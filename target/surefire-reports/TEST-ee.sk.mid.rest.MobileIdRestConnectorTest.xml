@@ -1,0 +1,1196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="21" failures="3" name="ee.sk.mid.rest.MobileIdRestConnectorTest" time="0.675" errors="8" skipped="0">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_172\jre\bin"/>
+    <property name="java.vm.version" value="25.172-b11"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="maven.multiModuleProjectDirectory" value="C:\Users\denisr\sk\mobile-id-java-client"/>
+    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+    <property name="path.separator" value=";"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.script" value=""/>
+    <property name="user.country" value="US"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="C:\Users\denisr\sk\mobile-id-java-client"/>
+    <property name="java.runtime.version" value="1.8.0_172-b11"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
+    <property name="java.endorsed.dirs" value="C:\Program Files\Java\jdk1.8.0_172\jre\lib\endorsed"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.io.tmpdir" value="C:\Users\denisr\AppData\Local\Temp\"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.variant" value=""/>
+    <property name="os.name" value="Windows 10"/>
+    <property name="classworlds.conf" value="C:\Program Files\Apache\maven\bin\..\bin\m2.conf"/>
+    <property name="sun.jnu.encoding" value="Cp1257"/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_172\bin;C:\windows\Sun\Java\bin;C:\windows\system32;C:\windows;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\iCLS\;C:\Program Files\Intel\Intel(R) Management Engine Components\iCLS\;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\Git\cmd;C:\Program Files\Apache\maven\bin;C:\Program Files\Apache\maven\bin;C:\Users\denisr\AppData\Local\Microsoft\WindowsApps;;."/>
+    <property name="maven.conf" value="C:\Program Files\Apache\maven\bin\../conf"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="52.0"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="10.0"/>
+    <property name="library.jansi.path" value="C:\Program Files\Apache\maven\bin\..\lib\jansi-native"/>
+    <property name="user.home" value="C:\Users\denisr"/>
+    <property name="user.timezone" value="Europe/Helsinki"/>
+    <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob"/>
+    <property name="java.specification.version" value="1.8"/>
+    <property name="file.encoding" value="Cp1257"/>
+    <property name="user.name" value="denisr"/>
+    <property name="java.class.path" value="C:\Program Files\Apache\maven\bin\..\boot\plexus-classworlds-2.5.2.jar"/>
+    <property name="java.vm.specification.version" value="1.8"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_172\jre"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean package"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.language" value="en"/>
+    <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.8.0_172"/>
+    <property name="java.ext.dirs" value="C:\Program Files\Java\jdk1.8.0_172\jre\lib\ext;C:\windows\Sun\Java\lib\ext"/>
+    <property name="sun.boot.class.path" value="C:\Program Files\Java\jdk1.8.0_172\jre\lib\resources.jar;C:\Program Files\Java\jdk1.8.0_172\jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_172\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.8.0_172\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.8.0_172\jre\lib\jce.jar;C:\Program Files\Java\jdk1.8.0_172\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.8.0_172\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.8.0_172\jre\classes"/>
+    <property name="sun.stderr.encoding" value="cp775"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="maven.home" value="C:\Program Files\Apache\maven\bin\.."/>
+    <property name="file.separator" value="\"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.stdout.encoding" value="cp775"/>
+    <property name="sun.desktop" value="windows"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+  </properties>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="authenticate_withWrongAuthenticationParams_shouldThrowException" time="0.019">
+    <error message="Unexpected exception, expected&lt;ee.sk.mid.exception.UnauthorizedException&gt; but was&lt;ee.sk.mid.exception.ResponseNotFound&gt;" type="java.lang.Exception">java.lang.Exception: Unexpected exception, expected&lt;ee.sk.mid.exception.UnauthorizedException&gt; but was&lt;ee.sk.mid.exception.ResponseNotFound&gt;
+	at org.junit.internal.runners.statements.ExpectException.evaluate(ExpectException.java:28)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at com.github.tomakehurst.wiremock.junit.WireMockRule$1.evaluate(WireMockRule.java:72)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+Caused by: ee.sk.mid.exception.ResponseNotFound
+	at ee.sk.mid.rest.MobileIdRestConnector.postRequest(MobileIdRestConnector.java:80)
+	at ee.sk.mid.rest.MobileIdRestConnector.postAuthenticationRequest(MobileIdRestConnector.java:68)
+	at ee.sk.mid.rest.MobileIdRestConnector.authenticate(MobileIdRestConnector.java:48)
+	at ee.sk.mid.rest.MobileIdRestConnectorTest.authenticate_withWrongAuthenticationParams_shouldThrowException(MobileIdRestConnectorTest.java:170)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.ExpectException.evaluate(ExpectException.java:19)
+	... 24 more
+</error>
+    <system-out>21.09.2018 17:37:08.500 INFO  [main] [org.eclipse.jetty.server.Server.doStart:327] - jetty-9.2.13.v20150730
+21.09.2018 17:37:08.501 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@14062855{/__admin,null,AVAILABLE}
+21.09.2018 17:37:08.502 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@30fc1d0c{/,null,AVAILABLE}
+21.09.2018 17:37:08.504 INFO  [main] [o.e.jetty.server.ServerConnector.doStart:266] - Started ServerConnector@151ddfc6{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:08.505 INFO  [main] [org.eclipse.jetty.server.Server.doStart:379] - Started @4305ms
+21.09.2018 17:37:08.509 INFO  [qtp657980701-236] [/__admin.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.AdminRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:08.519 DEBUG [main] [ee.sk.mid.rest.MobileIdRestConnector.authenticate:43] - Authenticating for phone number +37200007
+21.09.2018 17:37:08.530 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.logUrl:58] - POST http://localhost:18089/mid-api/authentication
+21.09.2018 17:37:08.530 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logHeaders:64] - Request headers: {Accept=[application/json], Content-Type=[application/json]}
+21.09.2018 17:37:08.533 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logRequestBody:98] - Message body: {&quot;relyingPartyUUID&quot;:&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445&quot;,&quot;relyingPartyName&quot;:&quot;ToomasBank&quot;,&quot;phoneNumber&quot;:&quot;+37200007&quot;,&quot;nationalIdentityNumber&quot;:&quot;14212128025&quot;,&quot;hash&quot;:&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==&quot;,&quot;hashType&quot;:&quot;SHA512&quot;,&quot;language&quot;:&quot;EST&quot;}
+21.09.2018 17:37:08.535 INFO  [qtp657980701-233] [/.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.StubRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:08.561 ERROR [qtp657980701-233] [WireMock.error:40] - Request was not matched:
+{
+  &quot;url&quot; : &quot;/mid-api/authentication&quot;,
+  &quot;absoluteUrl&quot; : &quot;http://localhost:18089/mid-api/authentication&quot;,
+  &quot;method&quot; : &quot;POST&quot;,
+  &quot;clientIp&quot; : &quot;127.0.0.1&quot;,
+  &quot;headers&quot; : {
+    &quot;User-Agent&quot; : &quot;Jersey/2.24.1 (HttpUrlConnection 1.8.0_172)&quot;,
+    &quot;Connection&quot; : &quot;keep-alive&quot;,
+    &quot;Host&quot; : &quot;localhost:18089&quot;,
+    &quot;Accept&quot; : &quot;application/json&quot;,
+    &quot;Content-Length&quot; : &quot;291&quot;,
+    &quot;Content-Type&quot; : &quot;application/json&quot;
+  },
+  &quot;cookies&quot; : { },
+  &quot;browserProxyRequest&quot; : false,
+  &quot;loggedDate&quot; : 1537540628537,
+  &quot;bodyAsBase64&quot; : &quot;eyJyZWx5aW5nUGFydHlVVUlEIjoiZTgxODkwNTEtNTYzNC00ZmJlLWE2ZTgtZmUxYjlhOWVmNDQ1IiwicmVseWluZ1BhcnR5TmFtZSI6IlRvb21hc0JhbmsiLCJwaG9uZU51bWJlciI6IiszNzIwMDAwNyIsIm5hdGlvbmFsSWRlbnRpdHlOdW1iZXIiOiIxNDIxMjEyODAyNSIsImhhc2giOiJLNzRNU0xrYWZSdUtaMU9vdWN2aDJ4YTRRM256K1IvaEZXSVNoTjk2U1BITmNlbSt1UTZtRk1lOWtrSlFxcDVFYW9abkplYUZwbDMxMFRtbHpSZ055UT09IiwiaGFzaFR5cGUiOiJTSEE1MTIiLCJsYW5ndWFnZSI6IkVTVCJ9&quot;,
+  &quot;body&quot; : &quot;{\&quot;relyingPartyUUID\&quot;:\&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445\&quot;,\&quot;relyingPartyName\&quot;:\&quot;ToomasBank\&quot;,\&quot;phoneNumber\&quot;:\&quot;+37200007\&quot;,\&quot;nationalIdentityNumber\&quot;:\&quot;14212128025\&quot;,\&quot;hash\&quot;:\&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==\&quot;,\&quot;hashType\&quot;:\&quot;SHA512\&quot;,\&quot;language\&quot;:\&quot;EST\&quot;}&quot;,
+  &quot;loggedDateString&quot; : &quot;2018-09-21T14:37:08Z&quot;
+}
+Closest match:
+{
+  &quot;url&quot; : &quot;/authentication&quot;,
+  &quot;method&quot; : &quot;POST&quot;,
+  &quot;headers&quot; : {
+    &quot;Accept&quot; : {
+      &quot;equalTo&quot; : &quot;application/json&quot;
+    }
+  },
+  &quot;bodyPatterns&quot; : [ {
+    &quot;equalToJson&quot; : &quot;{\r\n  \&quot;relyingPartyUUID\&quot;: \&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445\&quot;,\r\n  \&quot;relyingPartyName\&quot;: \&quot;ToomasBank\&quot;,\r\n  \&quot;phoneNumber\&quot;: \&quot;+37200007\&quot;,\r\n  \&quot;nationalIdentityNumber\&quot;: \&quot;14212128025\&quot;,\r\n  \&quot;hash\&quot;: \&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==\&quot;,\r\n  \&quot;hashType\&quot;: \&quot;SHA512\&quot;,\r\n  \&quot;language\&quot;: \&quot;EST\&quot;\r\n}&quot;,
+    &quot;ignoreArrayOrder&quot; : false,
+    &quot;ignoreExtraElements&quot; : false
+  } ]
+}
+21.09.2018 17:37:08.568 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.filter:40] - Response status: 404 - Not Found
+21.09.2018 17:37:08.569 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logResponseBody:80] - Response body: &lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=ISO-8859-1&quot;/&gt;
+&lt;title&gt;Error 404 &lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;HTTP ERROR: 404&lt;/h2&gt;
+&lt;p&gt;Problem accessing /mid-api/authentication. Reason:
+&lt;pre&gt;    Not Found&lt;/pre&gt;&lt;/p&gt;
+&lt;hr /&gt;&lt;i&gt;&lt;small&gt;Powered by Jetty://&lt;/small&gt;&lt;/i&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+21.09.2018 17:37:08.569 WARN  [main] [ee.sk.mid.rest.MobileIdRestConnector.postRequest:79] - Response not found for URI http://localhost:18089/mid-api/authentication: HTTP 404 Not Found
+21.09.2018 17:37:08.572 INFO  [main] [o.e.jetty.server.ServerConnector.doStop:306] - Stopped ServerConnector@151ddfc6{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:08.572 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@30fc1d0c{/,null,UNAVAILABLE}
+21.09.2018 17:37:08.573 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@14062855{/__admin,null,UNAVAILABLE}
+21.09.2018 17:37:08.575 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp657980701{STOPPING,8&lt;=9&lt;=10,i=6,q=7} Couldn&apos;t stop Thread[qtp657980701-232,5,]
+21.09.2018 17:37:08.576 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp657980701{STOPPING,8&lt;=9&lt;=10,i=0,q=5} Couldn&apos;t stop Thread[qtp657980701-234,5,]
+</system-out>
+  </testcase>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="getSessionStatus_whenPhoneAbsent" time="0.078"/>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="getSessionStatus_whenTimeout" time="0.037"/>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="authenticate_whenGettingSessionIdFailed_shouldThrowException" time="0.045">
+    <error message="Unexpected exception, expected&lt;ee.sk.mid.exception.ResponseRetrievingException&gt; but was&lt;ee.sk.mid.exception.ResponseNotFound&gt;" type="java.lang.Exception">java.lang.Exception: Unexpected exception, expected&lt;ee.sk.mid.exception.ResponseRetrievingException&gt; but was&lt;ee.sk.mid.exception.ResponseNotFound&gt;
+	at org.junit.internal.runners.statements.ExpectException.evaluate(ExpectException.java:28)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at com.github.tomakehurst.wiremock.junit.WireMockRule$1.evaluate(WireMockRule.java:72)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+Caused by: ee.sk.mid.exception.ResponseNotFound
+	at ee.sk.mid.rest.MobileIdRestConnector.postRequest(MobileIdRestConnector.java:80)
+	at ee.sk.mid.rest.MobileIdRestConnector.postAuthenticationRequest(MobileIdRestConnector.java:68)
+	at ee.sk.mid.rest.MobileIdRestConnector.authenticate(MobileIdRestConnector.java:48)
+	at ee.sk.mid.rest.MobileIdRestConnectorTest.authenticate_whenGettingSessionIdFailed_shouldThrowException(MobileIdRestConnectorTest.java:149)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.ExpectException.evaluate(ExpectException.java:19)
+	... 24 more
+</error>
+    <system-out>21.09.2018 17:37:08.702 INFO  [main] [org.eclipse.jetty.server.Server.doStart:327] - jetty-9.2.13.v20150730
+21.09.2018 17:37:08.703 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@21e58e9a{/__admin,null,AVAILABLE}
+21.09.2018 17:37:08.704 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@453ea7f6{/,null,AVAILABLE}
+21.09.2018 17:37:08.706 INFO  [main] [o.e.jetty.server.ServerConnector.doStart:266] - Started ServerConnector@48a26095{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:08.706 INFO  [main] [org.eclipse.jetty.server.Server.doStart:379] - Started @4506ms
+21.09.2018 17:37:08.710 INFO  [qtp2057591316-274] [/__admin.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.AdminRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:08.718 DEBUG [main] [ee.sk.mid.rest.MobileIdRestConnector.authenticate:43] - Authenticating for phone number +37200007
+21.09.2018 17:37:08.725 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.logUrl:58] - POST http://localhost:18089/mid-api/authentication
+21.09.2018 17:37:08.725 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logHeaders:64] - Request headers: {Accept=[application/json], Content-Type=[application/json]}
+21.09.2018 17:37:08.727 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logRequestBody:98] - Message body: {&quot;relyingPartyUUID&quot;:&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445&quot;,&quot;relyingPartyName&quot;:&quot;ToomasBank&quot;,&quot;phoneNumber&quot;:&quot;+37200007&quot;,&quot;nationalIdentityNumber&quot;:&quot;14212128025&quot;,&quot;hash&quot;:&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==&quot;,&quot;hashType&quot;:&quot;SHA512&quot;,&quot;language&quot;:&quot;EST&quot;}
+21.09.2018 17:37:08.729 INFO  [qtp2057591316-277] [/.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.StubRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:08.734 ERROR [qtp2057591316-277] [WireMock.error:40] - Request was not matched:
+{
+  &quot;url&quot; : &quot;/mid-api/authentication&quot;,
+  &quot;absoluteUrl&quot; : &quot;http://localhost:18089/mid-api/authentication&quot;,
+  &quot;method&quot; : &quot;POST&quot;,
+  &quot;clientIp&quot; : &quot;127.0.0.1&quot;,
+  &quot;headers&quot; : {
+    &quot;User-Agent&quot; : &quot;Jersey/2.24.1 (HttpUrlConnection 1.8.0_172)&quot;,
+    &quot;Connection&quot; : &quot;keep-alive&quot;,
+    &quot;Host&quot; : &quot;localhost:18089&quot;,
+    &quot;Accept&quot; : &quot;application/json&quot;,
+    &quot;Content-Length&quot; : &quot;291&quot;,
+    &quot;Content-Type&quot; : &quot;application/json&quot;
+  },
+  &quot;cookies&quot; : { },
+  &quot;browserProxyRequest&quot; : false,
+  &quot;loggedDate&quot; : 1537540628730,
+  &quot;bodyAsBase64&quot; : &quot;eyJyZWx5aW5nUGFydHlVVUlEIjoiZTgxODkwNTEtNTYzNC00ZmJlLWE2ZTgtZmUxYjlhOWVmNDQ1IiwicmVseWluZ1BhcnR5TmFtZSI6IlRvb21hc0JhbmsiLCJwaG9uZU51bWJlciI6IiszNzIwMDAwNyIsIm5hdGlvbmFsSWRlbnRpdHlOdW1iZXIiOiIxNDIxMjEyODAyNSIsImhhc2giOiJLNzRNU0xrYWZSdUtaMU9vdWN2aDJ4YTRRM256K1IvaEZXSVNoTjk2U1BITmNlbSt1UTZtRk1lOWtrSlFxcDVFYW9abkplYUZwbDMxMFRtbHpSZ055UT09IiwiaGFzaFR5cGUiOiJTSEE1MTIiLCJsYW5ndWFnZSI6IkVTVCJ9&quot;,
+  &quot;body&quot; : &quot;{\&quot;relyingPartyUUID\&quot;:\&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445\&quot;,\&quot;relyingPartyName\&quot;:\&quot;ToomasBank\&quot;,\&quot;phoneNumber\&quot;:\&quot;+37200007\&quot;,\&quot;nationalIdentityNumber\&quot;:\&quot;14212128025\&quot;,\&quot;hash\&quot;:\&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==\&quot;,\&quot;hashType\&quot;:\&quot;SHA512\&quot;,\&quot;language\&quot;:\&quot;EST\&quot;}&quot;,
+  &quot;loggedDateString&quot; : &quot;2018-09-21T14:37:08Z&quot;
+}
+Closest match:
+{
+  &quot;url&quot; : &quot;/authentication&quot;,
+  &quot;method&quot; : &quot;POST&quot;,
+  &quot;headers&quot; : {
+    &quot;Accept&quot; : {
+      &quot;equalTo&quot; : &quot;application/json&quot;
+    }
+  },
+  &quot;bodyPatterns&quot; : [ {
+    &quot;equalToJson&quot; : &quot;{\r\n  \&quot;relyingPartyUUID\&quot;: \&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445\&quot;,\r\n  \&quot;relyingPartyName\&quot;: \&quot;ToomasBank\&quot;,\r\n  \&quot;phoneNumber\&quot;: \&quot;+37200007\&quot;,\r\n  \&quot;nationalIdentityNumber\&quot;: \&quot;14212128025\&quot;,\r\n  \&quot;hash\&quot;: \&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==\&quot;,\r\n  \&quot;hashType\&quot;: \&quot;SHA512\&quot;,\r\n  \&quot;language\&quot;: \&quot;EST\&quot;\r\n}&quot;,
+    &quot;ignoreArrayOrder&quot; : false,
+    &quot;ignoreExtraElements&quot; : false
+  } ]
+}
+21.09.2018 17:37:08.736 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.filter:40] - Response status: 404 - Not Found
+21.09.2018 17:37:08.737 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logResponseBody:80] - Response body: &lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=ISO-8859-1&quot;/&gt;
+&lt;title&gt;Error 404 &lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;HTTP ERROR: 404&lt;/h2&gt;
+&lt;p&gt;Problem accessing /mid-api/authentication. Reason:
+&lt;pre&gt;    Not Found&lt;/pre&gt;&lt;/p&gt;
+&lt;hr /&gt;&lt;i&gt;&lt;small&gt;Powered by Jetty://&lt;/small&gt;&lt;/i&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+21.09.2018 17:37:08.737 WARN  [main] [ee.sk.mid.rest.MobileIdRestConnector.postRequest:79] - Response not found for URI http://localhost:18089/mid-api/authentication: HTTP 404 Not Found
+21.09.2018 17:37:08.738 INFO  [main] [o.e.jetty.server.ServerConnector.doStop:306] - Stopped ServerConnector@48a26095{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:08.738 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@453ea7f6{/,null,UNAVAILABLE}
+21.09.2018 17:37:08.738 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@21e58e9a{/__admin,null,UNAVAILABLE}
+21.09.2018 17:37:08.739 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp2057591316{STOPPING,8&lt;=8&lt;=10,i=7,q=7} Couldn&apos;t stop Thread[qtp2057591316-270,5,]
+21.09.2018 17:37:08.739 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp2057591316{STOPPING,8&lt;=8&lt;=10,i=0,q=5} Couldn&apos;t stop Thread[qtp2057591316-271,5,]
+</system-out>
+  </testcase>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="getSessionStatus_whenDeliveryError" time="0.027"/>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="getSessionStatus_withTimeoutParameter" time="0.033">
+    <error message="com.fasterxml.jackson.databind.JsonMappingException: Can not instantiate value of type [simple type, class ee.sk.mid.rest.dao.SessionCertificate] from String value (&apos;MIIHhjCCBW6gAwIBAgIQDNYLtVwrKURYStrYApYViTANBgkqhkiG9w0BAQsFADBoMQswCQYDVQQGEwJFRTEiMCAGA1UECgwZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czEXMBUGA1UEYQwOTlRSRUUtMTA3NDcwMTMxHDAaBgNVBAMME1RFU1Qgb2YgRUlELVNLIDIwMTYwHhcNMTYxMjA5MTYyNDU2WhcNMTkxMjA5MTYyNDU2WjCBvzELMAkGA1UEBhMCRUUxIjAgBgNVBAoMGUFTIFNlcnRpZml0c2VlcmltaXNrZXNrdXMxGjAYBgNVBAsMEWRpZ2l0YWwgc2lnbmF0dXJlMS0wKwYDVQQDDCRFTEZSSUlEQSxNQU5JVkFMREUsUE5PRUUtMzExMTExMTExMTExETAPBgNVBAQMCEVMRlJJSURBMRIwEAYDVQQqDAlNQU5JVkFMREUxGjAYBgNVBAUTEVBOT0VFLTMxMTExMTExMTExMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAgcfk+eY6dvVyDDPpJPkoKpQ08pQx5Jpfjgq+G31lRSsx03y4WYWQhILu5R4isI6DGzQ1MK2dEsW9Dl+S39y7mDDqGlviVpxCtgz14H7NG84ew8vd+sBeaYCvEhKS4+FxRWCmg5VCozr3s2Evi/ao3Wj51ThtecVmAY7PoE27Zckr0GJ/0I+JqEQx19POBr/lNkZN1AxBy8O9gvDzdpCa2Vn9qahY9eZnDGScrP2KsR34UlXa5PjEMVPtSB4btPi9VOQuRoZImGchfUyf1A2uyIPhV5aC+Zgl60B65WxZ+/nEsVN4NoSgBUv+HlwuRxJPelQKeA9tPwKroqO9PGc5/ee2C1HLH7loD+SwahSPMOY2e8CQd6pLmRF1a/H+ZPWZBW+U7Ekm3YeNNJToUkuonAQB/JbwBvHkZXwsH4/kMHyMPiws5G3nr/jyqF2595KKghIgjGHR1WhGljQzdgO5LT4uuOhesGDRYeMUanvClWSb/mt0SdS8njziY7WoYPYFFFgjRvIIK5FgOd8d2W88I5pj2/SjcXb6GMqEqI3HkCBGPDSo57nSJZzJD8KjJs/4jvzZnGwCFZ8+jeyh562B01mkFfwFaoFOYfqRG3g5sGdZUdY9Nk3FZ8dgEwylUMSxmaL0R2/mzNVasFWp482eHwlK2rae3v+QtCHGfOKn+vsCAwEAAaOCAdIwggHOMAkGA1UdEwQCMAAwDgYDVR0PAQH/BAQDAgZAMFYGA1UdIARPME0wQAYKKwYBBAHOHwMRAjAyMDAGCCsGAQUFBwIBFiRodHRwczovL3d3dy5zay5lZS9lbi9yZXBvc2l0b3J5L0NQUy8wCQYHBACL7EABATAdBgNVHQ4EFgQUNxW1gjoB4+Qh46Rj3SuULubhtUMwgZkGCCsGAQUFBwEDBIGMMIGJMAgGBgQAjkYBATAVBggrBgEFBQcLAjAJBgcEAIvsSQEBMBMGBgQAjkYBBjAJBgcEAI5GAQYBMFEGBgQAjkYBBTBHMEUWP2h0dHBzOi8vc2suZWUvZW4vcmVwb3NpdG9yeS9jb25kaXRpb25zLWZvci11c2Utb2YtY2VydGlmaWNhdGVzLxMCRU4wHwYDVR0jBBgwFoAUrrDq4Tb4JqulzAtmVf46HQK/ErQwfQYIKwYBBQUHAQEEcTBvMCkGCCsGAQUFBzABhh1odHRwOi8vYWlhLmRlbW8uc2suZWUvZWlkMjAxNjBCBggrBgEFBQcwAoY2aHR0cHM6Ly9zay5lZS91cGxvYWQvZmlsZXMvVEVTVF9vZl9FSUQtU0tfMjAxNi5kZXIuY3J0MA0GCSqGSIb3DQEBCwUAA4ICAQCH+SY8KKgw5UDlVL99ToRWPpcloyfOM64UTnNgEDXDDI5r1CNNA0OlggzoEZfakNQJamHjIT287LV7nXFsB4Q9VzyI3H1J5mzVIZrMUiE68wf25BDuA3Zwpri+f8Me78f3nowO2cJ2AiMJ83vQFKKy1LFOixWguuxioKlda2Jq7B57ty5cN+jZwLO7Vrv4Tryg9QeOaxnFvHvuZaxMnE55of7cLpfyAH/5DKvlXx4cdmh7kNO4F/o2LT7om4Cf+Sq6tFS3cUn4zcQbFKT5lw+7vfewzG6X0qYnHbe7Ts/zhh7IJpHnPF1p23ND0+jHgbcDVTFjV4pN1PhVthYHOMeDW461okw2OA/jfuQetUlDwqT5yCdjrOTMDkjZCjTMhcVPzw+7hSUUnewKiR0smuyZbKpE/ZGZWUA6K0sieGCpHGKJo99zD3zmEWmOmq++D0TmVvEiXVJs8fuNWl+VmXSStkMeNR4noHAL1PFUebXVS0lPpQZzBKgqhMGAgbwvYajZnOlvXVll6QashxFZmOVNy88O67s+a2p1SmQTtqNrlodszqkKsc28nDbbvBUd4PUD5tmVgPe29Zwnm1TxFuhl0gqvVc+qZme8zq6yd3nCKNrY6qron4Xcc1rxCWS7NcyO5JiF+qXgAuDOkSFJaaEnQh83ZJsNneXD/nyBH8kSiQ==&apos;); no single-String constructor/factory method
+ at [Source: org.glassfish.jersey.message.internal.ReaderInterceptorExecutor$UnCloseableInputStream@2d00df20; line: 7, column: 4] (through reference chain: ee.sk.mid.rest.dao.SessionStatus[&quot;cert&quot;])" type="javax.ws.rs.client.ResponseProcessingException">javax.ws.rs.client.ResponseProcessingException: com.fasterxml.jackson.databind.JsonMappingException: Can not instantiate value of type [simple type, class ee.sk.mid.rest.dao.SessionCertificate] from String value (&apos;MIIHhjCCBW6gAwIBAgIQDNYLtVwrKURYStrYApYViTANBgkqhkiG9w0BAQsFADBoMQswCQYDVQQGEwJFRTEiMCAGA1UECgwZQVMgU2VydGlmaXRzZWVyaW1pc2tlc2t1czEXMBUGA1UEYQwOTlRSRUUtMTA3NDcwMTMxHDAaBgNVBAMME1RFU1Qgb2YgRUlELVNLIDIwMTYwHhcNMTYxMjA5MTYyNDU2WhcNMTkxMjA5MTYyNDU2WjCBvzELMAkGA1UEBhMCRUUxIjAgBgNVBAoMGUFTIFNlcnRpZml0c2VlcmltaXNrZXNrdXMxGjAYBgNVBAsMEWRpZ2l0YWwgc2lnbmF0dXJlMS0wKwYDVQQDDCRFTEZSSUlEQSxNQU5JVkFMREUsUE5PRUUtMzExMTExMTExMTExETAPBgNVBAQMCEVMRlJJSURBMRIwEAYDVQQqDAlNQU5JVkFMREUxGjAYBgNVBAUTEVBOT0VFLTMxMTExMTExMTExMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAgcfk+eY6dvVyDDPpJPkoKpQ08pQx5Jpfjgq+G31lRSsx03y4WYWQhILu5R4isI6DGzQ1MK2dEsW9Dl+S39y7mDDqGlviVpxCtgz14H7NG84ew8vd+sBeaYCvEhKS4+FxRWCmg5VCozr3s2Evi/ao3Wj51ThtecVmAY7PoE27Zckr0GJ/0I+JqEQx19POBr/lNkZN1AxBy8O9gvDzdpCa2Vn9qahY9eZnDGScrP2KsR34UlXa5PjEMVPtSB4btPi9VOQuRoZImGchfUyf1A2uyIPhV5aC+Zgl60B65WxZ+/nEsVN4NoSgBUv+HlwuRxJPelQKeA9tPwKroqO9PGc5/ee2C1HLH7loD+SwahSPMOY2e8CQd6pLmRF1a/H+ZPWZBW+U7Ekm3YeNNJToUkuonAQB/JbwBvHkZXwsH4/kMHyMPiws5G3nr/jyqF2595KKghIgjGHR1WhGljQzdgO5LT4uuOhesGDRYeMUanvClWSb/mt0SdS8njziY7WoYPYFFFgjRvIIK5FgOd8d2W88I5pj2/SjcXb6GMqEqI3HkCBGPDSo57nSJZzJD8KjJs/4jvzZnGwCFZ8+jeyh562B01mkFfwFaoFOYfqRG3g5sGdZUdY9Nk3FZ8dgEwylUMSxmaL0R2/mzNVasFWp482eHwlK2rae3v+QtCHGfOKn+vsCAwEAAaOCAdIwggHOMAkGA1UdEwQCMAAwDgYDVR0PAQH/BAQDAgZAMFYGA1UdIARPME0wQAYKKwYBBAHOHwMRAjAyMDAGCCsGAQUFBwIBFiRodHRwczovL3d3dy5zay5lZS9lbi9yZXBvc2l0b3J5L0NQUy8wCQYHBACL7EABATAdBgNVHQ4EFgQUNxW1gjoB4+Qh46Rj3SuULubhtUMwgZkGCCsGAQUFBwEDBIGMMIGJMAgGBgQAjkYBATAVBggrBgEFBQcLAjAJBgcEAIvsSQEBMBMGBgQAjkYBBjAJBgcEAI5GAQYBMFEGBgQAjkYBBTBHMEUWP2h0dHBzOi8vc2suZWUvZW4vcmVwb3NpdG9yeS9jb25kaXRpb25zLWZvci11c2Utb2YtY2VydGlmaWNhdGVzLxMCRU4wHwYDVR0jBBgwFoAUrrDq4Tb4JqulzAtmVf46HQK/ErQwfQYIKwYBBQUHAQEEcTBvMCkGCCsGAQUFBzABhh1odHRwOi8vYWlhLmRlbW8uc2suZWUvZWlkMjAxNjBCBggrBgEFBQcwAoY2aHR0cHM6Ly9zay5lZS91cGxvYWQvZmlsZXMvVEVTVF9vZl9FSUQtU0tfMjAxNi5kZXIuY3J0MA0GCSqGSIb3DQEBCwUAA4ICAQCH+SY8KKgw5UDlVL99ToRWPpcloyfOM64UTnNgEDXDDI5r1CNNA0OlggzoEZfakNQJamHjIT287LV7nXFsB4Q9VzyI3H1J5mzVIZrMUiE68wf25BDuA3Zwpri+f8Me78f3nowO2cJ2AiMJ83vQFKKy1LFOixWguuxioKlda2Jq7B57ty5cN+jZwLO7Vrv4Tryg9QeOaxnFvHvuZaxMnE55of7cLpfyAH/5DKvlXx4cdmh7kNO4F/o2LT7om4Cf+Sq6tFS3cUn4zcQbFKT5lw+7vfewzG6X0qYnHbe7Ts/zhh7IJpHnPF1p23ND0+jHgbcDVTFjV4pN1PhVthYHOMeDW461okw2OA/jfuQetUlDwqT5yCdjrOTMDkjZCjTMhcVPzw+7hSUUnewKiR0smuyZbKpE/ZGZWUA6K0sieGCpHGKJo99zD3zmEWmOmq++D0TmVvEiXVJs8fuNWl+VmXSStkMeNR4noHAL1PFUebXVS0lPpQZzBKgqhMGAgbwvYajZnOlvXVll6QashxFZmOVNy88O67s+a2p1SmQTtqNrlodszqkKsc28nDbbvBUd4PUD5tmVgPe29Zwnm1TxFuhl0gqvVc+qZme8zq6yd3nCKNrY6qron4Xcc1rxCWS7NcyO5JiF+qXgAuDOkSFJaaEnQh83ZJsNneXD/nyBH8kSiQ==&apos;); no single-String constructor/factory method
+ at [Source: org.glassfish.jersey.message.internal.ReaderInterceptorExecutor$UnCloseableInputStream@2d00df20; line: 7, column: 4] (through reference chain: ee.sk.mid.rest.dao.SessionStatus[&quot;cert&quot;])
+	at org.glassfish.jersey.client.JerseyInvocation.translate(JerseyInvocation.java:809)
+	at org.glassfish.jersey.client.JerseyInvocation.access$700(JerseyInvocation.java:92)
+	at org.glassfish.jersey.client.JerseyInvocation$2.call(JerseyInvocation.java:701)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:315)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:297)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:228)
+	at org.glassfish.jersey.process.internal.RequestScope.runInScope(RequestScope.java:444)
+	at org.glassfish.jersey.client.JerseyInvocation.invoke(JerseyInvocation.java:697)
+	at org.glassfish.jersey.client.JerseyInvocation$Builder.method(JerseyInvocation.java:420)
+	at org.glassfish.jersey.client.JerseyInvocation$Builder.get(JerseyInvocation.java:316)
+	at ee.sk.mid.rest.MobileIdRestConnector.getSessionStatus(MobileIdRestConnector.java:60)
+	at ee.sk.mid.rest.MobileIdRestConnectorTest.getSessionStatus_withTimeoutParameter(MobileIdRestConnectorTest.java:121)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at com.github.tomakehurst.wiremock.junit.WireMockRule$1.evaluate(WireMockRule.java:72)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+Caused by: com.fasterxml.jackson.databind.JsonMappingException: Can not instantiate value of type [simple type, class ee.sk.mid.rest.dao.SessionCertificate] from String value (&apos;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&apos;); no single-String constructor/factory method
+ at [Source: org.glassfish.jersey.message.internal.ReaderInterceptorExecutor$UnCloseableInputStream@2d00df20; line: 7, column: 4] (through reference chain: ee.sk.mid.rest.dao.SessionStatus[&quot;cert&quot;])
+	at com.fasterxml.jackson.databind.JsonMappingException.from(JsonMappingException.java:148)
+	at com.fasterxml.jackson.databind.DeserializationContext.mappingException(DeserializationContext.java:875)
+	at com.fasterxml.jackson.databind.deser.ValueInstantiator._createFromStringFallbacks(ValueInstantiator.java:281)
+	at com.fasterxml.jackson.databind.deser.std.StdValueInstantiator.createFromString(StdValueInstantiator.java:284)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromString(BeanDeserializerBase.java:1176)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeOther(BeanDeserializer.java:143)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:134)
+	at com.fasterxml.jackson.databind.deser.SettableBeanProperty.deserialize(SettableBeanProperty.java:520)
+	at com.fasterxml.jackson.databind.deser.impl.MethodProperty.deserializeAndSet(MethodProperty.java:95)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.vanillaDeserialize(BeanDeserializer.java:256)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:125)
+	at com.fasterxml.jackson.databind.ObjectReader._bind(ObjectReader.java:1470)
+	at com.fasterxml.jackson.databind.ObjectReader.readValue(ObjectReader.java:912)
+	at com.fasterxml.jackson.jaxrs.base.ProviderBase.readFrom(ProviderBase.java:810)
+	at org.glassfish.jersey.message.internal.ReaderInterceptorExecutor$TerminalReaderInterceptor.invokeReadFrom(ReaderInterceptorExecutor.java:256)
+	at org.glassfish.jersey.message.internal.ReaderInterceptorExecutor$TerminalReaderInterceptor.aroundReadFrom(ReaderInterceptorExecutor.java:235)
+	at org.glassfish.jersey.message.internal.ReaderInterceptorExecutor.proceed(ReaderInterceptorExecutor.java:155)
+	at org.glassfish.jersey.message.internal.MessageBodyFactory.readFrom(MessageBodyFactory.java:1085)
+	at org.glassfish.jersey.message.internal.InboundMessageContext.readEntity(InboundMessageContext.java:874)
+	at org.glassfish.jersey.message.internal.InboundMessageContext.readEntity(InboundMessageContext.java:808)
+	at org.glassfish.jersey.client.ClientResponse.readEntity(ClientResponse.java:326)
+	at org.glassfish.jersey.client.JerseyInvocation.translate(JerseyInvocation.java:806)
+	... 43 more
+</error>
+    <system-out>21.09.2018 17:37:08.778 INFO  [main] [org.eclipse.jetty.server.Server.doStart:327] - jetty-9.2.13.v20150730
+21.09.2018 17:37:08.778 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@52889c68{/__admin,null,AVAILABLE}
+21.09.2018 17:37:08.779 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@4302394a{/,null,AVAILABLE}
+21.09.2018 17:37:08.780 INFO  [main] [o.e.jetty.server.ServerConnector.doStart:266] - Started ServerConnector@557f969e{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:08.780 INFO  [main] [org.eclipse.jetty.server.Server.doStart:379] - Started @4581ms
+21.09.2018 17:37:08.784 INFO  [qtp1619318123-298] [/__admin.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.AdminRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:08.790 DEBUG [main] [ee.sk.mid.rest.MobileIdRestConnector.getSessionStatus:53] - Getting session status for de305d54-75b4-431b-adb2-eb6b9e546016
+21.09.2018 17:37:08.797 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.logUrl:58] - GET http://localhost:18089/authentication/session/de305d54-75b4-431b-adb2-eb6b9e546016?timeoutMs=10000
+21.09.2018 17:37:08.797 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logHeaders:64] - Request headers: {Accept=[application/json]}
+21.09.2018 17:37:08.799 INFO  [qtp1619318123-299] [/.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.StubRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:08.805 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.filter:40] - Response status: 200 - OK
+21.09.2018 17:37:08.805 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logResponseBody:80] - Response body: {
+  &quot;state&quot;: &quot;COMPLETE&quot;,
+  &quot;result&quot;: &quot;OK&quot;,
+  &quot;signature&quot;: {
+    &quot;value&quot;: &quot;luvjsi1+1iLN9yfDFEh/BE8hXtAKhAIxilv0SEk8Qk0yoM9ms/Qsq6OtFoTFZfmpZNQtmEDg6ADeVNUfZrAoozSbqGggNP9pZLv0pQ6fvkoUjV0XI3FP5PuICuRp0vfC2w024cG/Rw2XGfZTcDWZ3IWVaS/C9tqbvA7l0Ssa8W9wUit2H5msNMyyviHJFW7m9yfjdMZe9ebPw9HGSHjnRGbzl7myUIZyWtlD5mqnk/tcU13+lD6DBYkGSW5eu125W1BMojH3sIRrKhEdZxkgwtg6KEuWQ85OQBMF3X5zFB62caKqKo42HfV74EcbaBChhJ32226VZju+JKN9D+WUeQ==&quot;,
+    &quot;algorithm&quot;: &quot;sha256WithRSAEncryption&quot;
+  },
+  &quot;cert&quot;: &quot;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&quot;
+}
+21.09.2018 17:37:08.809 INFO  [main] [o.e.jetty.server.ServerConnector.doStop:306] - Stopped ServerConnector@557f969e{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:08.809 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@4302394a{/,null,UNAVAILABLE}
+21.09.2018 17:37:08.809 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@52889c68{/__admin,null,UNAVAILABLE}
+21.09.2018 17:37:08.810 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1619318123{STOPPING,8&lt;=8&lt;=10,i=5,q=5} Couldn&apos;t stop Thread[qtp1619318123-294,5,]
+21.09.2018 17:37:08.810 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1619318123{STOPPING,8&lt;=8&lt;=10,i=1,q=5} Couldn&apos;t stop Thread[qtp1619318123-295,5,]
+21.09.2018 17:37:08.810 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1619318123{STOPPING,8&lt;=8&lt;=10,i=0,q=5} Couldn&apos;t stop Thread[qtp1619318123-304,5,]
+</system-out>
+  </testcase>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="getSessionStatus_whenSimError" time="0.033"/>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="getSessionStatus_whenMIDNotReady" time="0.03"/>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="getSessionStatus_whenNotMIDClient" time="0.007">
+    <failure message="File not found: responses/sessionStatusNotMIDClient.json" type="java.lang.AssertionError">java.lang.AssertionError: File not found: responses/sessionStatusNotMIDClient.json
+	at org.junit.Assert.fail(Assert.java:88)
+	at org.junit.Assert.assertTrue(Assert.java:41)
+	at org.junit.Assert.assertNotNull(Assert.java:712)
+	at ee.sk.mid.test.MobileIdRestServiceStubs.readFileBody(MobileIdRestServiceStubs.java:87)
+	at ee.sk.mid.test.MobileIdRestServiceStubs.stubRequestWithResponse(MobileIdRestServiceStubs.java:31)
+	at ee.sk.mid.rest.MobileIdRestConnectorTest.getStubbedSessionStatusWithResponse(MobileIdRestConnectorTest.java:206)
+	at ee.sk.mid.rest.MobileIdRestConnectorTest.getSessionStatus_whenNotMIDClient(MobileIdRestConnectorTest.java:70)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at com.github.tomakehurst.wiremock.junit.WireMockRule$1.evaluate(WireMockRule.java:72)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+</failure>
+    <system-out>21.09.2018 17:37:08.882 INFO  [main] [org.eclipse.jetty.server.Server.doStart:327] - jetty-9.2.13.v20150730
+21.09.2018 17:37:08.882 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@4c57b0e7{/__admin,null,AVAILABLE}
+21.09.2018 17:37:08.883 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@b3bb18a{/,null,AVAILABLE}
+21.09.2018 17:37:08.884 INFO  [main] [o.e.jetty.server.ServerConnector.doStart:266] - Started ServerConnector@7a1af882{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:08.884 INFO  [main] [org.eclipse.jetty.server.Server.doStart:379] - Started @4685ms
+21.09.2018 17:37:08.887 INFO  [main] [o.e.jetty.server.ServerConnector.doStop:306] - Stopped ServerConnector@7a1af882{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:08.888 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@b3bb18a{/,null,UNAVAILABLE}
+21.09.2018 17:37:08.888 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@4c57b0e7{/__admin,null,UNAVAILABLE}
+21.09.2018 17:37:08.888 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1452248922{STOPPING,8&lt;=8&lt;=10,i=5,q=6} Couldn&apos;t stop Thread[qtp1452248922-330,5,]
+21.09.2018 17:37:08.888 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1452248922{STOPPING,8&lt;=8&lt;=10,i=0,q=5} Couldn&apos;t stop Thread[qtp1452248922-331,5,]
+</system-out>
+  </testcase>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="authenticate_withDisplayText" time="0.03">
+    <error type="ee.sk.mid.exception.ResponseNotFound">ee.sk.mid.exception.ResponseNotFound
+	at ee.sk.mid.rest.MobileIdRestConnector.postRequest(MobileIdRestConnector.java:80)
+	at ee.sk.mid.rest.MobileIdRestConnector.postAuthenticationRequest(MobileIdRestConnector.java:68)
+	at ee.sk.mid.rest.MobileIdRestConnector.authenticate(MobileIdRestConnector.java:48)
+	at ee.sk.mid.rest.MobileIdRestConnectorTest.authenticate_withDisplayText(MobileIdRestConnectorTest.java:140)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at com.github.tomakehurst.wiremock.junit.WireMockRule$1.evaluate(WireMockRule.java:72)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+</error>
+    <system-out>21.09.2018 17:37:08.891 INFO  [main] [org.eclipse.jetty.server.Server.doStart:327] - jetty-9.2.13.v20150730
+21.09.2018 17:37:08.891 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@26f5c508{/__admin,null,AVAILABLE}
+21.09.2018 17:37:08.892 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@4ae19926{/,null,AVAILABLE}
+21.09.2018 17:37:08.893 INFO  [main] [o.e.jetty.server.ServerConnector.doStart:266] - Started ServerConnector@42b4d8f7{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:08.893 INFO  [main] [org.eclipse.jetty.server.Server.doStart:379] - Started @4694ms
+21.09.2018 17:37:08.897 INFO  [qtp119115485-345] [/__admin.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.AdminRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:08.904 DEBUG [main] [ee.sk.mid.rest.MobileIdRestConnector.authenticate:43] - Authenticating for phone number +37200007
+21.09.2018 17:37:08.911 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.logUrl:58] - POST http://localhost:18089/mid-api/authentication
+21.09.2018 17:37:08.911 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logHeaders:64] - Request headers: {Accept=[application/json], Content-Type=[application/json]}
+21.09.2018 17:37:08.912 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logRequestBody:98] - Message body: {&quot;relyingPartyUUID&quot;:&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445&quot;,&quot;relyingPartyName&quot;:&quot;ToomasBank&quot;,&quot;phoneNumber&quot;:&quot;+37200007&quot;,&quot;nationalIdentityNumber&quot;:&quot;14212128025&quot;,&quot;hash&quot;:&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==&quot;,&quot;hashType&quot;:&quot;SHA512&quot;,&quot;language&quot;:&quot;EST&quot;,&quot;displayText&quot;:&quot;Log into internet banking system&quot;}
+21.09.2018 17:37:08.913 INFO  [qtp119115485-347] [/.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.StubRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:08.917 ERROR [qtp119115485-347] [WireMock.error:40] - Request was not matched:
+{
+  &quot;url&quot; : &quot;/mid-api/authentication&quot;,
+  &quot;absoluteUrl&quot; : &quot;http://localhost:18089/mid-api/authentication&quot;,
+  &quot;method&quot; : &quot;POST&quot;,
+  &quot;clientIp&quot; : &quot;127.0.0.1&quot;,
+  &quot;headers&quot; : {
+    &quot;User-Agent&quot; : &quot;Jersey/2.24.1 (HttpUrlConnection 1.8.0_172)&quot;,
+    &quot;Connection&quot; : &quot;keep-alive&quot;,
+    &quot;Host&quot; : &quot;localhost:18089&quot;,
+    &quot;Accept&quot; : &quot;application/json&quot;,
+    &quot;Content-Length&quot; : &quot;340&quot;,
+    &quot;Content-Type&quot; : &quot;application/json&quot;
+  },
+  &quot;cookies&quot; : { },
+  &quot;browserProxyRequest&quot; : false,
+  &quot;loggedDate&quot; : 1537540628914,
+  &quot;bodyAsBase64&quot; : &quot;eyJyZWx5aW5nUGFydHlVVUlEIjoiZTgxODkwNTEtNTYzNC00ZmJlLWE2ZTgtZmUxYjlhOWVmNDQ1IiwicmVseWluZ1BhcnR5TmFtZSI6IlRvb21hc0JhbmsiLCJwaG9uZU51bWJlciI6IiszNzIwMDAwNyIsIm5hdGlvbmFsSWRlbnRpdHlOdW1iZXIiOiIxNDIxMjEyODAyNSIsImhhc2giOiJLNzRNU0xrYWZSdUtaMU9vdWN2aDJ4YTRRM256K1IvaEZXSVNoTjk2U1BITmNlbSt1UTZtRk1lOWtrSlFxcDVFYW9abkplYUZwbDMxMFRtbHpSZ055UT09IiwiaGFzaFR5cGUiOiJTSEE1MTIiLCJsYW5ndWFnZSI6IkVTVCIsImRpc3BsYXlUZXh0IjoiTG9nIGludG8gaW50ZXJuZXQgYmFua2luZyBzeXN0ZW0ifQ==&quot;,
+  &quot;body&quot; : &quot;{\&quot;relyingPartyUUID\&quot;:\&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445\&quot;,\&quot;relyingPartyName\&quot;:\&quot;ToomasBank\&quot;,\&quot;phoneNumber\&quot;:\&quot;+37200007\&quot;,\&quot;nationalIdentityNumber\&quot;:\&quot;14212128025\&quot;,\&quot;hash\&quot;:\&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==\&quot;,\&quot;hashType\&quot;:\&quot;SHA512\&quot;,\&quot;language\&quot;:\&quot;EST\&quot;,\&quot;displayText\&quot;:\&quot;Log into internet banking system\&quot;}&quot;,
+  &quot;loggedDateString&quot; : &quot;2018-09-21T14:37:08Z&quot;
+}
+Closest match:
+{
+  &quot;url&quot; : &quot;/authentication&quot;,
+  &quot;method&quot; : &quot;POST&quot;,
+  &quot;headers&quot; : {
+    &quot;Accept&quot; : {
+      &quot;equalTo&quot; : &quot;application/json&quot;
+    }
+  },
+  &quot;bodyPatterns&quot; : [ {
+    &quot;equalToJson&quot; : &quot;{\r\n  \&quot;relyingPartyUUID\&quot;: \&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445\&quot;,\r\n  \&quot;relyingPartyName\&quot;: \&quot;ToomasBank\&quot;,\r\n  \&quot;phoneNumber\&quot;: \&quot;+37200007\&quot;,\r\n  \&quot;nationalIdentityNumber\&quot;: \&quot;14212128025\&quot;,\r\n  \&quot;hash\&quot;: \&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==\&quot;,\r\n  \&quot;hashType\&quot;: \&quot;SHA512\&quot;,\r\n  \&quot;language\&quot;: \&quot;EST\&quot;,\r\n  \&quot;displayText\&quot;: \&quot;Log into internet banking system\&quot;\r\n}&quot;,
+    &quot;ignoreArrayOrder&quot; : false,
+    &quot;ignoreExtraElements&quot; : false
+  } ]
+}
+21.09.2018 17:37:08.918 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.filter:40] - Response status: 404 - Not Found
+21.09.2018 17:37:08.919 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logResponseBody:80] - Response body: &lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=ISO-8859-1&quot;/&gt;
+&lt;title&gt;Error 404 &lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;HTTP ERROR: 404&lt;/h2&gt;
+&lt;p&gt;Problem accessing /mid-api/authentication. Reason:
+&lt;pre&gt;    Not Found&lt;/pre&gt;&lt;/p&gt;
+&lt;hr /&gt;&lt;i&gt;&lt;small&gt;Powered by Jetty://&lt;/small&gt;&lt;/i&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+21.09.2018 17:37:08.919 WARN  [main] [ee.sk.mid.rest.MobileIdRestConnector.postRequest:79] - Response not found for URI http://localhost:18089/mid-api/authentication: HTTP 404 Not Found
+21.09.2018 17:37:08.920 INFO  [main] [o.e.jetty.server.ServerConnector.doStop:306] - Stopped ServerConnector@42b4d8f7{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:08.920 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@4ae19926{/,null,UNAVAILABLE}
+21.09.2018 17:37:08.921 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@26f5c508{/__admin,null,UNAVAILABLE}
+21.09.2018 17:37:08.921 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp119115485{STOPPING,8&lt;=8&lt;=10,i=5,q=6} Couldn&apos;t stop Thread[qtp119115485-341,5,]
+21.09.2018 17:37:08.921 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp119115485{STOPPING,8&lt;=8&lt;=10,i=0,q=4} Couldn&apos;t stop Thread[qtp119115485-342,5,]
+21.09.2018 17:37:08.921 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp119115485{STOPPING,8&lt;=8&lt;=10,i=0,q=4} Couldn&apos;t stop Thread[qtp119115485-347,5,]
+</system-out>
+  </testcase>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="getNotExistingSessionStatus" time="0.032"/>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="verifyCustomRequestHeaderPresent_whenRequestingSessionStatus" time="0.006">
+    <failure message="File not found: responses/sessionStatusForSuccessfulCertificateRequest.json" type="java.lang.AssertionError">java.lang.AssertionError: File not found: responses/sessionStatusForSuccessfulCertificateRequest.json
+	at org.junit.Assert.fail(Assert.java:88)
+	at org.junit.Assert.assertTrue(Assert.java:41)
+	at org.junit.Assert.assertNotNull(Assert.java:712)
+	at ee.sk.mid.test.MobileIdRestServiceStubs.readFileBody(MobileIdRestServiceStubs.java:87)
+	at ee.sk.mid.test.MobileIdRestServiceStubs.stubRequestWithResponse(MobileIdRestServiceStubs.java:31)
+	at ee.sk.mid.rest.MobileIdRestConnectorTest.verifyCustomRequestHeaderPresent_whenRequestingSessionStatus(MobileIdRestConnectorTest.java:197)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at com.github.tomakehurst.wiremock.junit.WireMockRule$1.evaluate(WireMockRule.java:72)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+</failure>
+    <system-out>21.09.2018 17:37:08.958 INFO  [main] [org.eclipse.jetty.server.Server.doStart:327] - jetty-9.2.13.v20150730
+21.09.2018 17:37:08.959 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@37ad8430{/__admin,null,AVAILABLE}
+21.09.2018 17:37:08.959 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@539d6123{/,null,AVAILABLE}
+21.09.2018 17:37:08.960 INFO  [main] [o.e.jetty.server.ServerConnector.doStart:266] - Started ServerConnector@6c80c8a3{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:08.961 INFO  [main] [org.eclipse.jetty.server.Server.doStart:379] - Started @4761ms
+21.09.2018 17:37:08.963 INFO  [main] [o.e.jetty.server.ServerConnector.doStop:306] - Stopped ServerConnector@6c80c8a3{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:08.963 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@539d6123{/,null,UNAVAILABLE}
+21.09.2018 17:37:08.963 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@37ad8430{/__admin,null,UNAVAILABLE}
+21.09.2018 17:37:08.964 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1028466661{STOPPING,8&lt;=8&lt;=10,i=3,q=5} Couldn&apos;t stop Thread[qtp1028466661-371,5,]
+21.09.2018 17:37:08.964 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1028466661{STOPPING,8&lt;=8&lt;=10,i=0,q=4} Couldn&apos;t stop Thread[qtp1028466661-372,5,]
+</system-out>
+  </testcase>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="verifyCustomRequestHeaderPresent_whenAuthenticating" time="0.033">
+    <error type="ee.sk.mid.exception.ResponseNotFound">ee.sk.mid.exception.ResponseNotFound
+	at ee.sk.mid.rest.MobileIdRestConnector.postRequest(MobileIdRestConnector.java:80)
+	at ee.sk.mid.rest.MobileIdRestConnector.postAuthenticationRequest(MobileIdRestConnector.java:68)
+	at ee.sk.mid.rest.MobileIdRestConnector.authenticate(MobileIdRestConnector.java:48)
+	at ee.sk.mid.rest.MobileIdRestConnectorTest.verifyCustomRequestHeaderPresent_whenAuthenticating(MobileIdRestConnectorTest.java:183)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at com.github.tomakehurst.wiremock.junit.WireMockRule$1.evaluate(WireMockRule.java:72)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+</error>
+    <system-out>21.09.2018 17:37:08.966 INFO  [main] [org.eclipse.jetty.server.Server.doStart:327] - jetty-9.2.13.v20150730
+21.09.2018 17:37:08.967 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@6fb1dd9d{/__admin,null,AVAILABLE}
+21.09.2018 17:37:08.967 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@394e21b9{/,null,AVAILABLE}
+21.09.2018 17:37:08.968 INFO  [main] [o.e.jetty.server.ServerConnector.doStart:266] - Started ServerConnector@58f24e38{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:08.968 INFO  [main] [org.eclipse.jetty.server.Server.doStart:379] - Started @4769ms
+21.09.2018 17:37:08.972 INFO  [qtp1248481056-380] [/__admin.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.AdminRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:08.977 DEBUG [main] [ee.sk.mid.rest.MobileIdRestConnector.authenticate:43] - Authenticating for phone number +37200007
+21.09.2018 17:37:08.986 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.logUrl:58] - POST http://localhost:18089/mid-api/authentication
+21.09.2018 17:37:08.987 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logHeaders:64] - Request headers: {Accept=[application/json], Content-Type=[application/json]}
+21.09.2018 17:37:08.989 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logRequestBody:98] - Message body: {&quot;relyingPartyUUID&quot;:&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445&quot;,&quot;relyingPartyName&quot;:&quot;ToomasBank&quot;,&quot;phoneNumber&quot;:&quot;+37200007&quot;,&quot;nationalIdentityNumber&quot;:&quot;14212128025&quot;,&quot;hash&quot;:&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==&quot;,&quot;hashType&quot;:&quot;SHA512&quot;,&quot;language&quot;:&quot;EST&quot;}
+21.09.2018 17:37:08.990 INFO  [qtp1248481056-381] [/.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.StubRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:08.993 ERROR [qtp1248481056-381] [WireMock.error:40] - Request was not matched:
+{
+  &quot;url&quot; : &quot;/mid-api/authentication&quot;,
+  &quot;absoluteUrl&quot; : &quot;http://localhost:18089/mid-api/authentication&quot;,
+  &quot;method&quot; : &quot;POST&quot;,
+  &quot;clientIp&quot; : &quot;127.0.0.1&quot;,
+  &quot;headers&quot; : {
+    &quot;custom-header&quot; : &quot;Auth&quot;,
+    &quot;Transfer-Encoding&quot; : &quot;chunked&quot;,
+    &quot;Accept&quot; : &quot;application/json&quot;,
+    &quot;User-Agent&quot; : &quot;Jersey/2.24.1 (Apache HttpClient 4.5.1)&quot;,
+    &quot;Connection&quot; : &quot;keep-alive&quot;,
+    &quot;Host&quot; : &quot;localhost:18089&quot;,
+    &quot;Accept-Encoding&quot; : &quot;gzip,deflate&quot;,
+    &quot;Content-Type&quot; : &quot;application/json&quot;
+  },
+  &quot;cookies&quot; : { },
+  &quot;browserProxyRequest&quot; : false,
+  &quot;loggedDate&quot; : 1537540628991,
+  &quot;bodyAsBase64&quot; : &quot;eyJyZWx5aW5nUGFydHlVVUlEIjoiZTgxODkwNTEtNTYzNC00ZmJlLWE2ZTgtZmUxYjlhOWVmNDQ1IiwicmVseWluZ1BhcnR5TmFtZSI6IlRvb21hc0JhbmsiLCJwaG9uZU51bWJlciI6IiszNzIwMDAwNyIsIm5hdGlvbmFsSWRlbnRpdHlOdW1iZXIiOiIxNDIxMjEyODAyNSIsImhhc2giOiJLNzRNU0xrYWZSdUtaMU9vdWN2aDJ4YTRRM256K1IvaEZXSVNoTjk2U1BITmNlbSt1UTZtRk1lOWtrSlFxcDVFYW9abkplYUZwbDMxMFRtbHpSZ055UT09IiwiaGFzaFR5cGUiOiJTSEE1MTIiLCJsYW5ndWFnZSI6IkVTVCJ9&quot;,
+  &quot;body&quot; : &quot;{\&quot;relyingPartyUUID\&quot;:\&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445\&quot;,\&quot;relyingPartyName\&quot;:\&quot;ToomasBank\&quot;,\&quot;phoneNumber\&quot;:\&quot;+37200007\&quot;,\&quot;nationalIdentityNumber\&quot;:\&quot;14212128025\&quot;,\&quot;hash\&quot;:\&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==\&quot;,\&quot;hashType\&quot;:\&quot;SHA512\&quot;,\&quot;language\&quot;:\&quot;EST\&quot;}&quot;,
+  &quot;loggedDateString&quot; : &quot;2018-09-21T14:37:08Z&quot;
+}
+Closest match:
+{
+  &quot;url&quot; : &quot;/authentication&quot;,
+  &quot;method&quot; : &quot;POST&quot;,
+  &quot;headers&quot; : {
+    &quot;Accept&quot; : {
+      &quot;equalTo&quot; : &quot;application/json&quot;
+    }
+  },
+  &quot;bodyPatterns&quot; : [ {
+    &quot;equalToJson&quot; : &quot;{\r\n  \&quot;relyingPartyUUID\&quot;: \&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445\&quot;,\r\n  \&quot;relyingPartyName\&quot;: \&quot;ToomasBank\&quot;,\r\n  \&quot;phoneNumber\&quot;: \&quot;+37200007\&quot;,\r\n  \&quot;nationalIdentityNumber\&quot;: \&quot;14212128025\&quot;,\r\n  \&quot;hash\&quot;: \&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==\&quot;,\r\n  \&quot;hashType\&quot;: \&quot;SHA512\&quot;,\r\n  \&quot;language\&quot;: \&quot;EST\&quot;\r\n}&quot;,
+    &quot;ignoreArrayOrder&quot; : false,
+    &quot;ignoreExtraElements&quot; : false
+  } ]
+}
+21.09.2018 17:37:08.995 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.filter:40] - Response status: 404 - Not Found
+21.09.2018 17:37:08.995 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logResponseBody:80] - Response body: &lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=ISO-8859-1&quot;/&gt;
+&lt;title&gt;Error 404 &lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;HTTP ERROR: 404&lt;/h2&gt;
+&lt;p&gt;Problem accessing /mid-api/authentication. Reason:
+&lt;pre&gt;    Not Found&lt;/pre&gt;&lt;/p&gt;
+&lt;hr /&gt;&lt;i&gt;&lt;small&gt;Powered by Jetty://&lt;/small&gt;&lt;/i&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+21.09.2018 17:37:08.995 WARN  [main] [ee.sk.mid.rest.MobileIdRestConnector.postRequest:79] - Response not found for URI http://localhost:18089/mid-api/authentication: HTTP 404 Not Found
+21.09.2018 17:37:08.997 INFO  [main] [o.e.jetty.server.ServerConnector.doStop:306] - Stopped ServerConnector@58f24e38{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:08.997 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@394e21b9{/,null,UNAVAILABLE}
+21.09.2018 17:37:08.998 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@6fb1dd9d{/__admin,null,UNAVAILABLE}
+21.09.2018 17:37:08.998 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1248481056{STOPPING,8&lt;=8&lt;=10,i=6,q=6} Couldn&apos;t stop Thread[qtp1248481056-376,5,]
+21.09.2018 17:37:08.998 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1248481056{STOPPING,8&lt;=8&lt;=10,i=2,q=6} Couldn&apos;t stop Thread[qtp1248481056-377,5,]
+21.09.2018 17:37:08.998 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1248481056{STOPPING,8&lt;=8&lt;=10,i=0,q=5} Couldn&apos;t stop Thread[qtp1248481056-385,5,]
+</system-out>
+  </testcase>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="getRunningSessionStatus" time="0.031">
+    <error message="com.fasterxml.jackson.databind.JsonMappingException: Can not deserialize instance of java.lang.String out of START_OBJECT token
+ at [Source: org.glassfish.jersey.message.internal.ReaderInterceptorExecutor$UnCloseableInputStream@7b7039ac; line: 2, column: 21] (through reference chain: ee.sk.mid.rest.dao.SessionStatus[&quot;result&quot;])" type="javax.ws.rs.client.ResponseProcessingException">javax.ws.rs.client.ResponseProcessingException: com.fasterxml.jackson.databind.JsonMappingException: Can not deserialize instance of java.lang.String out of START_OBJECT token
+ at [Source: org.glassfish.jersey.message.internal.ReaderInterceptorExecutor$UnCloseableInputStream@7b7039ac; line: 2, column: 21] (through reference chain: ee.sk.mid.rest.dao.SessionStatus[&quot;result&quot;])
+	at org.glassfish.jersey.client.JerseyInvocation.translate(JerseyInvocation.java:809)
+	at org.glassfish.jersey.client.JerseyInvocation.access$700(JerseyInvocation.java:92)
+	at org.glassfish.jersey.client.JerseyInvocation$2.call(JerseyInvocation.java:701)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:315)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:297)
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:228)
+	at org.glassfish.jersey.process.internal.RequestScope.runInScope(RequestScope.java:444)
+	at org.glassfish.jersey.client.JerseyInvocation.invoke(JerseyInvocation.java:697)
+	at org.glassfish.jersey.client.JerseyInvocation$Builder.method(JerseyInvocation.java:420)
+	at org.glassfish.jersey.client.JerseyInvocation$Builder.get(JerseyInvocation.java:316)
+	at ee.sk.mid.rest.MobileIdRestConnector.getSessionStatus(MobileIdRestConnector.java:60)
+	at ee.sk.mid.rest.MobileIdRestConnectorTest.getStubbedSessionStatusWithResponse(MobileIdRestConnectorTest.java:208)
+	at ee.sk.mid.rest.MobileIdRestConnectorTest.getRunningSessionStatus(MobileIdRestConnectorTest.java:51)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at com.github.tomakehurst.wiremock.junit.WireMockRule$1.evaluate(WireMockRule.java:72)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+Caused by: com.fasterxml.jackson.databind.JsonMappingException: Can not deserialize instance of java.lang.String out of START_OBJECT token
+ at [Source: org.glassfish.jersey.message.internal.ReaderInterceptorExecutor$UnCloseableInputStream@7b7039ac; line: 2, column: 21] (through reference chain: ee.sk.mid.rest.dao.SessionStatus[&quot;result&quot;])
+	at com.fasterxml.jackson.databind.JsonMappingException.from(JsonMappingException.java:148)
+	at com.fasterxml.jackson.databind.DeserializationContext.mappingException(DeserializationContext.java:854)
+	at com.fasterxml.jackson.databind.deser.std.StringDeserializer.deserialize(StringDeserializer.java:62)
+	at com.fasterxml.jackson.databind.deser.std.StringDeserializer.deserialize(StringDeserializer.java:11)
+	at com.fasterxml.jackson.databind.deser.SettableBeanProperty.deserialize(SettableBeanProperty.java:520)
+	at com.fasterxml.jackson.databind.deser.impl.MethodProperty.deserializeAndSet(MethodProperty.java:95)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.vanillaDeserialize(BeanDeserializer.java:256)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:125)
+	at com.fasterxml.jackson.databind.ObjectReader._bind(ObjectReader.java:1470)
+	at com.fasterxml.jackson.databind.ObjectReader.readValue(ObjectReader.java:912)
+	at com.fasterxml.jackson.jaxrs.base.ProviderBase.readFrom(ProviderBase.java:810)
+	at org.glassfish.jersey.message.internal.ReaderInterceptorExecutor$TerminalReaderInterceptor.invokeReadFrom(ReaderInterceptorExecutor.java:256)
+	at org.glassfish.jersey.message.internal.ReaderInterceptorExecutor$TerminalReaderInterceptor.aroundReadFrom(ReaderInterceptorExecutor.java:235)
+	at org.glassfish.jersey.message.internal.ReaderInterceptorExecutor.proceed(ReaderInterceptorExecutor.java:155)
+	at org.glassfish.jersey.message.internal.MessageBodyFactory.readFrom(MessageBodyFactory.java:1085)
+	at org.glassfish.jersey.message.internal.InboundMessageContext.readEntity(InboundMessageContext.java:874)
+	at org.glassfish.jersey.message.internal.InboundMessageContext.readEntity(InboundMessageContext.java:808)
+	at org.glassfish.jersey.client.ClientResponse.readEntity(ClientResponse.java:326)
+	at org.glassfish.jersey.client.JerseyInvocation.translate(JerseyInvocation.java:806)
+	... 44 more
+</error>
+    <system-out>21.09.2018 17:37:09.002 INFO  [main] [org.eclipse.jetty.server.Server.doStart:327] - jetty-9.2.13.v20150730
+21.09.2018 17:37:09.003 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@703b2538{/__admin,null,AVAILABLE}
+21.09.2018 17:37:09.003 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@685d92cf{/,null,AVAILABLE}
+21.09.2018 17:37:09.005 INFO  [main] [o.e.jetty.server.ServerConnector.doStart:266] - Started ServerConnector@41e67819{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:09.005 INFO  [main] [org.eclipse.jetty.server.Server.doStart:379] - Started @4805ms
+21.09.2018 17:37:09.010 INFO  [qtp1664655596-392] [/__admin.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.AdminRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:09.016 DEBUG [main] [ee.sk.mid.rest.MobileIdRestConnector.getSessionStatus:53] - Getting session status for de305d54-75b4-431b-adb2-eb6b9e546016
+21.09.2018 17:37:09.025 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.logUrl:58] - GET http://localhost:18089/authentication/session/de305d54-75b4-431b-adb2-eb6b9e546016
+21.09.2018 17:37:09.025 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logHeaders:64] - Request headers: {Accept=[application/json]}
+21.09.2018 17:37:09.027 INFO  [qtp1664655596-393] [/.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.StubRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:09.029 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.filter:40] - Response status: 200 - OK
+21.09.2018 17:37:09.029 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logResponseBody:80] - Response body: {
+  &quot;state&quot;: &quot;RUNNING&quot;,
+  &quot;result&quot;: {}
+}
+21.09.2018 17:37:09.032 INFO  [main] [o.e.jetty.server.ServerConnector.doStop:306] - Stopped ServerConnector@41e67819{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:09.032 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@685d92cf{/,null,UNAVAILABLE}
+21.09.2018 17:37:09.032 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@703b2538{/__admin,null,UNAVAILABLE}
+21.09.2018 17:37:09.033 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1664655596{STOPPING,8&lt;=8&lt;=10,i=1,q=4} Couldn&apos;t stop Thread[qtp1664655596-393,5,main]
+</system-out>
+  </testcase>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="authenticate_whenResponseNotFound_shouldThrowException" time="0.04">
+    <failure message="A request was unmatched by any stub mapping. Closest stub mapping was:  expected:&lt;
+POST
+/authentication
+
+Accept: application/json
+{
+  &quot;relyingPartyUUID&quot; : &quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445&quot;,
+  &quot;relyingPartyName&quot; : &quot;ToomasBank&quot;,
+  &quot;phoneNumber&quot; : &quot;+37200007&quot;,
+  &quot;nationalIdentityNumber&quot; : &quot;14212128025&quot;,
+  &quot;hash&quot; : &quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==&quot;,
+  &quot;hashType&quot; : &quot;SHA512&quot;,
+  &quot;language&quot; : &quot;EST&quot;
+}&gt; but was:&lt;
+POST
+/mid-api/authentication
+
+Accept: application/json
+{
+  &quot;relyingPartyUUID&quot; : &quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445&quot;,
+  &quot;relyingPartyName&quot; : &quot;ToomasBank&quot;,
+  &quot;phoneNumber&quot; : &quot;+37200007&quot;,
+  &quot;nationalIdentityNumber&quot; : &quot;14212128025&quot;,
+  &quot;hash&quot; : &quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==&quot;,
+  &quot;hashType&quot; : &quot;SHA512&quot;,
+  &quot;language&quot; : &quot;EST&quot;
+}&gt;" type="com.github.tomakehurst.wiremock.client.VerificationException">com.github.tomakehurst.wiremock.client.VerificationException: A request was unmatched by any stub mapping. Closest stub mapping was:  expected:&lt;
+POST
+/authentication
+
+Accept: application/json
+{
+  &quot;relyingPartyUUID&quot; : &quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445&quot;,
+  &quot;relyingPartyName&quot; : &quot;ToomasBank&quot;,
+  &quot;phoneNumber&quot; : &quot;+37200007&quot;,
+  &quot;nationalIdentityNumber&quot; : &quot;14212128025&quot;,
+  &quot;hash&quot; : &quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==&quot;,
+  &quot;hashType&quot; : &quot;SHA512&quot;,
+  &quot;language&quot; : &quot;EST&quot;
+}&gt; but was:&lt;
+POST
+/mid-api/authentication
+
+Accept: application/json
+{
+  &quot;relyingPartyUUID&quot; : &quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445&quot;,
+  &quot;relyingPartyName&quot; : &quot;ToomasBank&quot;,
+  &quot;phoneNumber&quot; : &quot;+37200007&quot;,
+  &quot;nationalIdentityNumber&quot; : &quot;14212128025&quot;,
+  &quot;hash&quot; : &quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==&quot;,
+  &quot;hashType&quot; : &quot;SHA512&quot;,
+  &quot;language&quot; : &quot;EST&quot;
+}&gt;
+	at com.github.tomakehurst.wiremock.client.VerificationException.forSingleUnmatchedRequest(VerificationException.java:43)
+	at com.github.tomakehurst.wiremock.client.VerificationException.forUnmatchedRequests(VerificationException.java:48)
+	at com.github.tomakehurst.wiremock.junit.WireMockRule.checkForUnmatchedRequests(WireMockRule.java:87)
+	at com.github.tomakehurst.wiremock.junit.WireMockRule.access$000(WireMockRule.java:33)
+	at com.github.tomakehurst.wiremock.junit.WireMockRule$1.evaluate(WireMockRule.java:73)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+</failure>
+    <system-out>21.09.2018 17:37:09.036 INFO  [main] [org.eclipse.jetty.server.Server.doStart:327] - jetty-9.2.13.v20150730
+21.09.2018 17:37:09.037 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@20003af7{/__admin,null,AVAILABLE}
+21.09.2018 17:37:09.037 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@767ab988{/,null,AVAILABLE}
+21.09.2018 17:37:09.039 INFO  [main] [o.e.jetty.server.ServerConnector.doStart:266] - Started ServerConnector@578ce232{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:09.039 INFO  [main] [org.eclipse.jetty.server.Server.doStart:379] - Started @4839ms
+21.09.2018 17:37:09.043 INFO  [qtp1700828897-404] [/__admin.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.AdminRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:09.049 DEBUG [main] [ee.sk.mid.rest.MobileIdRestConnector.authenticate:43] - Authenticating for phone number +37200007
+21.09.2018 17:37:09.059 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.logUrl:58] - POST http://localhost:18089/mid-api/authentication
+21.09.2018 17:37:09.060 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logHeaders:64] - Request headers: {Accept=[application/json], Content-Type=[application/json]}
+21.09.2018 17:37:09.062 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logRequestBody:98] - Message body: {&quot;relyingPartyUUID&quot;:&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445&quot;,&quot;relyingPartyName&quot;:&quot;ToomasBank&quot;,&quot;phoneNumber&quot;:&quot;+37200007&quot;,&quot;nationalIdentityNumber&quot;:&quot;14212128025&quot;,&quot;hash&quot;:&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==&quot;,&quot;hashType&quot;:&quot;SHA512&quot;,&quot;language&quot;:&quot;EST&quot;}
+21.09.2018 17:37:09.063 INFO  [qtp1700828897-405] [/.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.StubRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:09.066 ERROR [qtp1700828897-405] [WireMock.error:40] - Request was not matched:
+{
+  &quot;url&quot; : &quot;/mid-api/authentication&quot;,
+  &quot;absoluteUrl&quot; : &quot;http://localhost:18089/mid-api/authentication&quot;,
+  &quot;method&quot; : &quot;POST&quot;,
+  &quot;clientIp&quot; : &quot;127.0.0.1&quot;,
+  &quot;headers&quot; : {
+    &quot;User-Agent&quot; : &quot;Jersey/2.24.1 (HttpUrlConnection 1.8.0_172)&quot;,
+    &quot;Connection&quot; : &quot;keep-alive&quot;,
+    &quot;Host&quot; : &quot;localhost:18089&quot;,
+    &quot;Accept&quot; : &quot;application/json&quot;,
+    &quot;Content-Length&quot; : &quot;291&quot;,
+    &quot;Content-Type&quot; : &quot;application/json&quot;
+  },
+  &quot;cookies&quot; : { },
+  &quot;browserProxyRequest&quot; : false,
+  &quot;loggedDate&quot; : 1537540629064,
+  &quot;bodyAsBase64&quot; : &quot;eyJyZWx5aW5nUGFydHlVVUlEIjoiZTgxODkwNTEtNTYzNC00ZmJlLWE2ZTgtZmUxYjlhOWVmNDQ1IiwicmVseWluZ1BhcnR5TmFtZSI6IlRvb21hc0JhbmsiLCJwaG9uZU51bWJlciI6IiszNzIwMDAwNyIsIm5hdGlvbmFsSWRlbnRpdHlOdW1iZXIiOiIxNDIxMjEyODAyNSIsImhhc2giOiJLNzRNU0xrYWZSdUtaMU9vdWN2aDJ4YTRRM256K1IvaEZXSVNoTjk2U1BITmNlbSt1UTZtRk1lOWtrSlFxcDVFYW9abkplYUZwbDMxMFRtbHpSZ055UT09IiwiaGFzaFR5cGUiOiJTSEE1MTIiLCJsYW5ndWFnZSI6IkVTVCJ9&quot;,
+  &quot;body&quot; : &quot;{\&quot;relyingPartyUUID\&quot;:\&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445\&quot;,\&quot;relyingPartyName\&quot;:\&quot;ToomasBank\&quot;,\&quot;phoneNumber\&quot;:\&quot;+37200007\&quot;,\&quot;nationalIdentityNumber\&quot;:\&quot;14212128025\&quot;,\&quot;hash\&quot;:\&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==\&quot;,\&quot;hashType\&quot;:\&quot;SHA512\&quot;,\&quot;language\&quot;:\&quot;EST\&quot;}&quot;,
+  &quot;loggedDateString&quot; : &quot;2018-09-21T14:37:09Z&quot;
+}
+Closest match:
+{
+  &quot;url&quot; : &quot;/authentication&quot;,
+  &quot;method&quot; : &quot;POST&quot;,
+  &quot;headers&quot; : {
+    &quot;Accept&quot; : {
+      &quot;equalTo&quot; : &quot;application/json&quot;
+    }
+  },
+  &quot;bodyPatterns&quot; : [ {
+    &quot;equalToJson&quot; : &quot;{\r\n  \&quot;relyingPartyUUID\&quot;: \&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445\&quot;,\r\n  \&quot;relyingPartyName\&quot;: \&quot;ToomasBank\&quot;,\r\n  \&quot;phoneNumber\&quot;: \&quot;+37200007\&quot;,\r\n  \&quot;nationalIdentityNumber\&quot;: \&quot;14212128025\&quot;,\r\n  \&quot;hash\&quot;: \&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==\&quot;,\r\n  \&quot;hashType\&quot;: \&quot;SHA512\&quot;,\r\n  \&quot;language\&quot;: \&quot;EST\&quot;\r\n}&quot;,
+    &quot;ignoreArrayOrder&quot; : false,
+    &quot;ignoreExtraElements&quot; : false
+  } ]
+}
+21.09.2018 17:37:09.068 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.filter:40] - Response status: 404 - Not Found
+21.09.2018 17:37:09.068 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logResponseBody:80] - Response body: &lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=ISO-8859-1&quot;/&gt;
+&lt;title&gt;Error 404 &lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;HTTP ERROR: 404&lt;/h2&gt;
+&lt;p&gt;Problem accessing /mid-api/authentication. Reason:
+&lt;pre&gt;    Not Found&lt;/pre&gt;&lt;/p&gt;
+&lt;hr /&gt;&lt;i&gt;&lt;small&gt;Powered by Jetty://&lt;/small&gt;&lt;/i&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+21.09.2018 17:37:09.068 WARN  [main] [ee.sk.mid.rest.MobileIdRestConnector.postRequest:79] - Response not found for URI http://localhost:18089/mid-api/authentication: HTTP 404 Not Found
+21.09.2018 17:37:09.075 INFO  [main] [o.e.jetty.server.ServerConnector.doStop:306] - Stopped ServerConnector@578ce232{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:09.075 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@767ab988{/,null,UNAVAILABLE}
+21.09.2018 17:37:09.075 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@20003af7{/__admin,null,UNAVAILABLE}
+21.09.2018 17:37:09.075 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1700828897{STOPPING,8&lt;=8&lt;=10,i=6,q=6} Couldn&apos;t stop Thread[qtp1700828897-400,5,]
+21.09.2018 17:37:09.076 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1700828897{STOPPING,8&lt;=8&lt;=10,i=0,q=6} Couldn&apos;t stop Thread[qtp1700828897-401,5,]
+</system-out>
+  </testcase>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="getSessionStatus_whenExpiredTransaction" time="0.029"/>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="authenticate_withWrongRequestParams_shouldThrowException" time="0.045">
+    <error message="Unexpected exception, expected&lt;ee.sk.mid.exception.ParameterMissingException&gt; but was&lt;ee.sk.mid.exception.ResponseNotFound&gt;" type="java.lang.Exception">java.lang.Exception: Unexpected exception, expected&lt;ee.sk.mid.exception.ParameterMissingException&gt; but was&lt;ee.sk.mid.exception.ResponseNotFound&gt;
+	at org.junit.internal.runners.statements.ExpectException.evaluate(ExpectException.java:28)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at com.github.tomakehurst.wiremock.junit.WireMockRule$1.evaluate(WireMockRule.java:72)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+Caused by: ee.sk.mid.exception.ResponseNotFound
+	at ee.sk.mid.rest.MobileIdRestConnector.postRequest(MobileIdRestConnector.java:80)
+	at ee.sk.mid.rest.MobileIdRestConnector.postAuthenticationRequest(MobileIdRestConnector.java:68)
+	at ee.sk.mid.rest.MobileIdRestConnector.authenticate(MobileIdRestConnector.java:48)
+	at ee.sk.mid.rest.MobileIdRestConnectorTest.authenticate_withWrongRequestParams_shouldThrowException(MobileIdRestConnectorTest.java:163)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.ExpectException.evaluate(ExpectException.java:19)
+	... 24 more
+</error>
+    <system-out>21.09.2018 17:37:09.111 INFO  [main] [org.eclipse.jetty.server.Server.doStart:327] - jetty-9.2.13.v20150730
+21.09.2018 17:37:09.111 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@7c3341c9{/__admin,null,AVAILABLE}
+21.09.2018 17:37:09.111 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@178f5ab1{/,null,AVAILABLE}
+21.09.2018 17:37:09.113 INFO  [main] [o.e.jetty.server.ServerConnector.doStart:266] - Started ServerConnector@71d47c80{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:09.113 INFO  [main] [org.eclipse.jetty.server.Server.doStart:379] - Started @4914ms
+21.09.2018 17:37:09.117 INFO  [qtp1516819670-428] [/__admin.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.AdminRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:09.125 DEBUG [main] [ee.sk.mid.rest.MobileIdRestConnector.authenticate:43] - Authenticating for phone number +37200007
+21.09.2018 17:37:09.133 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.logUrl:58] - POST http://localhost:18089/mid-api/authentication
+21.09.2018 17:37:09.133 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logHeaders:64] - Request headers: {Accept=[application/json], Content-Type=[application/json]}
+21.09.2018 17:37:09.134 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logRequestBody:98] - Message body: {&quot;relyingPartyUUID&quot;:&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445&quot;,&quot;relyingPartyName&quot;:&quot;ToomasBank&quot;,&quot;phoneNumber&quot;:&quot;+37200007&quot;,&quot;nationalIdentityNumber&quot;:&quot;14212128025&quot;,&quot;hash&quot;:&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==&quot;,&quot;hashType&quot;:&quot;SHA512&quot;,&quot;language&quot;:&quot;EST&quot;}
+21.09.2018 17:37:09.137 INFO  [qtp1516819670-429] [/.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.StubRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:09.140 ERROR [qtp1516819670-429] [WireMock.error:40] - Request was not matched:
+{
+  &quot;url&quot; : &quot;/mid-api/authentication&quot;,
+  &quot;absoluteUrl&quot; : &quot;http://localhost:18089/mid-api/authentication&quot;,
+  &quot;method&quot; : &quot;POST&quot;,
+  &quot;clientIp&quot; : &quot;127.0.0.1&quot;,
+  &quot;headers&quot; : {
+    &quot;User-Agent&quot; : &quot;Jersey/2.24.1 (HttpUrlConnection 1.8.0_172)&quot;,
+    &quot;Connection&quot; : &quot;keep-alive&quot;,
+    &quot;Host&quot; : &quot;localhost:18089&quot;,
+    &quot;Accept&quot; : &quot;application/json&quot;,
+    &quot;Content-Length&quot; : &quot;291&quot;,
+    &quot;Content-Type&quot; : &quot;application/json&quot;
+  },
+  &quot;cookies&quot; : { },
+  &quot;browserProxyRequest&quot; : false,
+  &quot;loggedDate&quot; : 1537540629138,
+  &quot;bodyAsBase64&quot; : &quot;eyJyZWx5aW5nUGFydHlVVUlEIjoiZTgxODkwNTEtNTYzNC00ZmJlLWE2ZTgtZmUxYjlhOWVmNDQ1IiwicmVseWluZ1BhcnR5TmFtZSI6IlRvb21hc0JhbmsiLCJwaG9uZU51bWJlciI6IiszNzIwMDAwNyIsIm5hdGlvbmFsSWRlbnRpdHlOdW1iZXIiOiIxNDIxMjEyODAyNSIsImhhc2giOiJLNzRNU0xrYWZSdUtaMU9vdWN2aDJ4YTRRM256K1IvaEZXSVNoTjk2U1BITmNlbSt1UTZtRk1lOWtrSlFxcDVFYW9abkplYUZwbDMxMFRtbHpSZ055UT09IiwiaGFzaFR5cGUiOiJTSEE1MTIiLCJsYW5ndWFnZSI6IkVTVCJ9&quot;,
+  &quot;body&quot; : &quot;{\&quot;relyingPartyUUID\&quot;:\&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445\&quot;,\&quot;relyingPartyName\&quot;:\&quot;ToomasBank\&quot;,\&quot;phoneNumber\&quot;:\&quot;+37200007\&quot;,\&quot;nationalIdentityNumber\&quot;:\&quot;14212128025\&quot;,\&quot;hash\&quot;:\&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==\&quot;,\&quot;hashType\&quot;:\&quot;SHA512\&quot;,\&quot;language\&quot;:\&quot;EST\&quot;}&quot;,
+  &quot;loggedDateString&quot; : &quot;2018-09-21T14:37:09Z&quot;
+}
+Closest match:
+{
+  &quot;url&quot; : &quot;/authentication&quot;,
+  &quot;method&quot; : &quot;POST&quot;,
+  &quot;headers&quot; : {
+    &quot;Accept&quot; : {
+      &quot;equalTo&quot; : &quot;application/json&quot;
+    }
+  },
+  &quot;bodyPatterns&quot; : [ {
+    &quot;equalToJson&quot; : &quot;{\r\n  \&quot;relyingPartyUUID\&quot;: \&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445\&quot;,\r\n  \&quot;relyingPartyName\&quot;: \&quot;ToomasBank\&quot;,\r\n  \&quot;phoneNumber\&quot;: \&quot;+37200007\&quot;,\r\n  \&quot;nationalIdentityNumber\&quot;: \&quot;14212128025\&quot;,\r\n  \&quot;hash\&quot;: \&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==\&quot;,\r\n  \&quot;hashType\&quot;: \&quot;SHA512\&quot;,\r\n  \&quot;language\&quot;: \&quot;EST\&quot;\r\n}&quot;,
+    &quot;ignoreArrayOrder&quot; : false,
+    &quot;ignoreExtraElements&quot; : false
+  } ]
+}
+21.09.2018 17:37:09.142 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.filter:40] - Response status: 404 - Not Found
+21.09.2018 17:37:09.142 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logResponseBody:80] - Response body: &lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=ISO-8859-1&quot;/&gt;
+&lt;title&gt;Error 404 &lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;HTTP ERROR: 404&lt;/h2&gt;
+&lt;p&gt;Problem accessing /mid-api/authentication. Reason:
+&lt;pre&gt;    Not Found&lt;/pre&gt;&lt;/p&gt;
+&lt;hr /&gt;&lt;i&gt;&lt;small&gt;Powered by Jetty://&lt;/small&gt;&lt;/i&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+21.09.2018 17:37:09.142 WARN  [main] [ee.sk.mid.rest.MobileIdRestConnector.postRequest:79] - Response not found for URI http://localhost:18089/mid-api/authentication: HTTP 404 Not Found
+21.09.2018 17:37:09.143 INFO  [main] [o.e.jetty.server.ServerConnector.doStop:306] - Stopped ServerConnector@71d47c80{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:09.144 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@178f5ab1{/,null,UNAVAILABLE}
+21.09.2018 17:37:09.144 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@7c3341c9{/__admin,null,UNAVAILABLE}
+21.09.2018 17:37:09.144 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1516819670{STOPPING,8&lt;=8&lt;=10,i=5,q=5} Couldn&apos;t stop Thread[qtp1516819670-424,5,]
+21.09.2018 17:37:09.145 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1516819670{STOPPING,8&lt;=8&lt;=10,i=2,q=5} Couldn&apos;t stop Thread[qtp1516819670-425,5,]
+21.09.2018 17:37:09.145 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1516819670{STOPPING,8&lt;=8&lt;=10,i=0,q=5} Couldn&apos;t stop Thread[qtp1516819670-428,5,]
+</system-out>
+  </testcase>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="authenticate" time="0.028">
+    <error type="ee.sk.mid.exception.ResponseNotFound">ee.sk.mid.exception.ResponseNotFound
+	at ee.sk.mid.rest.MobileIdRestConnector.postRequest(MobileIdRestConnector.java:80)
+	at ee.sk.mid.rest.MobileIdRestConnector.postAuthenticationRequest(MobileIdRestConnector.java:68)
+	at ee.sk.mid.rest.MobileIdRestConnector.authenticate(MobileIdRestConnector.java:48)
+	at ee.sk.mid.rest.MobileIdRestConnectorTest.authenticate(MobileIdRestConnectorTest.java:130)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at com.github.tomakehurst.wiremock.junit.WireMockRule$1.evaluate(WireMockRule.java:72)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+</error>
+    <system-out>21.09.2018 17:37:09.148 INFO  [main] [org.eclipse.jetty.server.Server.doStart:327] - jetty-9.2.13.v20150730
+21.09.2018 17:37:09.149 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@45c20d8f{/__admin,null,AVAILABLE}
+21.09.2018 17:37:09.150 INFO  [main] [o.e.j.server.handler.ContextHandler.doStart:744] - Started o.e.j.s.ServletContextHandler@3d10a00a{/,null,AVAILABLE}
+21.09.2018 17:37:09.151 INFO  [main] [o.e.jetty.server.ServerConnector.doStart:266] - Started ServerConnector@68eb7c52{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:09.151 INFO  [main] [org.eclipse.jetty.server.Server.doStart:379] - Started @4952ms
+21.09.2018 17:37:09.155 INFO  [qtp1248898795-436] [/__admin.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.AdminRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:09.162 DEBUG [main] [ee.sk.mid.rest.MobileIdRestConnector.authenticate:43] - Authenticating for phone number +37200007
+21.09.2018 17:37:09.172 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.logUrl:58] - POST http://localhost:18089/mid-api/authentication
+21.09.2018 17:37:09.172 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logHeaders:64] - Request headers: {Accept=[application/json], Content-Type=[application/json]}
+21.09.2018 17:37:09.174 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logRequestBody:98] - Message body: {&quot;relyingPartyUUID&quot;:&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445&quot;,&quot;relyingPartyName&quot;:&quot;ToomasBank&quot;,&quot;phoneNumber&quot;:&quot;+37200007&quot;,&quot;nationalIdentityNumber&quot;:&quot;14212128025&quot;,&quot;hash&quot;:&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==&quot;,&quot;hashType&quot;:&quot;SHA512&quot;,&quot;language&quot;:&quot;EST&quot;}
+21.09.2018 17:37:09.175 INFO  [qtp1248898795-441] [/.log:2052] - RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.StubRequestHandler. Normalized mapped under returned &apos;null&apos;
+21.09.2018 17:37:09.178 ERROR [qtp1248898795-441] [WireMock.error:40] - Request was not matched:
+{
+  &quot;url&quot; : &quot;/mid-api/authentication&quot;,
+  &quot;absoluteUrl&quot; : &quot;http://localhost:18089/mid-api/authentication&quot;,
+  &quot;method&quot; : &quot;POST&quot;,
+  &quot;clientIp&quot; : &quot;127.0.0.1&quot;,
+  &quot;headers&quot; : {
+    &quot;User-Agent&quot; : &quot;Jersey/2.24.1 (HttpUrlConnection 1.8.0_172)&quot;,
+    &quot;Connection&quot; : &quot;keep-alive&quot;,
+    &quot;Host&quot; : &quot;localhost:18089&quot;,
+    &quot;Accept&quot; : &quot;application/json&quot;,
+    &quot;Content-Length&quot; : &quot;291&quot;,
+    &quot;Content-Type&quot; : &quot;application/json&quot;
+  },
+  &quot;cookies&quot; : { },
+  &quot;browserProxyRequest&quot; : false,
+  &quot;loggedDate&quot; : 1537540629176,
+  &quot;bodyAsBase64&quot; : &quot;eyJyZWx5aW5nUGFydHlVVUlEIjoiZTgxODkwNTEtNTYzNC00ZmJlLWE2ZTgtZmUxYjlhOWVmNDQ1IiwicmVseWluZ1BhcnR5TmFtZSI6IlRvb21hc0JhbmsiLCJwaG9uZU51bWJlciI6IiszNzIwMDAwNyIsIm5hdGlvbmFsSWRlbnRpdHlOdW1iZXIiOiIxNDIxMjEyODAyNSIsImhhc2giOiJLNzRNU0xrYWZSdUtaMU9vdWN2aDJ4YTRRM256K1IvaEZXSVNoTjk2U1BITmNlbSt1UTZtRk1lOWtrSlFxcDVFYW9abkplYUZwbDMxMFRtbHpSZ055UT09IiwiaGFzaFR5cGUiOiJTSEE1MTIiLCJsYW5ndWFnZSI6IkVTVCJ9&quot;,
+  &quot;body&quot; : &quot;{\&quot;relyingPartyUUID\&quot;:\&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445\&quot;,\&quot;relyingPartyName\&quot;:\&quot;ToomasBank\&quot;,\&quot;phoneNumber\&quot;:\&quot;+37200007\&quot;,\&quot;nationalIdentityNumber\&quot;:\&quot;14212128025\&quot;,\&quot;hash\&quot;:\&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==\&quot;,\&quot;hashType\&quot;:\&quot;SHA512\&quot;,\&quot;language\&quot;:\&quot;EST\&quot;}&quot;,
+  &quot;loggedDateString&quot; : &quot;2018-09-21T14:37:09Z&quot;
+}
+Closest match:
+{
+  &quot;url&quot; : &quot;/authentication&quot;,
+  &quot;method&quot; : &quot;POST&quot;,
+  &quot;headers&quot; : {
+    &quot;Accept&quot; : {
+      &quot;equalTo&quot; : &quot;application/json&quot;
+    }
+  },
+  &quot;bodyPatterns&quot; : [ {
+    &quot;equalToJson&quot; : &quot;{\r\n  \&quot;relyingPartyUUID\&quot;: \&quot;e8189051-5634-4fbe-a6e8-fe1b9a9ef445\&quot;,\r\n  \&quot;relyingPartyName\&quot;: \&quot;ToomasBank\&quot;,\r\n  \&quot;phoneNumber\&quot;: \&quot;+37200007\&quot;,\r\n  \&quot;nationalIdentityNumber\&quot;: \&quot;14212128025\&quot;,\r\n  \&quot;hash\&quot;: \&quot;K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==\&quot;,\r\n  \&quot;hashType\&quot;: \&quot;SHA512\&quot;,\r\n  \&quot;language\&quot;: \&quot;EST\&quot;\r\n}&quot;,
+    &quot;ignoreArrayOrder&quot; : false,
+    &quot;ignoreExtraElements&quot; : false
+  } ]
+}
+21.09.2018 17:37:09.180 DEBUG [main] [ee.sk.mid.rest.LoggingFilter.filter:40] - Response status: 404 - Not Found
+21.09.2018 17:37:09.181 TRACE [main] [ee.sk.mid.rest.LoggingFilter.logResponseBody:80] - Response body: &lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=ISO-8859-1&quot;/&gt;
+&lt;title&gt;Error 404 &lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;HTTP ERROR: 404&lt;/h2&gt;
+&lt;p&gt;Problem accessing /mid-api/authentication. Reason:
+&lt;pre&gt;    Not Found&lt;/pre&gt;&lt;/p&gt;
+&lt;hr /&gt;&lt;i&gt;&lt;small&gt;Powered by Jetty://&lt;/small&gt;&lt;/i&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+21.09.2018 17:37:09.181 WARN  [main] [ee.sk.mid.rest.MobileIdRestConnector.postRequest:79] - Response not found for URI http://localhost:18089/mid-api/authentication: HTTP 404 Not Found
+21.09.2018 17:37:09.182 INFO  [main] [o.e.jetty.server.ServerConnector.doStop:306] - Stopped ServerConnector@68eb7c52{HTTP/1.1}{0.0.0.0:18089}
+21.09.2018 17:37:09.183 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@3d10a00a{/,null,UNAVAILABLE}
+21.09.2018 17:37:09.183 INFO  [main] [o.e.j.server.handler.ContextHandler.doStop:865] - Stopped o.e.j.s.ServletContextHandler@45c20d8f{/__admin,null,UNAVAILABLE}
+21.09.2018 17:37:09.183 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1248898795{STOPPING,8&lt;=8&lt;=10,i=4,q=6} Couldn&apos;t stop Thread[qtp1248898795-436,5,main]
+21.09.2018 17:37:09.183 WARN  [main] [o.e.j.util.thread.QueuedThreadPool.doStop:178] - qtp1248898795{STOPPING,8&lt;=8&lt;=10,i=0,q=5} Couldn&apos;t stop Thread[qtp1248898795-438,5,]
+</system-out>
+  </testcase>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="getSessionStatus_whenSignatureHashMismatch" time="0.039"/>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="getSessionStatus_whenUserCancelled" time="0.024"/>
+  <testcase classname="ee.sk.mid.rest.MobileIdRestConnectorTest" name="getSessionStatus_whenError" time="0.029"/>
+</testsuite>

@@ -1,7 +1,7 @@
 package ee.sk.mid;
 
 import ee.sk.mid.exception.TechnicalErrorException;
-import ee.sk.mid.test.DummyData;
+import ee.sk.mid.mock.SessionStatusResultDummy;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
 
@@ -36,7 +36,7 @@ public class MobileIdAuthenticationTest {
     @Test
     public void getCertificate() throws CertificateEncodingException {
         MobileIdAuthentication authenticationResponse = new MobileIdAuthentication();
-        authenticationResponse.setCertificate(CertificateParser.parseX509Certificate(DummyData.CERTIFICATE));
-        assertEquals(DummyData.CERTIFICATE, Base64.encodeBase64String(authenticationResponse.getCertificate().getEncoded()));
+        authenticationResponse.setCertificate(CertificateParser.parseX509Certificate(SessionStatusResultDummy.CERTIFICATE));
+        assertEquals(SessionStatusResultDummy.CERTIFICATE, Base64.encodeBase64String(authenticationResponse.getCertificate().getEncoded()));
     }
 }

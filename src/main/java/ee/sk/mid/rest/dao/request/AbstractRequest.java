@@ -14,19 +14,21 @@ public class AbstractRequest {
     @Size(min = 1, max = 100)
     private String relyingPartyName;
 
+    @NotNull
     public String getRelyingPartyUUID() {
         return relyingPartyUUID;
     }
 
-    public void setRelyingPartyUUID(String relyingPartyUUID) {
+    public void setRelyingPartyUUID(@NotNull String relyingPartyUUID) {
         this.relyingPartyUUID = relyingPartyUUID;
     }
 
+    @NotNull
     public String getRelyingPartyName() {
         return relyingPartyName;
     }
 
-    public void setRelyingPartyName(String relyingPartyName) {
+    public void setRelyingPartyName(@NotNull String relyingPartyName) {
         this.relyingPartyName = relyingPartyName;
     }
 

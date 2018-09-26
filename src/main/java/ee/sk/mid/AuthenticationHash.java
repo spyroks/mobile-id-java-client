@@ -5,9 +5,9 @@ import java.security.SecureRandom;
 /**
  * Class containing the hash and its hash type used for authentication
  */
-public class AuthenticationHash extends SignableHash {
+class AuthenticationHash extends SignableHash {
 
-    public static AuthenticationHash generateRandomHash() {
+    static AuthenticationHash generateRandomHash() {
         AuthenticationHash authenticationHash = new AuthenticationHash();
         byte[] generatedDigest = DigestCalculator.calculateDigest(getRandomBytes(), HashType.SHA512);
         authenticationHash.setHash(generatedDigest);

@@ -1,20 +1,44 @@
-package ee.sk.mid.rest;
+package ee.sk.mid.mock;
 
 import ee.sk.mid.exception.SessionNotFoundException;
+import ee.sk.mid.rest.MobileIdConnector;
 import ee.sk.mid.rest.dao.SessionStatus;
 import ee.sk.mid.rest.dao.request.AuthenticationRequest;
 import ee.sk.mid.rest.dao.request.SessionStatusRequest;
+import ee.sk.mid.rest.dao.request.SignatureRequest;
 import ee.sk.mid.rest.dao.response.AuthenticationResponse;
+import ee.sk.mid.rest.dao.response.SignatureResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MobileIdConnectorStub implements MobileIdConnector {
 
-    String sessionIdUsed;
-    SessionStatusRequest requestUsed;
-    List<SessionStatus> responses = new ArrayList<>();
-    int responseNumber = 0;
+    private String sessionIdUsed;
+    private SessionStatusRequest requestUsed;
+    private List<SessionStatus> responses = new ArrayList<>();
+    private int responseNumber = 0;
+
+    public String getSessionIdUsed() {
+        return sessionIdUsed;
+    }
+
+    public SessionStatusRequest getRequestUsed() {
+        return requestUsed;
+    }
+
+    public List<SessionStatus> getResponses() {
+        return responses;
+    }
+
+    public int getResponseNumber() {
+        return responseNumber;
+    }
+
+    @Override
+    public SignatureResponse sign(SignatureRequest request) {
+        return null;
+    }
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {

@@ -1,4 +1,4 @@
-package ee.sk.mid.test;
+package ee.sk.mid.mock;
 
 public class TestData {
 

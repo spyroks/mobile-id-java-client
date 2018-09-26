@@ -15,19 +15,18 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import javax.ws.rs.InternalServerErrorException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static ee.sk.mid.test.MobileIdRestServiceStubs.*;
-import static ee.sk.mid.test.TestData.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static ee.sk.mid.mock.MobileIdRestServiceStubs.*;
+import static ee.sk.mid.mock.TestData.*;
+import static org.hamcrest.core.StringStartsWith.startsWith;
+import static org.junit.Assert.*;
 
-public class MobileIdRestConnectorTest {
+public class MobileIdRestConnectorAuthenticationTest {
 
     private static final String AUTHENTICATION_SESSION_PATH = "/mid-api/authentication/session/{sessionId}";
 
@@ -38,6 +37,69 @@ public class MobileIdRestConnectorTest {
     @Before
     public void setUp() {
         connector = new MobileIdRestConnector("http://localhost:18089");
+    }
+
+    @Test
+    public void authenticate() throws IOException {
+        stubRequestWithResponse("/mid-api/authentication", "requests/authenticationRequest.json", "responses/authenticationResponse.json");
+        AuthenticationRequest request = createDummyAuthenticationSessionRequest();
+        AuthenticationResponse response = connector.authenticate(request);
+        assertNotNull(response);
+        assertEquals("1dcc1600-29a6-4e95-a95c-d69b31febcfb", response.getSessionId());
+    }
+
+    @Test
+    public void authenticate_withDisplayText() throws IOException {
+        stubRequestWithResponse("/mid-api/authentication", "requests/authenticationRequestWithDisplayText.json", "responses/authenticationResponse.json");
+        AuthenticationRequest request = createDummyAuthenticationSessionRequest();
+        request.setDisplayText("Log into internet banking system");
+        AuthenticationResponse response = connector.authenticate(request);
+        assertNotNull(response);
+        assertEquals("1dcc1600-29a6-4e95-a95c-d69b31febcfb", response.getSessionId());
+    }
+
+    @Test(expected = ResponseRetrievingException.class)
+    public void authenticate_whenGettingSessionIdFailed_shouldThrowException() throws IOException {
+        stubInternalServerErrorResponse("/mid-api/authentication", "requests/authenticationRequest.json");
+        AuthenticationRequest request = createDummyAuthenticationSessionRequest();
+        connector.authenticate(request);
+    }
+
+    @Test(expected = ResponseNotFound.class)
+    public void authenticate_whenResponseNotFound_shouldThrowException() throws IOException {
+        stubNotFoundResponse("/mid-api/authentication", "requests/authenticationRequest.json");
+        AuthenticationRequest request = createDummyAuthenticationSessionRequest();
+        connector.authenticate(request);
+    }
+
+    @Test(expected = ParameterMissingException.class)
+    public void authenticate_withWrongRequestParams_shouldThrowException() throws IOException {
+        stubBadRequestResponse("/mid-api/authentication", "requests/authenticationRequest.json");
+        AuthenticationRequest request = createDummyAuthenticationSessionRequest();
+        connector.authenticate(request);
+    }
+
+    @Test(expected = UnauthorizedException.class)
+    public void authenticate_withWrongAuthenticationParams_shouldThrowException() throws IOException {
+        stubUnauthorizedResponse("/mid-api/authentication", "requests/authenticationRequest.json");
+        AuthenticationRequest request = createDummyAuthenticationSessionRequest();
+        connector.authenticate(request);
+    }
+
+    @Test
+    public void verifyCustomRequestHeaderPresent_whenAuthenticating() throws IOException {
+        String headerName = "custom-header";
+        String headerValue = "Auth";
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put(headerName, headerValue);
+        connector = new MobileIdRestConnector("http://localhost:18089", getClientConfigWithCustomRequestHeader(headers));
+        stubRequestWithResponse("/mid-api/authentication", "requests/authenticationRequest.json", "responses/authenticationResponse.json");
+        AuthenticationRequest request = createDummyAuthenticationSessionRequest();
+        connector.authenticate(request);
+
+        verify(postRequestedFor(urlEqualTo("/mid-api/authentication"))
+                .withHeader(headerName, equalTo(headerValue)));
     }
 
     @Test(expected = SessionNotFoundException.class)
@@ -52,6 +114,15 @@ public class MobileIdRestConnectorTest {
         SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusRunning.json");
         assertNotNull(sessionStatus);
         assertEquals("RUNNING", sessionStatus.getState());
+    }
+
+    @Test
+    public void getSessionStatus_forSuccessfulSigningRequest() throws Exception {
+        SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusForSuccessfulSigningRequest.json");
+        assertSuccessfulResponse(sessionStatus);
+        assertNotNull(sessionStatus.getSignature());
+        assertThat(sessionStatus.getSignature().getValueInBase64(), startsWith("luvjsi1+1iLN9yfDFEh/BE8hXtAKhAIxilv"));
+        assertEquals("sha256WithRSAEncryption", sessionStatus.getSignature().getAlgorithm());
     }
 
     @Test
@@ -122,69 +193,6 @@ public class MobileIdRestConnectorTest {
         SessionStatus sessionStatus = connector.getSessionStatus(request, AUTHENTICATION_SESSION_PATH);
         assertSuccessfulResponse(sessionStatus);
         verify(getRequestedFor(urlEqualTo("/mid-api/authentication/session/de305d54-75b4-431b-adb2-eb6b9e546016?timeoutMs=10000")));
-    }
-
-    @Test
-    public void authenticate() throws IOException {
-        stubRequestWithResponse("/mid-api/authentication", "requests/authenticationSessionRequest.json", "responses/authenticationSessionResponse.json");
-        AuthenticationRequest request = createDummyAuthenticationSessionRequest();
-        AuthenticationResponse response = connector.authenticate(request);
-        assertNotNull(response);
-        assertEquals("1dcc1600-29a6-4e95-a95c-d69b31febcfb", response.getSessionId());
-    }
-
-    @Test
-    public void authenticate_withDisplayText() throws IOException {
-        stubRequestWithResponse("/mid-api/authentication", "requests/authenticationSessionRequestWithDisplayText.json", "responses/authenticationSessionResponse.json");
-        AuthenticationRequest request = createDummyAuthenticationSessionRequest();
-        request.setDisplayText("Log into internet banking system");
-        AuthenticationResponse response = connector.authenticate(request);
-        assertNotNull(response);
-        assertEquals("1dcc1600-29a6-4e95-a95c-d69b31febcfb", response.getSessionId());
-    }
-
-    @Test(expected = ResponseRetrievingException.class)
-    public void authenticate_whenGettingSessionIdFailed_shouldThrowException() throws IOException {
-        stubInternalServerErrorResponse("/mid-api/authentication", "requests/authenticationSessionRequest.json");
-        AuthenticationRequest request = createDummyAuthenticationSessionRequest();
-        connector.authenticate(request);
-    }
-
-    @Test(expected = ResponseNotFound.class)
-    public void authenticate_whenResponseNotFound_shouldThrowException() throws IOException {
-        stubNotFoundResponse("/mid-api/authentication", "requests/authenticationSessionRequest.json");
-        AuthenticationRequest request = createDummyAuthenticationSessionRequest();
-        connector.authenticate(request);
-    }
-
-    @Test(expected = ParameterMissingException.class)
-    public void authenticate_withWrongRequestParams_shouldThrowException() throws IOException {
-        stubBadRequestResponse("/mid-api/authentication", "requests/authenticationSessionRequest.json");
-        AuthenticationRequest request = createDummyAuthenticationSessionRequest();
-        connector.authenticate(request);
-    }
-
-    @Test(expected = UnauthorizedException.class)
-    public void authenticate_withWrongAuthenticationParams_shouldThrowException() throws IOException {
-        stubUnauthorizedResponse("/mid-api/authentication", "requests/authenticationSessionRequest.json");
-        AuthenticationRequest request = createDummyAuthenticationSessionRequest();
-        connector.authenticate(request);
-    }
-
-    @Test
-    public void verifyCustomRequestHeaderPresent_whenAuthenticating() throws IOException {
-        String headerName = "custom-header";
-        String headerValue = "Auth";
-
-        Map<String, String> headers = new HashMap<>();
-        headers.put(headerName, headerValue);
-        connector = new MobileIdRestConnector("http://localhost:18089", getClientConfigWithCustomRequestHeader(headers));
-        stubRequestWithResponse("/mid-api/authentication", "requests/authenticationSessionRequest.json", "responses/authenticationSessionResponse.json");
-        AuthenticationRequest request = createDummyAuthenticationSessionRequest();
-        connector.authenticate(request);
-
-        verify(postRequestedFor(urlEqualTo("/mid-api/authentication"))
-                .withHeader(headerName, equalTo(headerValue)));
     }
 
     private SessionStatus getStubbedSessionStatusWithResponse(String responseFile) throws IOException {

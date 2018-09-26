@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class AuthenticationRequest extends AbstractRequest {
+public class SignatureRequest extends AbstractRequest {
 
     @NotNull
     @Pattern(regexp = "^\\+\\d{8,30}$", message = "must contain of + and numbers(8-30)")
@@ -87,7 +87,7 @@ public class AuthenticationRequest extends AbstractRequest {
 
     @Override
     public String toString() {
-        return "AuthenticationRequest{" +
+        return "SignatureRequest{" +
                 "phoneNumber='" + phoneNumber + '\'' +
                 ", nationalIdentityNumber='" + nationalIdentityNumber + '\'' +
                 ", hash='" + hash + '\'' +

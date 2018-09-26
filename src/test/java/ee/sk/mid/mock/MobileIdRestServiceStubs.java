@@ -1,4 +1,4 @@
-package ee.sk.mid.test;
+package ee.sk.mid.mock;
 
 import org.apache.commons.io.FileUtils;
 
@@ -13,8 +13,8 @@ import static org.junit.Assert.assertNotNull;
 
 public class MobileIdRestServiceStubs {
 
-    public static void stubNotFoundResponse(String urlEquals) {
-        stubFor(get(urlEqualTo(urlEquals))
+    public static void stubNotFoundResponse(String url) {
+        stubFor(get(urlEqualTo(url))
                 .withHeader("Accept", equalTo("application/json"))
                 .willReturn(aResponse()
                         .withStatus(404)
@@ -22,8 +22,8 @@ public class MobileIdRestServiceStubs {
                         .withBody("Not found")));
     }
 
-    public static void stubRequestWithResponse(String urlEquals, String responseFile) throws IOException {
-        stubFor(get(urlPathEqualTo(urlEquals))
+    public static void stubRequestWithResponse(String url, String responseFile) throws IOException {
+        stubFor(get(urlPathEqualTo(url))
                 .withHeader("Accept", equalTo("application/json"))
                 .willReturn(aResponse()
                         .withStatus(200)
@@ -41,9 +41,8 @@ public class MobileIdRestServiceStubs {
                         .withBody(readFileBody(responseFile))));
     }
 
-    public static void stubSessionStatusWithState(String sessionId, String responseFile, String startState, String endState) throws IOException {
-        String urlEquals = "/mid-api/authentication/session/" + sessionId;
-        stubFor(get(urlEqualTo(urlEquals))
+    public static void stubSessionStatusWithState(String url, String responseFile, String startState, String endState) throws IOException {
+        stubFor(get(urlEqualTo(url))
                 .inScenario("session status")
                 .whenScenarioStateIs(startState)
                 .withHeader("Accept", equalTo("application/json"))

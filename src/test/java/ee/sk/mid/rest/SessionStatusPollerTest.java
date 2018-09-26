@@ -1,13 +1,14 @@
 package ee.sk.mid.rest;
 
 import ee.sk.mid.exception.*;
+import ee.sk.mid.mock.MobileIdConnectorStub;
 import ee.sk.mid.rest.dao.SessionStatus;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
-import static ee.sk.mid.test.DummyData.*;
+import static ee.sk.mid.mock.SessionStatusResultDummy.*;
 import static org.junit.Assert.*;
 
 public class SessionStatusPollerTest {
@@ -26,20 +27,20 @@ public class SessionStatusPollerTest {
 
     @Test
     public void getFirstCompleteResponse() {
-        connector.responses.add(createCompleteSessionStatus());
+        connector.getResponses().add(createCompleteSessionStatus());
         SessionStatus status = poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
-        assertEquals("97f5058e-e308-4c83-ac14-7712b0eb9d86", connector.sessionIdUsed);
-        assertEquals(1, connector.responseNumber);
+        assertEquals("97f5058e-e308-4c83-ac14-7712b0eb9d86", connector.getSessionIdUsed());
+        assertEquals(1, connector.getResponseNumber());
         assertCompleteStateReceived(status);
     }
 
     @Test
     public void pollAndGetThirdCompleteResponse() {
-        connector.responses.add(createRunningSessionStatus());
-        connector.responses.add(createRunningSessionStatus());
-        connector.responses.add(createCompleteSessionStatus());
+        connector.getResponses().add(createRunningSessionStatus());
+        connector.getResponses().add(createRunningSessionStatus());
+        connector.getResponses().add(createCompleteSessionStatus());
         SessionStatus status = poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
-        assertEquals(3, connector.responseNumber);
+        assertEquals(3, connector.getResponseNumber());
         assertCompleteStateReceived(status);
     }
 
@@ -47,7 +48,7 @@ public class SessionStatusPollerTest {
     public void setPollingSleepTime() {
         poller.setPollingSleepTime(TimeUnit.MILLISECONDS, 200L);
         addMultipleRunningSessionResponses(5);
-        connector.responses.add(createCompleteSessionStatus());
+        connector.getResponses().add(createCompleteSessionStatus());
         long duration = measurePollingDuration();
         assertTrue(duration > 1000L);
         assertTrue(duration < 1100L);
@@ -56,87 +57,87 @@ public class SessionStatusPollerTest {
     @Test
     public void setResponseSocketOpenTime() {
         poller.setResponseSocketOpenTime(TimeUnit.MINUTES, 2L);
-        connector.responses.add(createCompleteSessionStatus());
+        connector.getResponses().add(createCompleteSessionStatus());
         SessionStatus status = poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
         assertCompleteStateReceived(status);
-        assertTrue(connector.requestUsed.isResponseSocketOpenTimeSet());
-        assertEquals(TimeUnit.MINUTES, connector.requestUsed.getResponseSocketOpenTimeUnit());
-        assertEquals(2L, connector.requestUsed.getResponseSocketOpenTimeValue());
+        assertTrue(connector.getRequestUsed().isResponseSocketOpenTimeSet());
+        assertEquals(TimeUnit.MINUTES, connector.getRequestUsed().getResponseSocketOpenTimeUnit());
+        assertEquals(2L, connector.getRequestUsed().getResponseSocketOpenTimeValue());
     }
 
     @Test
     public void responseSocketOpenTimeShouldNotBeSetByDefault() {
-        connector.responses.add(createCompleteSessionStatus());
+        connector.getResponses().add(createCompleteSessionStatus());
         SessionStatus status = poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
         assertCompleteStateReceived(status);
-        assertFalse(connector.requestUsed.isResponseSocketOpenTimeSet());
+        assertFalse(connector.getRequestUsed().isResponseSocketOpenTimeSet());
     }
 
     @Test(expected = SessionTimeoutException.class)
     public void getUserTimeoutResponse_shouldThrowException() {
-        connector.responses.add(createTimeoutSessionStatus());
+        connector.getResponses().add(createTimeoutSessionStatus());
         poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
     }
 
     @Test(expected = ResponseRetrievingException.class)
     public void getResponseRetrievingErrorResponse_shouldThrowException() {
-        connector.responses.add(createResponseRetrievingErrorStatus());
+        connector.getResponses().add(createResponseRetrievingErrorStatus());
         poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
     }
 
     @Test(expected = NotMIDClientException.class)
     public void getNotMIDClientResponse_shouldThrowException() {
-        connector.responses.add(createNotMIDClientStatus());
+        connector.getResponses().add(createNotMIDClientStatus());
         poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
     }
 
     @Test(expected = ExpiredTransactionException.class)
     public void getMSSSPTransactionExpiredResponse_shouldThrowException() {
-        connector.responses.add(createMSSPTransactionExpiredStatus());
+        connector.getResponses().add(createMSSPTransactionExpiredStatus());
         poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
     }
 
     @Test(expected = UserCancellationException.class)
     public void getUserCancellationResponse_shouldThrowException() {
-        connector.responses.add(createUserCancellationStatus());
+        connector.getResponses().add(createUserCancellationStatus());
         poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
     }
 
     @Test(expected = MIDNotReadyException.class)
     public void getMIDNotReadyResponse_shouldThrowException() {
-        connector.responses.add(createMIDNotReadyStatus());
+        connector.getResponses().add(createMIDNotReadyStatus());
         poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
     }
 
     @Test(expected = SimNotAvailableException.class)
     public void getSimNotAvailableResponse_shouldThrowException() {
-        connector.responses.add(createSimNotAvailableStatus());
+        connector.getResponses().add(createSimNotAvailableStatus());
         poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
     }
 
     @Test(expected = DeliveryException.class)
     public void getDeliveryErrorResponse_shouldThrowException() {
-        connector.responses.add(createDeliveryErrorStatus());
+        connector.getResponses().add(createDeliveryErrorStatus());
         poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
     }
 
     @Test(expected = InvalidCardResponseException.class)
     public void getInvalidCardResponse_shouldThrowException() {
-        connector.responses.add(createInvalidCardResponseStatus());
+        connector.getResponses().add(createInvalidCardResponseStatus());
         poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
     }
 
     @Test(expected = SignatureHashMismatchException.class)
     public void getSignatureHashMismatchResponse_shouldThrowException() {
-        connector.responses.add(createSignatureHashMismatchStatus());
+        connector.getResponses().add(createSignatureHashMismatchStatus());
         poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
     }
 
     @Test(expected = TechnicalErrorException.class)
     public void getUnknownResult_shouldThrowException() {
         SessionStatus status = createCompleteSessionStatus();
-        status.setResult("BLAH");
-        connector.responses.add(status);
+        status.setResult("HACKERMAN");
+        connector.getResponses().add(status);
         poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
     }
 
@@ -144,7 +145,7 @@ public class SessionStatusPollerTest {
     public void getMissingResult_shouldThrowException() {
         SessionStatus status = createCompleteSessionStatus();
         status.setResult(null);
-        connector.responses.add(status);
+        connector.getResponses().add(status);
         poller.fetchFinalSessionStatus("97f5058e-e308-4c83-ac14-7712b0eb9d86", AUTHENTICATION_SESSION_PATH);
     }
 
@@ -158,7 +159,7 @@ public class SessionStatusPollerTest {
 
     private void addMultipleRunningSessionResponses(int numberOfResponses) {
         for (int i = 0; i < numberOfResponses; i++)
-            connector.responses.add(createRunningSessionStatus());
+            connector.getResponses().add(createRunningSessionStatus());
     }
 
     private void assertCompleteStateReceived(SessionStatus status) {

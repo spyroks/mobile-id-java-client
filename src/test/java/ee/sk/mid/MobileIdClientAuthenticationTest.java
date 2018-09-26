@@ -15,12 +15,12 @@ import java.util.concurrent.TimeUnit;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED;
-import static ee.sk.mid.test.MobileIdRestServiceStubs.*;
-import static ee.sk.mid.test.TestData.*;
+import static ee.sk.mid.mock.MobileIdRestServiceStubs.*;
+import static ee.sk.mid.mock.TestData.*;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.*;
 
-public class MobileIdClientTest {
+public class MobileIdClientAuthenticationTest {
 
     private static final String AUTHENTICATION_SESSION_PATH = "/mid-api/authentication/session/{sessionId}";
 
@@ -35,9 +35,8 @@ public class MobileIdClientTest {
         client.setRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1);
         client.setRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1);
         client.setHostUrl("http://localhost:18089");
-        stubRequestWithResponse("/mid-api/authentication", "requests/authenticationSessionRequest.json", "responses/authenticationSessionResponse.json");
-        stubRequestWithResponse("/mid-api/authentication", "requests/authenticationSessionRequest.json", "responses/authenticationSessionResponse.json");
-        stubRequestWithResponse("/mid-api/authentication", "requests/authenticationSessionRequestWithDisplayText.json", "responses/authenticationSessionResponse.json");
+        stubRequestWithResponse("/mid-api/authentication", "requests/authenticationRequest.json", "responses/authenticationResponse.json");
+        stubRequestWithResponse("/mid-api/authentication", "requests/authenticationRequestWithDisplayText.json", "responses/authenticationResponse.json");
         stubRequestWithResponse("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusForSuccessfulAuthenticationRequest.json");
     }
 
@@ -142,32 +141,32 @@ public class MobileIdClientTest {
 
     @Test(expected = ResponseRetrievingException.class)
     public void authenticate_whenGettingSessionIdFailed_shouldThrowException() throws IOException {
-        stubInternalServerErrorResponse("/mid-api/authentication", "requests/authenticationSessionRequest.json");
+        stubInternalServerErrorResponse("/mid-api/authentication", "requests/authenticationRequest.json");
         makeAuthenticationRequest();
     }
 
     @Test(expected = ResponseNotFound.class)
     public void authenticate_whenResponseNotFound_shouldThrowException() throws IOException {
-        stubNotFoundResponse("/mid-api/authentication", "requests/authenticationSessionRequest.json");
+        stubNotFoundResponse("/mid-api/authentication", "requests/authenticationRequest.json");
         makeAuthenticationRequest();
     }
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withWrongRequestParams_shouldThrowException() throws IOException {
-        stubBadRequestResponse("/mid-api/authentication", "requests/authenticationSessionRequest.json");
+        stubBadRequestResponse("/mid-api/authentication", "requests/authenticationRequest.json");
         makeAuthenticationRequest();
     }
 
     @Test(expected = UnauthorizedException.class)
     public void authenticate_withWrongAuthenticationParams_shouldThrowException() throws IOException {
-        stubUnauthorizedResponse("/mid-api/authentication", "requests/authenticationSessionRequest.json");
+        stubUnauthorizedResponse("/mid-api/authentication", "requests/authenticationRequest.json");
         makeAuthenticationRequest();
     }
 
     @Test
     public void setPollingSleepTimeoutForAuthentication() throws IOException {
-        stubSessionStatusWithState("1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusRunning.json", STARTED, "COMPLETE");
-        stubSessionStatusWithState("1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusForSuccessfulAuthenticationRequest.json", "COMPLETE", STARTED);
+        stubSessionStatusWithState("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusRunning.json", STARTED, "COMPLETE");
+        stubSessionStatusWithState("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusForSuccessfulAuthenticationRequest.json", "COMPLETE", STARTED);
         client.setPollingSleepTimeout(TimeUnit.SECONDS, 2L);
         long duration = measureAuthenticationDuration();
         assertTrue("Duration is " + duration, duration > 2000L);
@@ -191,9 +190,9 @@ public class MobileIdClientTest {
 
     private long measureAuthenticationDuration() {
         long startTime = System.currentTimeMillis();
-        MobileIdAuthentication authenticationResponse = createAuthentication();
+        MobileIdAuthentication authentication = createAuthentication();
         long endTime = System.currentTimeMillis();
-        assertNotNull(authenticationResponse);
+        assertNotNull(authentication);
         return endTime - startTime;
     }
 

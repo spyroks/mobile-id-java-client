@@ -1,18 +1,18 @@
 package ee.sk.mid;
 
 import ee.sk.mid.exception.*;
-import ee.sk.mid.rest.MobileIdConnectorSpy;
+import ee.sk.mid.mock.MobileIdConnectorSpy;
 import ee.sk.mid.rest.SessionStatusPoller;
-import ee.sk.mid.test.TestUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.security.cert.CertificateEncodingException;
 
-import static ee.sk.mid.test.DummyData.*;
-import static ee.sk.mid.test.TestData.*;
-import static ee.sk.mid.test.TestUtils.createDummySessionStatusResponse;
+import static ee.sk.mid.mock.SessionStatusResultDummy.*;
+import static ee.sk.mid.mock.TestData.*;
+import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.createDummyAuthenticationResponse;
+import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.createDummyAuthenticationSessionStatusResponse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -26,8 +26,8 @@ public class AuthenticationRequestBuilderTest {
     @Before
     public void setUp() {
         connector = new MobileIdConnectorSpy();
-        connector.authenticationSessionResponseToRespond = TestUtils.createDummyAuthenticationSessionResponse();
-        connector.sessionStatusToRespond = createDummySessionStatusResponse();
+        connector.setAuthenticationResponseToRespond(createDummyAuthenticationResponse());
+        connector.setSessionStatusToRespond(createDummyAuthenticationSessionStatusResponse());
         SessionStatusPoller sessionStatusPoller = new SessionStatusPoller(connector);
         builder = new AuthenticationRequestBuilder(connector, sessionStatusPoller);
     }
@@ -46,7 +46,7 @@ public class AuthenticationRequestBuilderTest {
                 .authenticate(AUTHENTICATION_SESSION_PATH);
 
         assertCorrectSessionRequestMade();
-        assertAuthenticationResponseCorrect(authenticationResponse, authenticationHash.getHashInBase64());
+        assertAuthenticationCorrect(authenticationResponse, authenticationHash.getHashInBase64());
     }
 
     @Test
@@ -64,8 +64,9 @@ public class AuthenticationRequestBuilderTest {
                 .withLanguage(Language.EST)
                 .authenticate(AUTHENTICATION_SESSION_PATH);
 
+        assertCorrectAuthenticationRequestMade();
         assertCorrectSessionRequestMade();
-        assertAuthenticationResponseCorrect(authenticationResponse, "7iaw3Ur350mqGo7jwQrpkj9hiYB3Lkc/iBml1JQODbJ6wYX4oOHV+E+IvIh/1nsUNzLDBMxfqa2Ob1f1ACio/w==");
+        assertAuthenticationCorrect(authenticationResponse, "7iaw3Ur350mqGo7jwQrpkj9hiYB3Lkc/iBml1JQODbJ6wYX4oOHV+E+IvIh/1nsUNzLDBMxfqa2Ob1f1ACio/w==");
     }
 
     @Test(expected = ParameterMissingException.class)
@@ -181,87 +182,97 @@ public class AuthenticationRequestBuilderTest {
 
     @Test(expected = SessionTimeoutException.class)
     public void authenticate_withTimeout_shouldThrowException() {
-        connector.sessionStatusToRespond = createTimeoutSessionStatus();
+        connector.setSessionStatusToRespond(createTimeoutSessionStatus());
         makeAuthenticationRequest();
     }
 
     @Test(expected = ResponseRetrievingException.class)
     public void authenticate_withResponseRetrievingError_shouldThrowException() {
-        connector.sessionStatusToRespond = createResponseRetrievingErrorStatus();
+        connector.setSessionStatusToRespond(createResponseRetrievingErrorStatus());
         makeAuthenticationRequest();
     }
 
     @Test(expected = NotMIDClientException.class)
     public void authenticate_withNotMIDClient_shouldThrowException() {
-        connector.sessionStatusToRespond = createNotMIDClientStatus();
+        connector.setSessionStatusToRespond(createNotMIDClientStatus());
         makeAuthenticationRequest();
     }
 
     @Test(expected = ExpiredTransactionException.class)
     public void authenticate_withMSSPTransactionExpired_shouldThrowException() {
-        connector.sessionStatusToRespond = createMSSPTransactionExpiredStatus();
+        connector.setSessionStatusToRespond(createMSSPTransactionExpiredStatus());
         makeAuthenticationRequest();
     }
 
     @Test(expected = UserCancellationException.class)
     public void authenticate_withUserCancellation_shouldThrowException() {
-        connector.sessionStatusToRespond = createUserCancellationStatus();
+        connector.setSessionStatusToRespond(createUserCancellationStatus());
         makeAuthenticationRequest();
     }
 
     @Test(expected = MIDNotReadyException.class)
     public void authenticate_withMIDNotReady_shouldThrowException() {
-        connector.sessionStatusToRespond = createMIDNotReadyStatus();
+        connector.setSessionStatusToRespond(createMIDNotReadyStatus());
         makeAuthenticationRequest();
     }
 
     @Test(expected = SimNotAvailableException.class)
     public void authenticate_withSimNotAvailable_shouldThrowException() {
-        connector.sessionStatusToRespond = createSimNotAvailableStatus();
+        connector.setSessionStatusToRespond(createSimNotAvailableStatus());
         makeAuthenticationRequest();
     }
 
     @Test(expected = DeliveryException.class)
     public void authenticate_withDeliveryError_shouldThrowException() {
-        connector.sessionStatusToRespond = createDeliveryErrorStatus();
+        connector.setSessionStatusToRespond(createDeliveryErrorStatus());
         makeAuthenticationRequest();
     }
 
     @Test(expected = InvalidCardResponseException.class)
     public void authenticate_withInvalidCardResponse_shouldThrowException() {
-        connector.sessionStatusToRespond = createInvalidCardResponseStatus();
+        connector.setSessionStatusToRespond(createInvalidCardResponseStatus());
         makeAuthenticationRequest();
     }
 
     @Test(expected = SignatureHashMismatchException.class)
     public void authenticate_withSignatureHashMismatch_shouldThrowException() {
-        connector.sessionStatusToRespond = createSignatureHashMismatchStatus();
+        connector.setSessionStatusToRespond(createSignatureHashMismatchStatus());
         makeAuthenticationRequest();
     }
 
     @Test(expected = TechnicalErrorException.class)
     public void authenticate_withResultMissingInResponse_shouldThrowException() {
-        connector.sessionStatusToRespond.setResult(null);
+        connector.getSessionStatusToRespond().setResult(null);
         makeAuthenticationRequest();
     }
 
     @Test(expected = TechnicalErrorException.class)
     public void authenticate_withSignatureMissingInResponse_shouldThrowException() {
-        connector.sessionStatusToRespond.setSignature(null);
+        connector.getSessionStatusToRespond().setSignature(null);
         makeAuthenticationRequest();
     }
 
     @Test(expected = TechnicalErrorException.class)
     public void authenticate_withCertificateMissingInResponse_shouldThrowException() {
-        connector.sessionStatusToRespond.setCertificate(null);
+        connector.getSessionStatusToRespond().setCertificate(null);
         makeAuthenticationRequest();
     }
 
-    private void assertCorrectSessionRequestMade() {
-        assertEquals("97f5058e-e308-4c83-ac14-7712b0eb9d86", connector.sessionIdUsed);
+    private void assertCorrectAuthenticationRequestMade() {
+        assertEquals(RELYING_PARTY_UUID_OF_USER_1, connector.getAuthenticationRequestUsed().getRelyingPartyUUID());
+        assertEquals(RELYING_PARTY_NAME_OF_USER_1, connector.getAuthenticationRequestUsed().getRelyingPartyName());
+        assertEquals(VALID_PHONE_1, connector.getAuthenticationRequestUsed().getPhoneNumber());
+        assertEquals(VALID_NAT_IDENTITY_1, connector.getAuthenticationRequestUsed().getNationalIdentityNumber());
+        assertEquals("7iaw3Ur350mqGo7jwQrpkj9hiYB3Lkc/iBml1JQODbJ6wYX4oOHV+E+IvIh/1nsUNzLDBMxfqa2Ob1f1ACio/w==", connector.getAuthenticationRequestUsed().getHash());
+        assertEquals(HashType.SHA512, connector.getAuthenticationRequestUsed().getHashType());
+        assertEquals(Language.EST, connector.getAuthenticationRequestUsed().getLanguage());
     }
 
-    private void assertAuthenticationResponseCorrect(MobileIdAuthentication authentication, String expectedHashToSignInBase64) throws CertificateEncodingException {
+    private void assertCorrectSessionRequestMade() {
+        assertEquals("97f5058e-e308-4c83-ac14-7712b0eb9d86", connector.getSessionIdUsed());
+    }
+
+    private void assertAuthenticationCorrect(MobileIdAuthentication authentication, String expectedHashToSignInBase64) throws CertificateEncodingException {
         assertNotNull(authentication);
         assertEquals("OK", authentication.getResult());
         assertEquals(expectedHashToSignInBase64, authentication.getSignedHashInBase64());

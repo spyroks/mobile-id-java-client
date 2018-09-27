@@ -21,16 +21,12 @@ import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static ee.sk.mid.mock.MobileIdRestServiceStubs.*;
-import static ee.sk.mid.mock.MobileIdRestServiceStubs.stubRequestWithResponse;
-import static ee.sk.mid.mock.MobileIdRestServiceStubs.stubUnauthorizedResponse;
 import static ee.sk.mid.mock.TestData.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 public class MobileIdRestConnectorSignatureTest {
-
-    private static final String SIGNATURE_SESSION_PATH = "/mid-api/signature/session/{sessionId}";
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(18089);
@@ -46,8 +42,8 @@ public class MobileIdRestConnectorSignatureTest {
         stubRequestWithResponse("/mid-api/signature", "requests/signatureRequest.json", "responses/signatureResponse.json");
         SignatureRequest request = createDummySignatureSessionRequest();
         SignatureResponse response = connector.sign(request);
-        assertNotNull(response);
-        assertEquals("2c52caf4-13b0-41c4-bdc6-aa268403cc00", response.getSessionId());
+        assertThat(response, is(notNullValue()));
+        assertThat(response.getSessionId(), is("2c52caf4-13b0-41c4-bdc6-aa268403cc00"));
     }
 
     @Test
@@ -56,8 +52,8 @@ public class MobileIdRestConnectorSignatureTest {
         SignatureRequest request = createDummySignatureSessionRequest();
         request.setDisplayText("Authorize transfer of €10");
         SignatureResponse response = connector.sign(request);
-        assertNotNull(response);
-        assertEquals("2c52caf4-13b0-41c4-bdc6-aa268403cc00", response.getSessionId());
+        assertThat(response, is(notNullValue()));
+        assertThat(response.getSessionId(), is("2c52caf4-13b0-41c4-bdc6-aa268403cc00"));
     }
 
     @Test(expected = ResponseRetrievingException.class)
@@ -110,7 +106,7 @@ public class MobileIdRestConnectorSignatureTest {
         request.setRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1);
         request.setPhoneNumber(VALID_PHONE_1);
         request.setNationalIdentityNumber(VALID_NAT_IDENTITY_1);
-        request.setHash("0nbgC2fVdLVQFZJdBbmG7oPoElpCYsQMtrY0c0wKYRg=");
+        request.setHash("AE7S1QxYjqtVv+Tgukv2bMMi9gDCbc9ca2vy/iIG6ug=");
         request.setHashType(HashType.SHA256);
         request.setLanguage(Language.EST);
         return request;

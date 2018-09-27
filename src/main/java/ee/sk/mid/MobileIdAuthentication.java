@@ -1,6 +1,6 @@
 package ee.sk.mid;
 
-import ee.sk.mid.exception.TechnicalErrorException;
+import ee.sk.mid.exception.InvalidBase64CharacterException;
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.Serializable;
@@ -17,7 +17,7 @@ public class MobileIdAuthentication implements Serializable {
 
     public byte[] getSignatureValue() {
         if (!Base64.isBase64(signatureValueInBase64)) {
-            throw new TechnicalErrorException("Failed to parse signature value in base64. Probably incorrectly encoded base64 string: '" + signatureValueInBase64);
+            throw new InvalidBase64CharacterException("Failed to parse signature value in base64. Probably incorrectly encoded base64 string: '" + signatureValueInBase64);
         }
         return Base64.decodeBase64(signatureValueInBase64);
     }

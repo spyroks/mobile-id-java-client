@@ -7,11 +7,12 @@ import ee.sk.mid.rest.dao.response.SignatureResponse;
 
 import static ee.sk.mid.mock.SessionStatusResultDummy.CERTIFICATE;
 import static ee.sk.mid.mock.SessionStatusResultDummy.createSessionResult;
+import static ee.sk.mid.mock.TestData.SESSION_ID;
 
 public class MobileIdRestServiceResponseDummy {
 
     public static SignatureResponse createDummySignatureResponse() {
-        return new SignatureResponse("97f5058e-e308-4c83-ac14-7712b0eb9d86");
+        return new SignatureResponse(SESSION_ID);
     }
 
     public static SessionStatus createDummySignatureSessionStatusResponse() {
@@ -26,7 +27,7 @@ public class MobileIdRestServiceResponseDummy {
     }
 
     public static AuthenticationResponse createDummyAuthenticationResponse() {
-        return new AuthenticationResponse("97f5058e-e308-4c83-ac14-7712b0eb9d86");
+        return new AuthenticationResponse(SESSION_ID);
     }
 
     public static SessionStatus createDummyAuthenticationSessionStatusResponse() {

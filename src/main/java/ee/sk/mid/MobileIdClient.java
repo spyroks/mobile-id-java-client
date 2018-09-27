@@ -37,16 +37,8 @@ public class MobileIdClient {
         this.relyingPartyUUID = relyingPartyUUID;
     }
 
-    public String getRelyingPartyUUID() {
-        return relyingPartyUUID;
-    }
-
     public void setRelyingPartyName(String relyingPartyName) {
         this.relyingPartyName = relyingPartyName;
-    }
-
-    public String getRelyingPartyName() {
-        return relyingPartyName;
     }
 
     public void setHostUrl(String hostUrl) {

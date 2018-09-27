@@ -13,6 +13,14 @@ public class SignableData implements Serializable {
         this.dataToSign = dataToSign;
     }
 
+    HashType getHashType() {
+        return hashType;
+    }
+
+    public void setHashType(HashType hashType) {
+        this.hashType = hashType;
+    }
+
     String calculateHashInBase64() {
         byte[] digest = calculateHash();
         return Base64.encodeBase64String(digest);
@@ -22,11 +30,7 @@ public class SignableData implements Serializable {
         return DigestCalculator.calculateDigest(dataToSign, hashType);
     }
 
-    public void setHashType(HashType hashType) {
-        this.hashType = hashType;
-    }
-
-    HashType getHashType() {
-        return hashType;
+    String calculateVerificationCode() {
+        return VerificationCodeCalculator.calculate(calculateHash());
     }
 }

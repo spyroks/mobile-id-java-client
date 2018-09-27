@@ -1,42 +1,57 @@
 package ee.sk.mid;
 
-import ee.sk.mid.exception.TechnicalErrorException;
-import ee.sk.mid.mock.SessionStatusResultDummy;
+import ee.sk.mid.exception.InvalidBase64CharacterException;
 import org.apache.commons.codec.binary.Base64;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.security.cert.CertificateEncodingException;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static ee.sk.mid.mock.SessionStatusResultDummy.CERTIFICATE;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 public class MobileIdAuthenticationTest {
 
+    private MobileIdAuthentication authentication;
+
+    @Before
+    public void setUp() {
+        authentication = new MobileIdAuthentication();
+    }
+
+    @Test(expected = InvalidBase64CharacterException.class)
+    public void setInvalidValueInBase64_shouldThrowException() {
+        authentication.setSignatureValueInBase64("!IsNotValidBase64Character");
+        authentication.getSignatureValue();
+    }
+
     @Test
     public void getSignatureValueInBase64() {
-        MobileIdAuthentication authenticationResponse = new MobileIdAuthentication();
-        authenticationResponse.setSignatureValueInBase64("SGVsbG8gU21hcnQtSUQgc2lnbmF0dXJlIQ==");
-        assertEquals("SGVsbG8gU21hcnQtSUQgc2lnbmF0dXJlIQ==", authenticationResponse.getSignatureValueInBase64());
+        authentication.setSignatureValueInBase64("SEFDS0VSTUFO");
+        assertThat(authentication.getSignatureValueInBase64(), is("SEFDS0VSTUFO"));
     }
 
     @Test
     public void getSignatureValueInBytes() {
-        MobileIdAuthentication authenticationResponse = new MobileIdAuthentication();
-        authenticationResponse.setSignatureValueInBase64("VGVyZSBhbGxraXJpIQ==");
-        assertArrayEquals("Tere allkiri!".getBytes(), authenticationResponse.getSignatureValue());
-    }
-
-    @Test(expected = TechnicalErrorException.class)
-    public void incorrectBase64StringShouldThrowException() {
-        MobileIdAuthentication authenticationResponse = new MobileIdAuthentication();
-        authenticationResponse.setSignatureValueInBase64("!IsNotValidBase64Character");
-        authenticationResponse.getSignatureValue();
+        authentication.setSignatureValueInBase64("SEFDS0VSTUFO");
+        assertThat(authentication.getSignatureValue(), is("HACKERMAN".getBytes()));
     }
 
     @Test
-    public void getCertificate() throws CertificateEncodingException {
-        MobileIdAuthentication authenticationResponse = new MobileIdAuthentication();
-        authenticationResponse.setCertificate(CertificateParser.parseX509Certificate(SessionStatusResultDummy.CERTIFICATE));
-        assertEquals(SessionStatusResultDummy.CERTIFICATE, Base64.encodeBase64String(authenticationResponse.getCertificate().getEncoded()));
+    public void createMobileIdAuthentication() throws CertificateEncodingException {
+        authentication.setResult("OK");
+        authentication.setSignatureValueInBase64("SEFDS0VSTUFO");
+        authentication.setAlgorithmName(HashType.SHA512.getAlgorithmName());
+        authentication.setCertificate(CertificateParser.parseX509Certificate(CERTIFICATE));
+        authentication.setSignedHashInBase64("K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==");
+        authentication.setHashType(HashType.SHA512);
+
+        assertThat(authentication.getResult(), is("OK"));
+        assertThat(authentication.getSignatureValueInBase64(), is("SEFDS0VSTUFO"));
+        assertThat(authentication.getAlgorithmName(), is("SHA-512"));
+        assertThat(Base64.encodeBase64String(authentication.getCertificate().getEncoded()), is(CERTIFICATE));
+        assertThat(authentication.getSignedHashInBase64(), is("K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ=="));
+        assertThat(authentication.getHashType(), is(HashType.SHA512));
     }
 }

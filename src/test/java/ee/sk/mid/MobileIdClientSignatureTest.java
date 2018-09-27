@@ -23,12 +23,12 @@ import static ee.sk.mid.mock.MobileIdRestServiceStubs.stubUnauthorizedResponse;
 import static ee.sk.mid.mock.TestData.*;
 import static ee.sk.mid.mock.TestData.VALID_NAT_IDENTITY_1;
 import static ee.sk.mid.mock.TestData.VALID_PHONE_1;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class MobileIdClientSignatureTest {
-
-    private static final String SIGNATURE_SESSION_PATH = "/mid-api/signature/session/{sessionId}";
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(18089);
@@ -46,14 +46,13 @@ public class MobileIdClientSignatureTest {
         stubRequestWithResponse("/mid-api/signature/session/2c52caf4-13b0-41c4-bdc6-aa268403cc00", "responses/sessionStatusForSuccessfulSigningRequest.json");
     }
 
-
     @Test
     public void sign() {
         SignableHash hashToSign = new SignableHash();
-        hashToSign.setHashInBase64("0nbgC2fVdLVQFZJdBbmG7oPoElpCYsQMtrY0c0wKYRg=");
+        hashToSign.setHashInBase64("AE7S1QxYjqtVv+Tgukv2bMMi9gDCbc9ca2vy/iIG6ug=");
         hashToSign.setHashType(HashType.SHA256);
 
-//        assertEquals("1796", hashToSign.calculateVerificationCode());
+        assertThat(hashToSign.calculateVerificationCode(), is("0108"));
 
         MobileIdSignature signature = client
                 .createSignature()
@@ -61,18 +60,18 @@ public class MobileIdClientSignatureTest {
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withSignableHash(hashToSign)
                 .withLanguage(Language.EST)
-                .sign(SIGNATURE_SESSION_PATH);
+                .sign();
 
         assertValidSignatureCreated(signature);
     }
 
     @Test
-    public void signWithDisplayText() {
+    public void sign_withDisplayText() {
         SignableHash hashToSign = new SignableHash();
-        hashToSign.setHashInBase64("0nbgC2fVdLVQFZJdBbmG7oPoElpCYsQMtrY0c0wKYRg=");
+        hashToSign.setHashInBase64("AE7S1QxYjqtVv+Tgukv2bMMi9gDCbc9ca2vy/iIG6ug=");
         hashToSign.setHashType(HashType.SHA256);
 
-//        assertEquals("1796", hashToSign.calculateVerificationCode());
+        assertThat(hashToSign.calculateVerificationCode(), is("0108"));
 
         MobileIdSignature signature = client
                 .createSignature()
@@ -81,7 +80,7 @@ public class MobileIdClientSignatureTest {
                 .withSignableHash(hashToSign)
                 .withLanguage(Language.EST)
                 .withDisplayText("Authorize transfer of €10")
-                .sign(SIGNATURE_SESSION_PATH);
+                .sign();
 
         assertValidSignatureCreated(signature);
     }
@@ -176,22 +175,22 @@ public class MobileIdClientSignatureTest {
         stubSessionStatusWithState("/mid-api/signature/session/2c52caf4-13b0-41c4-bdc6-aa268403cc00", "responses/sessionStatusForSuccessfulSigningRequest.json", "COMPLETE", STARTED);
         client.setPollingSleepTimeout(TimeUnit.SECONDS, 2L);
         long duration = measureSigningDuration();
-        assertTrue("Duration is " + duration, duration > 2000L);
-        assertTrue("Duration is " + duration, duration < 3000L);
+        assertThat("Duration is " + duration, duration > 2000L, is(true));
+        assertThat("Duration is " + duration, duration < 3000L, is(true));
     }
 
     @Test
     public void setSessionStatusResponseSocketTimeout() {
         client.setSessionStatusResponseSocketOpenTime(TimeUnit.SECONDS, 10L);
         MobileIdSignature signature = createSignature();
-        assertNotNull(signature);
+        assertThat(signature, is(notNullValue()));
         verify(getRequestedFor(urlEqualTo("/mid-api/signature/session/2c52caf4-13b0-41c4-bdc6-aa268403cc00?timeoutMs=10000")));
     }
 
     @Test
     public void verifySigning_withNetworkConnectionConfigurationHavingCustomHeader() {
         String headerName = "custom-header";
-        String headerValue = "Hello?!";
+        String headerValue = "HACKERMAN";
 
         Map<String, String> headers = new HashMap<>();
         headers.put(headerName, headerValue);
@@ -207,13 +206,13 @@ public class MobileIdClientSignatureTest {
         long startTime = System.currentTimeMillis();
         MobileIdSignature signature = createSignature();
         long endTime = System.currentTimeMillis();
-        assertNotNull(signature);
+        assertThat(signature, is(notNullValue()));
         return endTime - startTime;
     }
 
     private MobileIdSignature createSignature() {
         SignableHash hashToSign = new SignableHash();
-        hashToSign.setHashInBase64("0nbgC2fVdLVQFZJdBbmG7oPoElpCYsQMtrY0c0wKYRg=");
+        hashToSign.setHashInBase64("AE7S1QxYjqtVv+Tgukv2bMMi9gDCbc9ca2vy/iIG6ug=");
         hashToSign.setHashType(HashType.SHA256);
 
         return client
@@ -222,12 +221,12 @@ public class MobileIdClientSignatureTest {
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withSignableHash(hashToSign)
                 .withLanguage(Language.EST)
-                .sign(SIGNATURE_SESSION_PATH);
+                .sign();
     }
 
     private void makeSignatureRequest() {
         SignableHash hashToSign = new SignableHash();
-        hashToSign.setHashInBase64("0nbgC2fVdLVQFZJdBbmG7oPoElpCYsQMtrY0c0wKYRg=");
+        hashToSign.setHashInBase64("AE7S1QxYjqtVv+Tgukv2bMMi9gDCbc9ca2vy/iIG6ug=");
         hashToSign.setHashType(HashType.SHA256);
 
         client
@@ -236,7 +235,7 @@ public class MobileIdClientSignatureTest {
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withSignableHash(hashToSign)
                 .withLanguage(Language.EST)
-                .sign(SIGNATURE_SESSION_PATH);
+                .sign();
     }
 
     private ClientConfig getClientConfigWithCustomRequestHeaders(Map<String, String> headers) {
@@ -246,8 +245,8 @@ public class MobileIdClientSignatureTest {
     }
 
     private void assertValidSignatureCreated(MobileIdSignature signature) {
-        assertNotNull(signature);
+        assertThat(signature, is(notNullValue()));
         assertThat(signature.getValueInBase64(), startsWith("luvjsi1+1iLN9yfDFEh/BE8h"));
-        assertEquals("sha256WithRSAEncryption", signature.getAlgorithmName());
+        assertThat(signature.getAlgorithmName(), is("sha256WithRSAEncryption"));
     }
 }

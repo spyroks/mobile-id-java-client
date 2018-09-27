@@ -6,16 +6,15 @@ import ee.sk.mid.rest.SessionStatusPoller;
 import org.junit.Before;
 import org.junit.Test;
 
-import static ee.sk.mid.mock.SessionStatusResultDummy.*;
-import static ee.sk.mid.mock.TestData.*;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.createDummySignatureResponse;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.createDummySignatureSessionStatusResponse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static ee.sk.mid.mock.SessionStatusResultDummy.*;
+import static ee.sk.mid.mock.TestData.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 public class SignatureRequestBuilderTest {
-
-    private static final String SIGNATURE_SESSION_PATH = "/mid-api/signature/session/{sessionId}";
 
     private MobileIdConnectorSpy connector;
     private SignatureRequestBuilder builder;
@@ -30,9 +29,9 @@ public class SignatureRequestBuilderTest {
     }
 
     @Test
-    public void signWithSignableHash() {
+    public void sign_withSignableHash() {
         SignableHash hashToSign = new SignableHash();
-        hashToSign.setHashInBase64("AE7S1QxYjqtVv+Tgukv2bMMi9gDCbc9ca2vy/iIG6ug=");
+        hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
         hashToSign.setHashType(HashType.SHA256);
 
         MobileIdSignature signature = builder
@@ -42,7 +41,7 @@ public class SignatureRequestBuilderTest {
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withSignableHash(hashToSign)
                 .withLanguage(Language.EST)
-                .sign(SIGNATURE_SESSION_PATH);
+                .sign();
 
         assertCorrectSignatureRequestMade();
         assertCorrectSessionRequestMade();
@@ -50,8 +49,8 @@ public class SignatureRequestBuilderTest {
     }
 
     @Test
-    public void signWithSignableData() {
-        SignableData dataToSign = new SignableData("HACKERMAN".getBytes());
+    public void sign_withSignableData() {
+        SignableData dataToSign = new SignableData(DATA_TO_SIGN);
         dataToSign.setHashType(HashType.SHA256);
 
         MobileIdSignature signature = builder
@@ -61,7 +60,7 @@ public class SignatureRequestBuilderTest {
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withSignableData(dataToSign)
                 .withLanguage(Language.EST)
-                .sign(SIGNATURE_SESSION_PATH);
+                .sign();
 
         assertCorrectSignatureRequestMade();
         assertCorrectSessionRequestMade();
@@ -69,20 +68,80 @@ public class SignatureRequestBuilderTest {
     }
 
     @Test(expected = ParameterMissingException.class)
-    public void signWithoutSignableHash_andWithoutSignableData_shouldThrowException() {
+    public void sign_withoutRelyingPartyUuid_shouldThrowException() {
+        SignableHash hashToSign = new SignableHash();
+        hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
+        hashToSign.setHashType(HashType.SHA256);
+
+        builder
+                .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
+                .withPhoneNumber(VALID_PHONE_1)
+                .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
+                .withSignableHash(hashToSign)
+                .withLanguage(Language.EST)
+                .sign();
+    }
+
+    @Test(expected = ParameterMissingException.class)
+    public void sign_withoutRelyingPartyName_shouldThrowException() {
+        SignableHash hashToSign = new SignableHash();
+        hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
+        hashToSign.setHashType(HashType.SHA256);
+
+        builder
+                .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
+                .withPhoneNumber(VALID_PHONE_1)
+                .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
+                .withSignableHash(hashToSign)
+                .withLanguage(Language.EST)
+                .sign();
+    }
+
+    @Test(expected = ParameterMissingException.class)
+    public void sign_withoutPhoneNumber_shouldThrowException() {
+        SignableHash hashToSign = new SignableHash();
+        hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
+        hashToSign.setHashType(HashType.SHA256);
+
+        builder
+                .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
+                .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
+                .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
+                .withSignableHash(hashToSign)
+                .withLanguage(Language.EST)
+                .sign();
+    }
+
+    @Test(expected = ParameterMissingException.class)
+    public void sign_withoutNationalIdentityNumber_shouldThrowException() {
+        SignableHash hashToSign = new SignableHash();
+        hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
+        hashToSign.setHashType(HashType.SHA256);
+
+        builder
+                .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
+                .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
+                .withPhoneNumber(VALID_PHONE_1)
+                .withSignableHash(hashToSign)
+                .withLanguage(Language.EST)
+                .sign();
+    }
+
+    @Test(expected = ParameterMissingException.class)
+    public void sign_withoutSignableHash_andWithoutSignableData_shouldThrowException() {
         builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
                 .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withLanguage(Language.EST)
-                .sign(SIGNATURE_SESSION_PATH);
+                .sign();
     }
 
     @Test(expected = ParameterMissingException.class)
-    public void signWithSignableHash_withoutHashType_shouldThrowException() {
+    public void sign_withSignableHash_withoutHashType_shouldThrowException() {
         SignableHash hashToSign = new SignableHash();
-        hashToSign.setHashInBase64("0nbgC2fVdLVQFZJdBbmG7oPoElpCYsQMtrY0c0wKYRg=");
+        hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
 
         builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
@@ -91,11 +150,11 @@ public class SignatureRequestBuilderTest {
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withSignableHash(hashToSign)
                 .withLanguage(Language.EST)
-                .sign(SIGNATURE_SESSION_PATH);
+                .sign();
     }
 
     @Test(expected = ParameterMissingException.class)
-    public void signWithSignableHash_withoutHash_shouldThrowException() {
+    public void sign_withSignableHash_withoutHash_shouldThrowException() {
         SignableHash hashToSign = new SignableHash();
         hashToSign.setHashType(HashType.SHA256);
 
@@ -106,37 +165,22 @@ public class SignatureRequestBuilderTest {
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withSignableHash(hashToSign)
                 .withLanguage(Language.EST)
-                .sign(SIGNATURE_SESSION_PATH);
+                .sign();
     }
 
     @Test(expected = ParameterMissingException.class)
-    public void signWithoutRelyingPartyUuid_shouldThrowException() {
+    public void sign_withoutLanguage_shouldThrowException() {
         SignableHash hashToSign = new SignableHash();
-        hashToSign.setHashInBase64("0nbgC2fVdLVQFZJdBbmG7oPoElpCYsQMtrY0c0wKYRg=");
-        hashToSign.setHashType(HashType.SHA256);
-
-        builder
-                .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
-                .withPhoneNumber(VALID_PHONE_1)
-                .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withSignableHash(hashToSign)
-                .withLanguage(Language.EST)
-                .sign(SIGNATURE_SESSION_PATH);
-    }
-
-    @Test(expected = ParameterMissingException.class)
-    public void signWithoutRelyingPartyName_shouldThrowException() {
-        SignableHash hashToSign = new SignableHash();
-        hashToSign.setHashInBase64("0nbgC2fVdLVQFZJdBbmG7oPoElpCYsQMtrY0c0wKYRg=");
+        hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
         hashToSign.setHashType(HashType.SHA256);
 
         builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
+                .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withSignableHash(hashToSign)
-                .withLanguage(Language.EST)
-                .sign(SIGNATURE_SESSION_PATH);
+                .sign();
     }
 
     @Test(expected = SessionTimeoutException.class)
@@ -212,28 +256,28 @@ public class SignatureRequestBuilderTest {
     }
 
     private void assertCorrectSignatureRequestMade() {
-        assertEquals(RELYING_PARTY_UUID_OF_USER_1, connector.getSignatureRequestUsed().getRelyingPartyUUID());
-        assertEquals(RELYING_PARTY_NAME_OF_USER_1, connector.getSignatureRequestUsed().getRelyingPartyName());
-        assertEquals(VALID_PHONE_1, connector.getSignatureRequestUsed().getPhoneNumber());
-        assertEquals(VALID_NAT_IDENTITY_1, connector.getSignatureRequestUsed().getNationalIdentityNumber());
-        assertEquals("AE7S1QxYjqtVv+Tgukv2bMMi9gDCbc9ca2vy/iIG6ug=", connector.getSignatureRequestUsed().getHash());
-        assertEquals(HashType.SHA256, connector.getSignatureRequestUsed().getHashType());
-        assertEquals(Language.EST, connector.getSignatureRequestUsed().getLanguage());
+        assertThat(connector.getSignatureRequestUsed().getRelyingPartyUUID(), is(RELYING_PARTY_UUID_OF_USER_1));
+        assertThat(connector.getSignatureRequestUsed().getRelyingPartyName(), is(RELYING_PARTY_NAME_OF_USER_1));
+        assertThat(connector.getSignatureRequestUsed().getPhoneNumber(), is(VALID_PHONE_1));
+        assertThat(connector.getSignatureRequestUsed().getNationalIdentityNumber(), is(VALID_NAT_IDENTITY_1));
+        assertThat(connector.getSignatureRequestUsed().getHash(), is(SHA256_HASH_IN_BASE64));
+        assertThat(connector.getSignatureRequestUsed().getHashType(), is(HashType.SHA256));
+        assertThat(connector.getSignatureRequestUsed().getLanguage(), is(Language.EST));
     }
 
     private void assertCorrectSessionRequestMade() {
-        assertEquals("97f5058e-e308-4c83-ac14-7712b0eb9d86", connector.getSessionIdUsed());
+        assertThat(connector.getSessionIdUsed(), is(SESSION_ID));
     }
 
     private void assertSignatureCorrect(MobileIdSignature signature) {
-        assertNotNull(signature);
-        assertEquals("luvjsi1+1iLN9yfDFEh/BE8h", signature.getValueInBase64());
-        assertEquals("sha256WithRSAEncryption", signature.getAlgorithmName());
+        assertThat(signature, is(notNullValue()));
+        assertThat(signature.getValueInBase64(), is("luvjsi1+1iLN9yfDFEh/BE8h"));
+        assertThat(signature.getAlgorithmName(), is("sha256WithRSAEncryption"));
     }
 
     private void makeSigningRequest() {
         SignableHash hashToSign = new SignableHash();
-        hashToSign.setHashInBase64("jsflWgpkVcWOyICotnVn5lazcXdaIWvcvNOWTYPceYQ=");
+        hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
         hashToSign.setHashType(HashType.SHA256);
 
         builder
@@ -243,6 +287,6 @@ public class SignatureRequestBuilderTest {
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withSignableHash(hashToSign)
                 .withLanguage(Language.EST)
-                .sign(SIGNATURE_SESSION_PATH);
+                .sign();
     }
 }

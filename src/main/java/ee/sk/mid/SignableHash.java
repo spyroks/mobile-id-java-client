@@ -1,8 +1,11 @@
 package ee.sk.mid;
 
+import ee.sk.mid.exception.InvalidBase64CharacterException;
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.Serializable;
+
+import static org.apache.commons.codec.binary.Base64.isBase64;
 
 public class SignableHash implements Serializable {
 
@@ -14,12 +17,16 @@ public class SignableHash implements Serializable {
 
     }
 
-    public void setHashInBase64(String hashInBase64) {
-        hash = Base64.decodeBase64(hashInBase64);
-    }
-
     String getHashInBase64() {
         return Base64.encodeBase64String(hash);
+    }
+
+    public void setHashInBase64(String hashInBase64) {
+        if (isBase64(hashInBase64)) {
+            hash = Base64.decodeBase64(hashInBase64);
+        } else {
+            throw new InvalidBase64CharacterException();
+        }
     }
 
     HashType getHashType() {
@@ -28,6 +35,10 @@ public class SignableHash implements Serializable {
 
     void setHashType(HashType hashType) {
         this.hashType = hashType;
+    }
+
+    public String calculateVerificationCode() {
+        return VerificationCodeCalculator.calculate(hash);
     }
 
     boolean areFieldsFilled() {

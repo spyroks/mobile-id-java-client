@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 public class AuthenticationRequestBuilder extends MobileIdRequestBuilder {
 
+    private static final String AUTHENTICATION_SESSION_PATH = "/mid-api/authentication/session/{sessionId}";
+
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationRequestBuilder.class);
 
     public AuthenticationRequestBuilder(MobileIdConnector connector, SessionStatusPoller sessionStatusPoller) {
@@ -59,14 +61,14 @@ public class AuthenticationRequestBuilder extends MobileIdRequestBuilder {
         return this;
     }
 
-    public MobileIdAuthentication authenticate(String path) throws ResponseNotFound, ParameterMissingException,
+    public MobileIdAuthentication authenticate() throws ResponseNotFound, ParameterMissingException,
             UnauthorizedException, SessionTimeoutException, ResponseRetrievingException, NotMIDClientException, ExpiredTransactionException,
             UserCancellationException, MIDNotReadyException, SimNotAvailableException, DeliveryException, InvalidCardResponseException,
             SignatureHashMismatchException, TechnicalErrorException {
         validateParameters();
         AuthenticationRequest request = createAuthenticationSessionRequest();
         AuthenticationResponse response = getAuthenticationResponse(request);
-        SessionStatus sessionStatus = getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), path);
+        SessionStatus sessionStatus = getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), AUTHENTICATION_SESSION_PATH);
         validateResponse(sessionStatus);
         return createMobileIdAuthentication(sessionStatus);
     }
@@ -94,17 +96,17 @@ public class AuthenticationRequestBuilder extends MobileIdRequestBuilder {
         String certificate = sessionStatus.getCertificate();
         MobileIdAuthentication authentication = new MobileIdAuthentication();
         authentication.setResult(sessionResult);
-        authentication.setSignedHashInBase64(getHashInBase64());
-        authentication.setHashType(getHashType());
         authentication.setSignatureValueInBase64(sessionSignature.getValueInBase64());
         authentication.setAlgorithmName(sessionSignature.getAlgorithm());
         authentication.setCertificate(CertificateParser.parseX509Certificate(certificate));
+        authentication.setSignedHashInBase64(getHashInBase64());
+        authentication.setHashType(getHashType());
         return authentication;
     }
 
     protected void validateParameters() {
         super.validateParameters();
-        if (!isHashSet() && !isSignableDataSet()) {
+        if (isHashSet() && isSignableDataSet()) {
             logger.error("Signable data or hash with hash type must be set");
             throw new ParameterMissingException("Signable data or hash with hash type must be set");
         }

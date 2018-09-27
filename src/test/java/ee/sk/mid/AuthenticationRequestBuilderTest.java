@@ -9,16 +9,15 @@ import org.junit.Test;
 
 import java.security.cert.CertificateEncodingException;
 
-import static ee.sk.mid.mock.SessionStatusResultDummy.*;
-import static ee.sk.mid.mock.TestData.*;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.createDummyAuthenticationResponse;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.createDummyAuthenticationSessionStatusResponse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static ee.sk.mid.mock.SessionStatusResultDummy.*;
+import static ee.sk.mid.mock.TestData.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 public class AuthenticationRequestBuilderTest {
-
-    private static final String AUTHENTICATION_SESSION_PATH = "/mid-api/authentication/session/{sessionId}";
 
     private MobileIdConnectorSpy connector;
     private AuthenticationRequestBuilder builder;
@@ -33,47 +32,64 @@ public class AuthenticationRequestBuilderTest {
     }
 
     @Test
-    public void authenticateWithGeneratedHash() throws Exception {
+    public void authenticate_withGeneratedHash() throws Exception {
         AuthenticationHash authenticationHash = AuthenticationHash.generateRandomHash();
 
-        MobileIdAuthentication authenticationResponse = builder
+        MobileIdAuthentication authentication = builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
                 .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withAuthenticationHash(authenticationHash)
                 .withLanguage(Language.EST)
-                .authenticate(AUTHENTICATION_SESSION_PATH);
+                .authenticate();
 
         assertCorrectSessionRequestMade();
-        assertAuthenticationCorrect(authenticationResponse, authenticationHash.getHashInBase64());
+        assertAuthenticationCorrect(authentication, authenticationHash.getHashInBase64());
     }
 
     @Test
-    public void authenticateWithHash() throws Exception {
+    public void authenticate_withHash() throws Exception {
         AuthenticationHash authenticationHash = new AuthenticationHash();
-        authenticationHash.setHashInBase64("7iaw3Ur350mqGo7jwQrpkj9hiYB3Lkc/iBml1JQODbJ6wYX4oOHV+E+IvIh/1nsUNzLDBMxfqa2Ob1f1ACio/w==");
+        authenticationHash.setHashInBase64(SHA512_HASH_IN_BASE64);
         authenticationHash.setHashType(HashType.SHA512);
 
-        MobileIdAuthentication authenticationResponse = builder
+        MobileIdAuthentication authentication = builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
                 .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withAuthenticationHash(authenticationHash)
                 .withLanguage(Language.EST)
-                .authenticate(AUTHENTICATION_SESSION_PATH);
+                .authenticate();
 
         assertCorrectAuthenticationRequestMade();
         assertCorrectSessionRequestMade();
-        assertAuthenticationCorrect(authenticationResponse, "7iaw3Ur350mqGo7jwQrpkj9hiYB3Lkc/iBml1JQODbJ6wYX4oOHV+E+IvIh/1nsUNzLDBMxfqa2Ob1f1ACio/w==");
+        assertAuthenticationCorrect(authentication, SHA512_HASH_IN_BASE64);
+    }
+
+    @Test
+    public void authenticate_withSignableData() throws Exception {
+        SignableData dataToSign = new SignableData(DATA_TO_SIGN);
+        dataToSign.setHashType(HashType.SHA512);
+
+        MobileIdAuthentication authentication = builder
+                .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
+                .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
+                .withPhoneNumber(VALID_PHONE_1)
+                .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
+                .withSignableData(dataToSign)
+                .withLanguage(Language.EST)
+                .authenticate();
+
+        assertCorrectAuthenticationRequestMade();
+        assertCorrectSessionRequestMade();
+        assertAuthenticationCorrect(authentication, SHA512_HASH_IN_BASE64);
     }
 
     @Test(expected = ParameterMissingException.class)
-    public void authenticateWithoutRelyingPartyUuid_shouldThrowException() {
-        AuthenticationHash authenticationHash = new AuthenticationHash();
-        authenticationHash.setHashInBase64("7iaw3Ur350mqGo7jwQrpkj9hiYB3Lkc/iBml1JQODbJ6wYX4oOHV+E+IvIh/1nsUNzLDBMxfqa2Ob1f1ACio/w==");
-        authenticationHash.setHashType(HashType.SHA512);
+    public void authenticate_withoutRelyingPartyUuid_shouldThrowException() {
+        AuthenticationHash authenticationHash = AuthenticationHash.generateRandomHash();
 
         builder
                 .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
@@ -81,15 +97,13 @@ public class AuthenticationRequestBuilderTest {
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withAuthenticationHash(authenticationHash)
                 .withLanguage(Language.EST)
-                .authenticate(AUTHENTICATION_SESSION_PATH);
+                .authenticate();
 
     }
 
     @Test(expected = ParameterMissingException.class)
-    public void authenticateWithoutRelyingPartyName_shouldThrowException() {
-        AuthenticationHash authenticationHash = new AuthenticationHash();
-        authenticationHash.setHashInBase64("7iaw3Ur350mqGo7jwQrpkj9hiYB3Lkc/iBml1JQODbJ6wYX4oOHV+E+IvIh/1nsUNzLDBMxfqa2Ob1f1ACio/w==");
-        authenticationHash.setHashType(HashType.SHA512);
+    public void authenticate_withoutRelyingPartyName_shouldThrowException() {
+        AuthenticationHash authenticationHash = AuthenticationHash.generateRandomHash();
 
         builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
@@ -97,11 +111,11 @@ public class AuthenticationRequestBuilderTest {
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withAuthenticationHash(authenticationHash)
                 .withLanguage(Language.EST)
-                .authenticate(AUTHENTICATION_SESSION_PATH);
+                .authenticate();
     }
 
     @Test(expected = ParameterMissingException.class)
-    public void authenticateWithoutPhoneNumber_shouldThrowException() {
+    public void authenticate_withoutPhoneNumber_shouldThrowException() {
         AuthenticationHash authenticationHash = AuthenticationHash.generateRandomHash();
 
         builder
@@ -110,11 +124,11 @@ public class AuthenticationRequestBuilderTest {
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withAuthenticationHash(authenticationHash)
                 .withLanguage(Language.EST)
-                .authenticate(AUTHENTICATION_SESSION_PATH);
+                .authenticate();
     }
 
     @Test(expected = ParameterMissingException.class)
-    public void authenticateWithoutNationalIdentityNumber_shouldThrowException() {
+    public void authenticate_withoutNationalIdentityNumber_shouldThrowException() {
         AuthenticationHash authenticationHash = AuthenticationHash.generateRandomHash();
 
         builder
@@ -123,24 +137,24 @@ public class AuthenticationRequestBuilderTest {
                 .withPhoneNumber(VALID_PHONE_1)
                 .withAuthenticationHash(authenticationHash)
                 .withLanguage(Language.EST)
-                .authenticate(AUTHENTICATION_SESSION_PATH);
+                .authenticate();
     }
 
     @Test(expected = ParameterMissingException.class)
-    public void authenticateWithoutHash_andWithoutSignableData_shouldThrowException() {
+    public void authenticate_withoutHash_andWithoutSignableData_shouldThrowException() {
         builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
                 .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withLanguage(Language.EST)
-                .authenticate(AUTHENTICATION_SESSION_PATH);
+                .authenticate();
     }
 
     @Test(expected = ParameterMissingException.class)
-    public void authenticateWithHash_withoutHashType_shouldThrowException() {
+    public void authenticate_withHash_withoutHashType_shouldThrowException() {
         AuthenticationHash authenticationHash = new AuthenticationHash();
-        authenticationHash.setHashInBase64("7iaw3Ur350mqGo7jwQrpkj9hiYB3Lkc/iBml1JQODbJ6wYX4oOHV+E+IvIh/1nsUNzLDBMxfqa2Ob1f1ACio/w==");
+        authenticationHash.setHashInBase64(SHA512_HASH_IN_BASE64);
 
         builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
@@ -149,11 +163,11 @@ public class AuthenticationRequestBuilderTest {
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withAuthenticationHash(authenticationHash)
                 .withLanguage(Language.EST)
-                .authenticate(AUTHENTICATION_SESSION_PATH);
+                .authenticate();
     }
 
     @Test(expected = ParameterMissingException.class)
-    public void authenticateWithHash_withoutHash_shouldThrowException() {
+    public void authenticate_withHashType_withoutHash_shouldThrowException() {
         AuthenticationHash authenticationHash = new AuthenticationHash();
         authenticationHash.setHashType(HashType.SHA512);
 
@@ -164,11 +178,11 @@ public class AuthenticationRequestBuilderTest {
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withAuthenticationHash(authenticationHash)
                 .withLanguage(Language.EST)
-                .authenticate(AUTHENTICATION_SESSION_PATH);
+                .authenticate();
     }
 
     @Test(expected = ParameterMissingException.class)
-    public void authenticateWithoutLanguage_shouldThrowException() {
+    public void authenticate_withoutLanguage_shouldThrowException() {
         AuthenticationHash authenticationHash = AuthenticationHash.generateRandomHash();
 
         builder
@@ -177,7 +191,7 @@ public class AuthenticationRequestBuilderTest {
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withAuthenticationHash(authenticationHash)
-                .authenticate(AUTHENTICATION_SESSION_PATH);
+                .authenticate();
     }
 
     @Test(expected = SessionTimeoutException.class)
@@ -259,32 +273,30 @@ public class AuthenticationRequestBuilderTest {
     }
 
     private void assertCorrectAuthenticationRequestMade() {
-        assertEquals(RELYING_PARTY_UUID_OF_USER_1, connector.getAuthenticationRequestUsed().getRelyingPartyUUID());
-        assertEquals(RELYING_PARTY_NAME_OF_USER_1, connector.getAuthenticationRequestUsed().getRelyingPartyName());
-        assertEquals(VALID_PHONE_1, connector.getAuthenticationRequestUsed().getPhoneNumber());
-        assertEquals(VALID_NAT_IDENTITY_1, connector.getAuthenticationRequestUsed().getNationalIdentityNumber());
-        assertEquals("7iaw3Ur350mqGo7jwQrpkj9hiYB3Lkc/iBml1JQODbJ6wYX4oOHV+E+IvIh/1nsUNzLDBMxfqa2Ob1f1ACio/w==", connector.getAuthenticationRequestUsed().getHash());
-        assertEquals(HashType.SHA512, connector.getAuthenticationRequestUsed().getHashType());
-        assertEquals(Language.EST, connector.getAuthenticationRequestUsed().getLanguage());
+        assertThat(connector.getAuthenticationRequestUsed().getRelyingPartyUUID(), is(RELYING_PARTY_UUID_OF_USER_1));
+        assertThat(connector.getAuthenticationRequestUsed().getRelyingPartyName(), is(RELYING_PARTY_NAME_OF_USER_1));
+        assertThat(connector.getAuthenticationRequestUsed().getPhoneNumber(), is(VALID_PHONE_1));
+        assertThat(connector.getAuthenticationRequestUsed().getNationalIdentityNumber(), is(VALID_NAT_IDENTITY_1));
+        assertThat(connector.getAuthenticationRequestUsed().getHash(), is(SHA512_HASH_IN_BASE64));
+        assertThat(connector.getAuthenticationRequestUsed().getHashType(), is(HashType.SHA512));
+        assertThat(connector.getAuthenticationRequestUsed().getLanguage(), is(Language.EST));
     }
 
     private void assertCorrectSessionRequestMade() {
-        assertEquals("97f5058e-e308-4c83-ac14-7712b0eb9d86", connector.getSessionIdUsed());
+        assertThat(connector.getSessionIdUsed(), is(SESSION_ID));
     }
 
     private void assertAuthenticationCorrect(MobileIdAuthentication authentication, String expectedHashToSignInBase64) throws CertificateEncodingException {
-        assertNotNull(authentication);
-        assertEquals("OK", authentication.getResult());
-        assertEquals(expectedHashToSignInBase64, authentication.getSignedHashInBase64());
-        assertEquals("c2FtcGxlIHNpZ25hdHVyZQ0K", authentication.getSignatureValueInBase64());
-        assertEquals("sha512WithRSAEncryption", authentication.getAlgorithmName());
-        assertEquals(CERTIFICATE, Base64.encodeBase64String(authentication.getCertificate().getEncoded()));
+        assertThat(authentication, is(notNullValue()));
+        assertThat(authentication.getResult(), is("OK"));
+        assertThat(authentication.getSignatureValueInBase64(), is("c2FtcGxlIHNpZ25hdHVyZQ0K"));
+        assertThat(authentication.getAlgorithmName(), is("sha512WithRSAEncryption"));
+        assertThat(Base64.encodeBase64String(authentication.getCertificate().getEncoded()), is(CERTIFICATE));
+        assertThat(authentication.getSignedHashInBase64(), is(expectedHashToSignInBase64));
     }
 
     private void makeAuthenticationRequest() {
-        AuthenticationHash authenticationHash = new AuthenticationHash();
-        authenticationHash.setHashInBase64("7iaw3Ur350mqGo7jwQrpkj9hiYB3Lkc/iBml1JQODbJ6wYX4oOHV+E+IvIh/1nsUNzLDBMxfqa2Ob1f1ACio/w==");
-        authenticationHash.setHashType(HashType.SHA512);
+        AuthenticationHash authenticationHash = AuthenticationHash.generateRandomHash();
 
         builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
@@ -293,6 +305,6 @@ public class AuthenticationRequestBuilderTest {
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
                 .withAuthenticationHash(authenticationHash)
                 .withLanguage(Language.EST)
-                .authenticate(AUTHENTICATION_SESSION_PATH);
+                .authenticate();
     }
 }

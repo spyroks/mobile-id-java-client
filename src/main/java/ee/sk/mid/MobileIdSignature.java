@@ -1,6 +1,6 @@
 package ee.sk.mid;
 
-import ee.sk.mid.exception.TechnicalErrorException;
+import ee.sk.mid.exception.InvalidBase64CharacterException;
 import org.apache.commons.codec.binary.Base64;
 
 public class MobileIdSignature {
@@ -10,7 +10,7 @@ public class MobileIdSignature {
 
     public byte[] getValue() {
         if (!Base64.isBase64(valueInBase64)) {
-            throw new TechnicalErrorException("Failed to parse signature value in base64. Probably incorrectly encoded base64 string: '" + valueInBase64);
+            throw new InvalidBase64CharacterException("Failed to parse signature value in base64. Probably incorrectly encoded base64 string: '" + valueInBase64);
         }
         return Base64.decodeBase64(valueInBase64);
     }

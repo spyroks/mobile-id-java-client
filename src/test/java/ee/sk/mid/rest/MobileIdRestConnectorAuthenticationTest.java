@@ -23,8 +23,10 @@ import java.util.concurrent.TimeUnit;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static ee.sk.mid.mock.MobileIdRestServiceStubs.*;
 import static ee.sk.mid.mock.TestData.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.StringStartsWith.startsWith;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class MobileIdRestConnectorAuthenticationTest {
 
@@ -32,6 +34,7 @@ public class MobileIdRestConnectorAuthenticationTest {
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(18089);
+
     private MobileIdConnector connector;
 
     @Before
@@ -44,8 +47,8 @@ public class MobileIdRestConnectorAuthenticationTest {
         stubRequestWithResponse("/mid-api/authentication", "requests/authenticationRequest.json", "responses/authenticationResponse.json");
         AuthenticationRequest request = createDummyAuthenticationSessionRequest();
         AuthenticationResponse response = connector.authenticate(request);
-        assertNotNull(response);
-        assertEquals("1dcc1600-29a6-4e95-a95c-d69b31febcfb", response.getSessionId());
+        assertThat(response, is(notNullValue()));
+        assertThat(response.getSessionId(), is("1dcc1600-29a6-4e95-a95c-d69b31febcfb"));
     }
 
     @Test
@@ -54,8 +57,8 @@ public class MobileIdRestConnectorAuthenticationTest {
         AuthenticationRequest request = createDummyAuthenticationSessionRequest();
         request.setDisplayText("Log into internet banking system");
         AuthenticationResponse response = connector.authenticate(request);
-        assertNotNull(response);
-        assertEquals("1dcc1600-29a6-4e95-a95c-d69b31febcfb", response.getSessionId());
+        assertThat(response, is(notNullValue()));
+        assertThat(response.getSessionId(), is("1dcc1600-29a6-4e95-a95c-d69b31febcfb"));
     }
 
     @Test(expected = ResponseRetrievingException.class)
@@ -112,17 +115,17 @@ public class MobileIdRestConnectorAuthenticationTest {
     @Test
     public void getRunningSessionStatus() throws IOException {
         SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusRunning.json");
-        assertNotNull(sessionStatus);
-        assertEquals("RUNNING", sessionStatus.getState());
+        assertThat(sessionStatus, is(notNullValue()));
+        assertThat(sessionStatus.getState(), is("RUNNING"));
     }
 
     @Test
     public void getSessionStatus_forSuccessfulSigningRequest() throws Exception {
         SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusForSuccessfulSigningRequest.json");
         assertSuccessfulResponse(sessionStatus);
-        assertNotNull(sessionStatus.getSignature());
+        assertThat(sessionStatus.getSignature(), is(notNullValue()));
         assertThat(sessionStatus.getSignature().getValueInBase64(), startsWith("luvjsi1+1iLN9yfDFEh/BE8hXtAKhAIxilv"));
-        assertEquals("sha256WithRSAEncryption", sessionStatus.getSignature().getAlgorithm());
+        assertThat(sessionStatus.getSignature().getAlgorithm(), is("sha256WithRSAEncryption"));
     }
 
     @Test
@@ -202,14 +205,14 @@ public class MobileIdRestConnectorAuthenticationTest {
     }
 
     private void assertSessionStatusErrorWithResult(SessionStatus sessionStatus, String result) {
-        assertEquals("COMPLETE", sessionStatus.getState());
-        assertEquals(result, sessionStatus.getResult());
+        assertThat(sessionStatus.getState(), is("COMPLETE"));
+        assertThat(sessionStatus.getResult(), is(result));
     }
 
     private void assertSuccessfulResponse(SessionStatus sessionStatus) {
-        assertEquals("COMPLETE", sessionStatus.getState());
-        assertNotNull(sessionStatus.getResult());
-        assertEquals("OK", sessionStatus.getResult());
+        assertThat(sessionStatus.getState(), is("COMPLETE"));
+        assertThat(sessionStatus.getResult(), is(notNullValue()));
+        assertThat(sessionStatus.getResult(), is("OK"));
     }
 
     private AuthenticationRequest createDummyAuthenticationSessionRequest() {
@@ -218,7 +221,7 @@ public class MobileIdRestConnectorAuthenticationTest {
         request.setRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1);
         request.setPhoneNumber(VALID_PHONE_1);
         request.setNationalIdentityNumber(VALID_NAT_IDENTITY_1);
-        request.setHash("K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==");
+        request.setHash("kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw==");
         request.setHashType(HashType.SHA512);
         request.setLanguage(Language.EST);
         return request;

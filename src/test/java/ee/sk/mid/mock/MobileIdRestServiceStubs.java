@@ -43,7 +43,7 @@ public class MobileIdRestServiceStubs {
 
     public static void stubSessionStatusWithState(String url, String responseFile, String startState, String endState) throws IOException {
         stubFor(get(urlEqualTo(url))
-                .inScenario("session status")
+                .inScenario("Session status")
                 .whenScenarioStateIs(startState)
                 .withHeader("Accept", equalTo("application/json"))
                 .willReturn(aResponse()

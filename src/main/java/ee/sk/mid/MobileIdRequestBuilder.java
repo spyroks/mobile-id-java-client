@@ -28,10 +28,6 @@ public abstract class MobileIdRequestBuilder {
         this.sessionStatusPoller = sessionStatusPoller;
     }
 
-    protected MobileIdRequestBuilder(MobileIdConnector connector) {
-        this.connector = connector;
-    }
-
     protected MobileIdRequestBuilder withRelyingPartyUUID(String relyingPartyUUID) {
         this.relyingPartyUUID = relyingPartyUUID;
         return this;
@@ -119,11 +115,11 @@ public abstract class MobileIdRequestBuilder {
     }
 
     boolean isHashSet() {
-        return hashToSign != null && hashToSign.areFieldsFilled();
+        return hashToSign == null || !hashToSign.areFieldsFilled();
     }
 
     boolean isSignableDataSet() {
-        return dataToSign != null;
+        return dataToSign == null;
     }
 
     boolean isLanguageSet() {

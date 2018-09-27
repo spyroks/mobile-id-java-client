@@ -14,6 +14,8 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class SignatureRequestBuilder extends MobileIdRequestBuilder {
 
+    private static final String SIGNATURE_SESSION_PATH = "/mid-api/signature/session/{sessionId}";
+
     private static final Logger logger = LoggerFactory.getLogger(SignatureRequestBuilder.class);
 
     public SignatureRequestBuilder(MobileIdConnector connector, SessionStatusPoller sessionStatusPoller) {
@@ -61,14 +63,14 @@ public class SignatureRequestBuilder extends MobileIdRequestBuilder {
         return this;
     }
 
-    public MobileIdSignature sign(String path) throws ResponseNotFound, ParameterMissingException,
+    public MobileIdSignature sign() throws ResponseNotFound, ParameterMissingException,
             UnauthorizedException, SessionTimeoutException, ResponseRetrievingException, NotMIDClientException, ExpiredTransactionException,
             UserCancellationException, MIDNotReadyException, SimNotAvailableException, DeliveryException, InvalidCardResponseException,
             SignatureHashMismatchException, TechnicalErrorException {
         validateParameters();
         SignatureRequest request = createSignatureRequest();
         SignatureResponse response = getSignatureResponse(request);
-        SessionStatus sessionStatus = getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), path);
+        SessionStatus sessionStatus = getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);
         validateResponse(sessionStatus);
         return createMobileIdSignature(sessionStatus);
     }
@@ -100,13 +102,13 @@ public class SignatureRequestBuilder extends MobileIdRequestBuilder {
 
     protected void validateParameters() {
         super.validateParameters();
-        if (isBlank(getPhoneNumber()) || isBlank(getNationalIdentityNumber())) {
-            logger.error("Phone number and national identity must be set");
-            throw new ParameterMissingException("Phone number and national identity must be set");
-        }
-        if (!isHashSet() && !isSignableDataSet()) {
+        if (isHashSet() && isSignableDataSet()) {
             logger.error("Signable data or hash with hash type must be set");
             throw new ParameterMissingException("Signable data or hash with hash type must be set");
+        }
+        if (!isLanguageSet()) {
+            logger.error("Language for user dialog in mobile phone must be set");
+            throw new ParameterMissingException("Language for user dialog in mobile phone must be set");
         }
     }
 

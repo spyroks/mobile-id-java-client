@@ -17,6 +17,13 @@ public class MobileIdClient {
     private TimeUnit sessionStatusResponseSocketOpenTimeUnit;
     private long sessionStatusResponseSocketOpenTimeValue;
 
+    public CertificateRequestBuilder getCertificate() {
+        MobileIdRestConnector connector = new MobileIdRestConnector(hostUrl, networkConnectionConfig);
+        CertificateRequestBuilder builder = new CertificateRequestBuilder(connector);
+        populateBuilderFields(builder);
+        return builder;
+    }
+
     public SignatureRequestBuilder createSignature() {
         MobileIdRestConnector connector = new MobileIdRestConnector(hostUrl, networkConnectionConfig);
         SessionStatusPoller sessionStatusPoller = createSessionStatusPoller(connector);

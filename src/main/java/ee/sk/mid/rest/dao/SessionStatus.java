@@ -11,6 +11,7 @@ public class SessionStatus implements Serializable {
     private String state;
     private String result;
     private SessionSignature signature;
+
     @JsonProperty("cert")
     private String certificate;
 

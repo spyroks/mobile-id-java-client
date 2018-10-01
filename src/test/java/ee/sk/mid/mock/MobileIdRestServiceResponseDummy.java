@@ -3,6 +3,7 @@ package ee.sk.mid.mock;
 import ee.sk.mid.rest.dao.SessionSignature;
 import ee.sk.mid.rest.dao.SessionStatus;
 import ee.sk.mid.rest.dao.response.AuthenticationResponse;
+import ee.sk.mid.rest.dao.response.CertificateChoiceResponse;
 import ee.sk.mid.rest.dao.response.SignatureResponse;
 
 import static ee.sk.mid.mock.SessionStatusResultDummy.CERTIFICATE;
@@ -10,6 +11,13 @@ import static ee.sk.mid.mock.SessionStatusResultDummy.createSessionResult;
 import static ee.sk.mid.mock.TestData.SESSION_ID;
 
 public class MobileIdRestServiceResponseDummy {
+
+    public static CertificateChoiceResponse createDummyCertificateChoiceResponse() {
+        CertificateChoiceResponse certificateChoiceResponse = new CertificateChoiceResponse();
+        certificateChoiceResponse.setResult("OK");
+        certificateChoiceResponse.setCertificate(CERTIFICATE);
+        return certificateChoiceResponse;
+    }
 
     public static SignatureResponse createDummySignatureResponse() {
         return new SignatureResponse(SESSION_ID);

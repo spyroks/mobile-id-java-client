@@ -94,7 +94,7 @@ public class SessionStatusPollerTest {
         poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
     }
 
-    @Test(expected = ExpiredTransactionException.class)
+    @Test(expected = ExpiredException.class)
     public void getMSSSPTransactionExpiredResponse_shouldThrowException() {
         connector.getResponses().add(createMSSPTransactionExpiredStatus());
         poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);

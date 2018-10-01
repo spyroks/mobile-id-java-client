@@ -5,7 +5,7 @@ import ee.sk.mid.ClientRequestHeaderFilter;
 import ee.sk.mid.HashType;
 import ee.sk.mid.Language;
 import ee.sk.mid.exception.ParameterMissingException;
-import ee.sk.mid.exception.ResponseNotFound;
+import ee.sk.mid.exception.NotFoundException;
 import ee.sk.mid.exception.ResponseRetrievingException;
 import ee.sk.mid.exception.UnauthorizedException;
 import ee.sk.mid.rest.dao.request.SignatureRequest;
@@ -42,6 +42,7 @@ public class MobileIdRestConnectorSignatureTest {
         stubRequestWithResponse("/mid-api/signature", "requests/signatureRequest.json", "responses/signatureResponse.json");
         SignatureRequest request = createDummySignatureSessionRequest();
         SignatureResponse response = connector.sign(request);
+
         assertThat(response, is(notNullValue()));
         assertThat(response.getSessionId(), is("2c52caf4-13b0-41c4-bdc6-aa268403cc00"));
     }
@@ -52,6 +53,7 @@ public class MobileIdRestConnectorSignatureTest {
         SignatureRequest request = createDummySignatureSessionRequest();
         request.setDisplayText("Authorize transfer of €10");
         SignatureResponse response = connector.sign(request);
+
         assertThat(response, is(notNullValue()));
         assertThat(response.getSessionId(), is("2c52caf4-13b0-41c4-bdc6-aa268403cc00"));
     }
@@ -63,7 +65,7 @@ public class MobileIdRestConnectorSignatureTest {
         connector.sign(request);
     }
 
-    @Test(expected = ResponseNotFound.class)
+    @Test(expected = NotFoundException.class)
     public void sign_whenResponseNotFound_shouldThrowException() throws Exception {
         stubNotFoundResponse("/mid-api/signature", "requests/signatureRequest.json");
         SignatureRequest request = createDummySignatureSessionRequest();

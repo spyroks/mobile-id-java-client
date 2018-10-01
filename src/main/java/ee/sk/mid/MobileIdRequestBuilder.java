@@ -28,6 +28,10 @@ public abstract class MobileIdRequestBuilder {
         this.sessionStatusPoller = sessionStatusPoller;
     }
 
+    protected MobileIdRequestBuilder(MobileIdConnector connector) {
+        this.connector = connector;
+    }
+
     protected MobileIdRequestBuilder withRelyingPartyUUID(String relyingPartyUUID) {
         this.relyingPartyUUID = relyingPartyUUID;
         return this;
@@ -68,62 +72,62 @@ public abstract class MobileIdRequestBuilder {
         return this;
     }
 
-    MobileIdConnector getConnector() {
+    protected MobileIdConnector getConnector() {
         return connector;
     }
 
-    SessionStatusPoller getSessionStatusPoller() {
+    protected SessionStatusPoller getSessionStatusPoller() {
         return sessionStatusPoller;
     }
 
-    String getRelyingPartyUUID() {
+    protected String getRelyingPartyUUID() {
         return relyingPartyUUID;
     }
 
-    String getRelyingPartyName() {
+    protected String getRelyingPartyName() {
         return relyingPartyName;
     }
 
-    String getPhoneNumber() {
+    protected String getPhoneNumber() {
         return phoneNumber;
     }
 
-    String getNationalIdentityNumber() {
+    protected String getNationalIdentityNumber() {
         return nationalIdentityNumber;
     }
 
-    HashType getHashType() {
+    protected HashType getHashType() {
         if (hashToSign != null) {
             return hashToSign.getHashType();
         }
         return dataToSign.getHashType();
     }
 
-    String getHashInBase64() {
+    protected String getHashInBase64() {
         if (hashToSign != null) {
             return hashToSign.getHashInBase64();
         }
         return dataToSign.calculateHashInBase64();
     }
 
-    Language getLanguage() {
+    protected Language getLanguage() {
         return language;
     }
 
-    String getDisplayText() {
+    protected String getDisplayText() {
         return displayText;
     }
 
-    boolean isHashSet() {
+    protected boolean isHashSet() {
         return hashToSign == null || !hashToSign.areFieldsFilled();
     }
 
-    boolean isSignableDataSet() {
+    protected boolean isSignableDataSet() {
         return dataToSign == null;
     }
 
-    boolean isLanguageSet() {
-        return language != null;
+    protected boolean isLanguageSet() {
+        return language == null;
     }
 
     protected void validateParameters() {

@@ -97,7 +97,7 @@ public class MobileIdClientAuthenticationTest {
         makeAuthenticationRequest();
     }
 
-    @Test(expected = ExpiredTransactionException.class)
+    @Test(expected = ExpiredException.class)
     public void authenticate_whenMSSPTransactionExpired_shouldThrowException() throws IOException {
         stubRequestWithResponse("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusWhenExpiredTransaction.json");
         makeAuthenticationRequest();
@@ -145,7 +145,7 @@ public class MobileIdClientAuthenticationTest {
         makeAuthenticationRequest();
     }
 
-    @Test(expected = ResponseNotFound.class)
+    @Test(expected = NotFoundException.class)
     public void authenticate_whenResponseNotFound_shouldThrowException() throws IOException {
         stubNotFoundResponse("/mid-api/authentication", "requests/authenticationRequest.json");
         makeAuthenticationRequest();
@@ -176,7 +176,7 @@ public class MobileIdClientAuthenticationTest {
     @Test
     public void verifyAuthentication_withNetworkConnectionConfigurationHavingCustomHeader() {
         String headerName = "custom-header";
-        String headerValue = "HACKERMAN";
+        String headerValue = "Auth";
 
         Map<String, String> headersToAdd = new HashMap<>();
         headersToAdd.put(headerName, headerValue);

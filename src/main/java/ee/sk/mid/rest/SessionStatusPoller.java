@@ -23,9 +23,7 @@ public class SessionStatusPoller {
         this.connector = connector;
     }
 
-    public SessionStatus fetchFinalSessionStatus(String sessionId, String path) throws SessionTimeoutException, ResponseRetrievingException,
-            NotMIDClientException, ExpiredTransactionException, UserCancellationException, MIDNotReadyException,
-            SimNotAvailableException, DeliveryException, InvalidCardResponseException, SignatureHashMismatchException, TechnicalErrorException {
+    public SessionStatus fetchFinalSessionStatus(String sessionId, String path) throws MobileIdException {
         logger.debug("Starting to poll session status for session " + sessionId);
         try {
             SessionStatus status = pollForFinalSessionStatus(sessionId, path);
@@ -65,9 +63,7 @@ public class SessionStatusPoller {
         return request;
     }
 
-    private void validateResult(SessionStatus status) throws SessionTimeoutException, ResponseRetrievingException,
-            NotMIDClientException, ExpiredTransactionException, UserCancellationException, MIDNotReadyException,
-            SimNotAvailableException, DeliveryException, InvalidCardResponseException, SignatureHashMismatchException, TechnicalErrorException {
+    private void validateResult(SessionStatus status) throws MobileIdException {
         String result = status.getResult();
         if (result == null) {
             logger.error("Result is missing in the session status response");
@@ -76,9 +72,7 @@ public class SessionStatusPoller {
         validateResult(result);
     }
 
-    private void validateResult(String result) throws SessionTimeoutException, ResponseRetrievingException,
-            NotMIDClientException, ExpiredTransactionException, UserCancellationException, MIDNotReadyException,
-            SimNotAvailableException, DeliveryException, InvalidCardResponseException, SignatureHashMismatchException, TechnicalErrorException {
+    private void validateResult(String result) throws MobileIdException {
         if (equalsIgnoreCase(result, "TIMEOUT")) {
             logger.debug("Session timeout");
             throw new SessionTimeoutException();
@@ -90,7 +84,7 @@ public class SessionStatusPoller {
             throw new NotMIDClientException();
         } else if (equalsIgnoreCase(result, "EXPIRED_TRANSACTION")) {
             logger.debug("MSSP transaction timed out");
-            throw new ExpiredTransactionException();
+            throw new ExpiredException();
         } else if (equalsIgnoreCase(result, "USER_CANCELLED")) {
             logger.debug("User cancelled the operation");
             throw new UserCancellationException();

@@ -1,6 +1,6 @@
 package ee.sk.mid.exception;
 
-class MobileIdException extends RuntimeException {
+public class MobileIdException extends RuntimeException {
 
     MobileIdException() {
     }

@@ -88,7 +88,7 @@ public class AuthenticationRequestBuilderTest {
     }
 
     @Test(expected = ParameterMissingException.class)
-    public void authenticate_withoutRelyingPartyUuid_shouldThrowException() {
+    public void authenticate_withoutRelyingPartyUUID_shouldThrowException() {
         AuthenticationHash authenticationHash = AuthenticationHash.generateRandomHash();
 
         builder
@@ -212,7 +212,7 @@ public class AuthenticationRequestBuilderTest {
         makeAuthenticationRequest();
     }
 
-    @Test(expected = ExpiredTransactionException.class)
+    @Test(expected = ExpiredException.class)
     public void authenticate_withMSSPTransactionExpired_shouldThrowException() {
         connector.setSessionStatusToRespond(createMSSPTransactionExpiredStatus());
         makeAuthenticationRequest();
@@ -261,8 +261,20 @@ public class AuthenticationRequestBuilderTest {
     }
 
     @Test(expected = TechnicalErrorException.class)
+    public void authenticate_withResultBlankInResponse_shouldThrowException() {
+        connector.getSessionStatusToRespond().setResult("");
+        makeAuthenticationRequest();
+    }
+
+    @Test(expected = TechnicalErrorException.class)
     public void authenticate_withSignatureMissingInResponse_shouldThrowException() {
         connector.getSessionStatusToRespond().setSignature(null);
+        makeAuthenticationRequest();
+    }
+
+    @Test(expected = TechnicalErrorException.class)
+    public void authenticate_withCertificateBlankInResponse_shouldThrowException() {
+        connector.getSessionStatusToRespond().setCertificate("");
         makeAuthenticationRequest();
     }
 

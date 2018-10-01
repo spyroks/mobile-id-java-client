@@ -103,7 +103,7 @@ public class MobileIdClientSignatureTest {
         makeSignatureRequest();
     }
 
-    @Test(expected = ExpiredTransactionException.class)
+    @Test(expected = ExpiredException.class)
     public void sign_whenMSSPTransactionExpired_shouldThrowException() throws IOException {
         stubRequestWithResponse("/mid-api/signature/session/2c52caf4-13b0-41c4-bdc6-aa268403cc00", "responses/sessionStatusWhenExpiredTransaction.json");
         makeSignatureRequest();
@@ -151,7 +151,7 @@ public class MobileIdClientSignatureTest {
         makeSignatureRequest();
     }
 
-    @Test(expected = ResponseNotFound.class)
+    @Test(expected = NotFoundException.class)
     public void sign_whenResponseNotFound_shouldThrowException() throws IOException {
         stubNotFoundResponse("/mid-api/signature", "requests/signatureRequest.json");
         makeSignatureRequest();
@@ -190,7 +190,7 @@ public class MobileIdClientSignatureTest {
     @Test
     public void verifySigning_withNetworkConnectionConfigurationHavingCustomHeader() {
         String headerName = "custom-header";
-        String headerValue = "HACKERMAN";
+        String headerValue = "Sign";
 
         Map<String, String> headers = new HashMap<>();
         headers.put(headerName, headerValue);

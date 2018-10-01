@@ -47,6 +47,7 @@ public class MobileIdRestConnectorAuthenticationTest {
         stubRequestWithResponse("/mid-api/authentication", "requests/authenticationRequest.json", "responses/authenticationResponse.json");
         AuthenticationRequest request = createDummyAuthenticationSessionRequest();
         AuthenticationResponse response = connector.authenticate(request);
+
         assertThat(response, is(notNullValue()));
         assertThat(response.getSessionId(), is("1dcc1600-29a6-4e95-a95c-d69b31febcfb"));
     }
@@ -57,6 +58,7 @@ public class MobileIdRestConnectorAuthenticationTest {
         AuthenticationRequest request = createDummyAuthenticationSessionRequest();
         request.setDisplayText("Log into internet banking system");
         AuthenticationResponse response = connector.authenticate(request);
+
         assertThat(response, is(notNullValue()));
         assertThat(response.getSessionId(), is("1dcc1600-29a6-4e95-a95c-d69b31febcfb"));
     }
@@ -68,7 +70,7 @@ public class MobileIdRestConnectorAuthenticationTest {
         connector.authenticate(request);
     }
 
-    @Test(expected = ResponseNotFound.class)
+    @Test(expected = NotFoundException.class)
     public void authenticate_whenResponseNotFound_shouldThrowException() throws IOException {
         stubNotFoundResponse("/mid-api/authentication", "requests/authenticationRequest.json");
         AuthenticationRequest request = createDummyAuthenticationSessionRequest();

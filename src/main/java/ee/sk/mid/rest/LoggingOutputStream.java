@@ -11,7 +11,7 @@ public class LoggingOutputStream extends FilterOutputStream {
 
     private ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-    LoggingOutputStream(OutputStream out) {
+    public LoggingOutputStream(OutputStream out) {
         super(out);
     }
 
@@ -27,7 +27,7 @@ public class LoggingOutputStream extends FilterOutputStream {
         byteArrayOutputStream.write(b);
     }
 
-    byte[] getBytes() {
+    public byte[] getBytes() {
         return byteArrayOutputStream.toByteArray();
     }
 }

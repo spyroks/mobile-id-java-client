@@ -1,6 +1,8 @@
 package ee.sk.mid;
 
-import ee.sk.mid.exception.*;
+import ee.sk.mid.exception.MobileIdException;
+import ee.sk.mid.exception.ParameterMissingException;
+import ee.sk.mid.exception.TechnicalErrorException;
 import ee.sk.mid.rest.MobileIdConnector;
 import ee.sk.mid.rest.SessionStatusPoller;
 import ee.sk.mid.rest.dao.SessionSignature;
@@ -15,7 +17,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class SignatureRequestBuilder extends MobileIdRequestBuilder {
 
     private static final String SIGNATURE_SESSION_PATH = "/mid-api/signature/session/{sessionId}";
-
     private static final Logger logger = LoggerFactory.getLogger(SignatureRequestBuilder.class);
 
     public SignatureRequestBuilder(MobileIdConnector connector, SessionStatusPoller sessionStatusPoller) {
@@ -63,10 +64,7 @@ public class SignatureRequestBuilder extends MobileIdRequestBuilder {
         return this;
     }
 
-    public MobileIdSignature sign() throws ResponseNotFound, ParameterMissingException,
-            UnauthorizedException, SessionTimeoutException, ResponseRetrievingException, NotMIDClientException, ExpiredTransactionException,
-            UserCancellationException, MIDNotReadyException, SimNotAvailableException, DeliveryException, InvalidCardResponseException,
-            SignatureHashMismatchException, TechnicalErrorException {
+    public MobileIdSignature sign() throws MobileIdException {
         validateParameters();
         SignatureRequest request = createSignatureRequest();
         SignatureResponse response = getSignatureResponse(request);
@@ -106,14 +104,14 @@ public class SignatureRequestBuilder extends MobileIdRequestBuilder {
             logger.error("Signable data or hash with hash type must be set");
             throw new ParameterMissingException("Signable data or hash with hash type must be set");
         }
-        if (!isLanguageSet()) {
+        if (isLanguageSet()) {
             logger.error("Language for user dialog in mobile phone must be set");
             throw new ParameterMissingException("Language for user dialog in mobile phone must be set");
         }
     }
 
     private void validateResponse(SessionStatus sessionStatus) {
-        if (sessionStatus.getSignature() == null) {
+        if (sessionStatus.getSignature() == null || isBlank(sessionStatus.getSignature().getValueInBase64())) {
             logger.error("Signature was not present in the response");
             throw new TechnicalErrorException("Signature was not present in the response");
         }

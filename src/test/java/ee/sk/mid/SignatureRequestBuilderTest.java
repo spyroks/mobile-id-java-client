@@ -68,7 +68,7 @@ public class SignatureRequestBuilderTest {
     }
 
     @Test(expected = ParameterMissingException.class)
-    public void sign_withoutRelyingPartyUuid_shouldThrowException() {
+    public void sign_withoutRelyingPartyUUID_shouldThrowException() {
         SignableHash hashToSign = new SignableHash();
         hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
         hashToSign.setHashType(HashType.SHA256);
@@ -201,7 +201,7 @@ public class SignatureRequestBuilderTest {
         makeSigningRequest();
     }
 
-    @Test(expected = ExpiredTransactionException.class)
+    @Test(expected = ExpiredException.class)
     public void sign_withMSSPTransactionExpired_shouldThrowException() {
         connector.setSessionStatusToRespond(createMSSPTransactionExpiredStatus());
         makeSigningRequest();
@@ -246,6 +246,12 @@ public class SignatureRequestBuilderTest {
     @Test(expected = TechnicalErrorException.class)
     public void sign_withResultMissingInResponse_shouldThrowException() {
         connector.getSessionStatusToRespond().setResult(null);
+        makeSigningRequest();
+    }
+
+    @Test(expected = TechnicalErrorException.class)
+    public void sign_withResultBlankInResponse_shouldThrowException() {
+        connector.getSessionStatusToRespond().setResult("");
         makeSigningRequest();
     }
 

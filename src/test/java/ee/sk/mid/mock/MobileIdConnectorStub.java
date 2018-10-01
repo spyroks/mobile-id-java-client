@@ -4,9 +4,11 @@ import ee.sk.mid.exception.SessionNotFoundException;
 import ee.sk.mid.rest.MobileIdConnector;
 import ee.sk.mid.rest.dao.SessionStatus;
 import ee.sk.mid.rest.dao.request.AuthenticationRequest;
+import ee.sk.mid.rest.dao.request.CertificateRequest;
 import ee.sk.mid.rest.dao.request.SessionStatusRequest;
 import ee.sk.mid.rest.dao.request.SignatureRequest;
 import ee.sk.mid.rest.dao.response.AuthenticationResponse;
+import ee.sk.mid.rest.dao.response.CertificateChoiceResponse;
 import ee.sk.mid.rest.dao.response.SignatureResponse;
 
 import java.util.ArrayList;
@@ -33,6 +35,11 @@ public class MobileIdConnectorStub implements MobileIdConnector {
 
     public int getResponseNumber() {
         return responseNumber;
+    }
+
+    @Override
+    public CertificateChoiceResponse getCertificate(CertificateRequest request) {
+        return null;
     }
 
     @Override

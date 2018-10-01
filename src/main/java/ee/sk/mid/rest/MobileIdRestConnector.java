@@ -1,11 +1,14 @@
 package ee.sk.mid.rest;
 
 import ee.sk.mid.exception.*;
+import ee.sk.mid.exception.NotFoundException;
 import ee.sk.mid.rest.dao.SessionStatus;
 import ee.sk.mid.rest.dao.request.AuthenticationRequest;
+import ee.sk.mid.rest.dao.request.CertificateRequest;
 import ee.sk.mid.rest.dao.request.SessionStatusRequest;
 import ee.sk.mid.rest.dao.request.SignatureRequest;
 import ee.sk.mid.rest.dao.response.AuthenticationResponse;
+import ee.sk.mid.rest.dao.response.CertificateChoiceResponse;
 import ee.sk.mid.rest.dao.response.SignatureResponse;
 import org.glassfish.jersey.client.ClientConfig;
 import org.slf4j.Logger;
@@ -26,6 +29,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 public class MobileIdRestConnector implements MobileIdConnector {
 
     private static final Logger logger = LoggerFactory.getLogger(MobileIdRestConnector.class);
+    private static final String CERTIFICATE_PATH = "/mid-api/certificate";
     private static final String SIGNATURE_PATH = "/mid-api/signature";
     private static final String AUTHENTICATION_PATH = "/mid-api/authentication";
 
@@ -42,13 +46,23 @@ public class MobileIdRestConnector implements MobileIdConnector {
     }
 
     @Override
+    public CertificateChoiceResponse getCertificate(CertificateRequest request) {
+        logger.debug("Getting certificate for phone number: " + request.getPhoneNumber());
+        URI uri = UriBuilder
+                .fromUri(endpointUrl)
+                .path(CERTIFICATE_PATH)
+                .build();
+        return postCertificateRequest(uri, request);
+    }
+
+    @Override
     public SignatureResponse sign(SignatureRequest request) {
         logger.debug("Signing for phone number: " + request.getPhoneNumber());
         URI uri = UriBuilder
                 .fromUri(endpointUrl)
                 .path(SIGNATURE_PATH)
                 .build();
-        return postRequest(uri, request, SignatureResponse.class);
+        return postSignatureRequest(uri, request);
     }
 
     @Override
@@ -71,10 +85,18 @@ public class MobileIdRestConnector implements MobileIdConnector {
         URI uri = uriBuilder.build(request.getSessionId());
         try {
             return prepareClient(uri).get(SessionStatus.class);
-        } catch (NotFoundException e) {
+        } catch (javax.ws.rs.NotFoundException e) {
             logger.warn("Session " + request + " not found: " + e.getMessage());
             throw new SessionNotFoundException();
         }
+    }
+
+    private CertificateChoiceResponse postCertificateRequest(URI uri, CertificateRequest request) {
+        return postRequest(uri, request, CertificateChoiceResponse.class);
+    }
+
+    private SignatureResponse postSignatureRequest(URI uri, SignatureRequest request) {
+        return postRequest(uri, request, SignatureResponse.class);
     }
 
     private AuthenticationResponse postAuthenticationRequest(URI uri, AuthenticationRequest request) {
@@ -88,9 +110,9 @@ public class MobileIdRestConnector implements MobileIdConnector {
         } catch (InternalServerErrorException e) {
             logger.warn("Error getting response from cert-store/MSSP for URI " + uri + ": " + e.getMessage());
             throw new ResponseRetrievingException();
-        } catch (NotFoundException e) {
+        } catch (javax.ws.rs.NotFoundException e) {
             logger.warn("Response not found for URI " + uri + ": " + e.getMessage());
-            throw new ResponseNotFound();
+            throw new NotFoundException();
         } catch (BadRequestException e) {
             logger.warn("Request is invalid for URI " + uri + ": " + e.getMessage());
             throw new ParameterMissingException();

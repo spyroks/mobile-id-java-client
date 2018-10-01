@@ -9,7 +9,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
-class CertificateParser {
+public class CertificateParser {
 
     private static final String BEGIN_CERT = "-----BEGIN CERTIFICATE-----";
 
@@ -17,7 +17,7 @@ class CertificateParser {
 
     private static final Logger logger = LoggerFactory.getLogger(CertificateParser.class);
 
-    static X509Certificate parseX509Certificate(String certificateValue) {
+    public static X509Certificate parseX509Certificate(String certificateValue) {
         logger.debug("Parsing X509 certificate");
         String certificateString = BEGIN_CERT + "\n" + certificateValue + "\n" + END_CERT;
         try {

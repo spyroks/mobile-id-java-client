@@ -2,7 +2,7 @@ package ee.sk.mid;
 
 import ee.sk.mid.exception.ExpiredException;
 import ee.sk.mid.exception.MobileIdException;
-import ee.sk.mid.exception.NotFoundException;
+import ee.sk.mid.exception.CertificateNotPresentException;
 import ee.sk.mid.exception.TechnicalErrorException;
 import ee.sk.mid.rest.MobileIdConnector;
 import ee.sk.mid.rest.dao.request.CertificateRequest;
@@ -75,17 +75,17 @@ public class CertificateRequestBuilder extends MobileIdRequestBuilder {
         super.validateParameters();
     }
 
-    private void validateResponse(CertificateChoiceResponse certificateChoiceResponse) {
+    private void validateResponse(CertificateChoiceResponse certificateChoiceResponse) throws TechnicalErrorException {
         if (certificateChoiceResponse.getCertificate() == null || isBlank(certificateChoiceResponse.getCertificate())) {
             logger.error("Certificate was not present in the session status response");
             throw new TechnicalErrorException("Certificate was not present in the session status response");
         }
     }
 
-    private void validateResult(String result) {
+    private void validateResult(String result) throws MobileIdException {
         if (equalsIgnoreCase(result, "NOT_FOUND")) {
             logger.debug("No certificate for the user was found");
-            throw new NotFoundException("No certificate for the user was found");
+            throw new CertificateNotPresentException("No certificate for the user was found");
         } else if (equalsIgnoreCase(result, "NOT_ACTIVE")) {
             logger.debug("Inactive certificate found");
             throw new ExpiredException("Inactive certificate found");

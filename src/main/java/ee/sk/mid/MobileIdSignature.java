@@ -8,9 +8,9 @@ public class MobileIdSignature {
     private String valueInBase64;
     private String algorithmName;
 
-    public byte[] getValue() {
+    public byte[] getValue() throws InvalidBase64CharacterException {
         if (!Base64.isBase64(valueInBase64)) {
-            throw new InvalidBase64CharacterException("Failed to parse signature value in base64. Probably incorrectly encoded base64 string: '" + valueInBase64);
+            throw new InvalidBase64CharacterException("Failed to parse signature value in base64. Probably incorrectly encoded base64 string: '" + valueInBase64 + "'");
         }
         return Base64.decodeBase64(valueInBase64);
     }

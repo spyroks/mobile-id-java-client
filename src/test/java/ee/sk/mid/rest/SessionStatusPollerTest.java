@@ -57,25 +57,6 @@ public class SessionStatusPollerTest {
         assertThat(duration < 1100L, is(true));
     }
 
-    @Test
-    public void setResponseSocketOpenTime() {
-        poller.setResponseSocketOpenTime(TimeUnit.MINUTES, 2L);
-        connector.getResponses().add(createCompleteSessionStatus());
-        SessionStatus status = poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
-        assertCompleteStateReceived(status);
-        assertThat(connector.getRequestUsed().isResponseSocketOpenTimeSet(), is(true));
-        assertThat(connector.getRequestUsed().getResponseSocketOpenTimeUnit(), is(TimeUnit.MINUTES));
-        assertThat(connector.getRequestUsed().getResponseSocketOpenTimeValue(), is(2L));
-    }
-
-    @Test
-    public void responseSocketOpenTimeShouldNotBeSetByDefault() {
-        connector.getResponses().add(createCompleteSessionStatus());
-        SessionStatus status = poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
-        assertCompleteStateReceived(status);
-        assertThat(connector.getRequestUsed().isResponseSocketOpenTimeSet(), is(false));
-    }
-
     @Test(expected = SessionTimeoutException.class)
     public void getUserTimeoutResponse_shouldThrowException() {
         connector.getResponses().add(createTimeoutSessionStatus());

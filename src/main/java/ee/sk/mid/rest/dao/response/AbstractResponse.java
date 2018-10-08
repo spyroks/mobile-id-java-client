@@ -7,11 +7,11 @@ public class AbstractResponse {
     @JsonProperty("sessionID")
     private String sessionId;
 
-    public AbstractResponse(String sessionId) {
-        this.sessionId = sessionId;
+    public AbstractResponse() {
     }
 
-    public AbstractResponse() {
+    public AbstractResponse(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getSessionId() {

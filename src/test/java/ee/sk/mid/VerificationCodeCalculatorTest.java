@@ -46,6 +46,6 @@ public class VerificationCodeCalculatorTest {
     }
 
     private String calculateVerificationCode(byte[] dummyDocumentHash) {
-        return VerificationCodeCalculator.calculate(dummyDocumentHash);
+        return VerificationCodeCalculator.calculateMobileIdVerificationCode(dummyDocumentHash);
     }
 }

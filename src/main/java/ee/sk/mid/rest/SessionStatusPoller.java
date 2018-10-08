@@ -13,17 +13,16 @@ import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 public class SessionStatusPoller {
 
     private static final Logger logger = LoggerFactory.getLogger(SessionStatusPoller.class);
+
     private MobileIdConnector connector;
     private TimeUnit pollingSleepTimeUnit = TimeUnit.SECONDS;
     private long pollingSleepTimeout = 1L;
-    private TimeUnit responseSocketOpenTimeUnit;
-    private long responseSocketOpenTimeValue;
 
     public SessionStatusPoller(MobileIdConnector connector) {
         this.connector = connector;
     }
 
-    public SessionStatus fetchFinalSessionStatus(String sessionId, String path) throws MobileIdException {
+    public SessionStatus fetchFinalSessionStatus(String sessionId, String path) throws TechnicalErrorException {
         logger.debug("Starting to poll session status for session " + sessionId);
         try {
             SessionStatus status = pollForFinalSessionStatus(sessionId, path);
@@ -56,14 +55,10 @@ public class SessionStatusPoller {
     }
 
     private SessionStatusRequest createSessionStatusRequest(String sessionId) {
-        SessionStatusRequest request = new SessionStatusRequest(sessionId);
-        if (responseSocketOpenTimeUnit != null && responseSocketOpenTimeValue > 0) {
-            request.setResponseSocketOpenTime(responseSocketOpenTimeUnit, responseSocketOpenTimeValue);
-        }
-        return request;
+        return new SessionStatusRequest(sessionId);
     }
 
-    private void validateResult(SessionStatus status) throws MobileIdException {
+    private void validateResult(SessionStatus status) throws TechnicalErrorException {
         String result = status.getResult();
         if (result == null) {
             logger.error("Result is missing in the session status response");
@@ -113,10 +108,5 @@ public class SessionStatusPoller {
         logger.debug("Polling sleep time is " + timeout + " " + unit.toString());
         pollingSleepTimeUnit = unit;
         pollingSleepTimeout = timeout;
-    }
-
-    public void setResponseSocketOpenTime(TimeUnit timeUnit, long timeValue) {
-        this.responseSocketOpenTimeUnit = timeUnit;
-        this.responseSocketOpenTimeValue = timeValue;
     }
 }

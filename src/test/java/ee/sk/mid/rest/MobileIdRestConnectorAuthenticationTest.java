@@ -18,7 +18,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static ee.sk.mid.mock.MobileIdRestServiceStubs.*;
@@ -70,7 +69,7 @@ public class MobileIdRestConnectorAuthenticationTest {
         connector.authenticate(request);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = ResponseNotFoundException.class)
     public void authenticate_whenResponseNotFound_shouldThrowException() throws IOException {
         stubNotFoundResponse("/mid-api/authentication", "requests/authenticationRequest.json");
         AuthenticationRequest request = createDummyAuthenticationSessionRequest();
@@ -188,16 +187,6 @@ public class MobileIdRestConnectorAuthenticationTest {
     public void getSessionStatus_whenSignatureHashMismatch() throws IOException {
         SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenSignatureHashMismatch.json");
         assertSessionStatusErrorWithResult(sessionStatus, "SIGNATURE_HASH_MISMATCH");
-    }
-
-    @Test
-    public void getSessionStatus_withTimeoutParameter() throws IOException {
-        stubRequestWithResponse("/mid-api/authentication/session/de305d54-75b4-431b-adb2-eb6b9e546016", "responses/sessionStatusForSuccessfulAuthenticationRequest.json");
-        SessionStatusRequest request = new SessionStatusRequest("de305d54-75b4-431b-adb2-eb6b9e546016");
-        request.setResponseSocketOpenTime(TimeUnit.SECONDS, 10L);
-        SessionStatus sessionStatus = connector.getSessionStatus(request, AUTHENTICATION_SESSION_PATH);
-        assertSuccessfulResponse(sessionStatus);
-        verify(getRequestedFor(urlEqualTo("/mid-api/authentication/session/de305d54-75b4-431b-adb2-eb6b9e546016?timeoutMs=10000")));
     }
 
     private SessionStatus getStubbedSessionStatusWithResponse(String responseFile) throws IOException {

@@ -13,13 +13,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED;
 import static ee.sk.mid.mock.MobileIdRestServiceStubs.*;
 import static ee.sk.mid.mock.TestData.*;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class MobileIdClientAuthenticationTest {
@@ -42,17 +41,17 @@ public class MobileIdClientAuthenticationTest {
 
     @Test
     public void authenticate() {
-        AuthenticationHash authenticationHash = new AuthenticationHash();
-        authenticationHash.setHashInBase64("kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw==");
-        authenticationHash.setHashType(HashType.SHA512);
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = new MobileIdAuthenticationHash();
+        mobileIdAuthenticationHash.setHashInBase64("kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw==");
+        mobileIdAuthenticationHash.setHashType(HashType.SHA512);
 
-        assertThat(authenticationHash.calculateVerificationCode(), is("4677"));
+        assertThat(mobileIdAuthenticationHash.calculateVerificationCode(), is("4677"));
 
         MobileIdAuthentication authentication = client
                 .createAuthentication()
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(authenticationHash)
+                .withAuthenticationHash(mobileIdAuthenticationHash)
                 .withLanguage(Language.EST)
                 .authenticate();
 
@@ -61,17 +60,17 @@ public class MobileIdClientAuthenticationTest {
 
     @Test
     public void authenticate_withDisplayText() {
-        AuthenticationHash authenticationHash = new AuthenticationHash();
-        authenticationHash.setHashInBase64("kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw==");
-        authenticationHash.setHashType(HashType.SHA512);
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = new MobileIdAuthenticationHash();
+        mobileIdAuthenticationHash.setHashInBase64("kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw==");
+        mobileIdAuthenticationHash.setHashType(HashType.SHA512);
 
-        assertThat(authenticationHash.calculateVerificationCode(), is("4677"));
+        assertThat(mobileIdAuthenticationHash.calculateVerificationCode(), is("4677"));
 
         MobileIdAuthentication authentication = client
                 .createAuthentication()
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(authenticationHash)
+                .withAuthenticationHash(mobileIdAuthenticationHash)
                 .withLanguage(Language.EST)
                 .withDisplayText("Log into internet banking system")
                 .authenticate();
@@ -145,7 +144,7 @@ public class MobileIdClientAuthenticationTest {
         makeAuthenticationRequest();
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = ResponseNotFoundException.class)
     public void authenticate_whenResponseNotFound_shouldThrowException() throws IOException {
         stubNotFoundResponse("/mid-api/authentication", "requests/authenticationRequest.json");
         makeAuthenticationRequest();
@@ -197,29 +196,29 @@ public class MobileIdClientAuthenticationTest {
     }
 
     private MobileIdAuthentication createAuthentication() {
-        AuthenticationHash authenticationHash = new AuthenticationHash();
-        authenticationHash.setHashInBase64("kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw==");
-        authenticationHash.setHashType(HashType.SHA512);
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = new MobileIdAuthenticationHash();
+        mobileIdAuthenticationHash.setHashInBase64("kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw==");
+        mobileIdAuthenticationHash.setHashType(HashType.SHA512);
 
         return client
                 .createAuthentication()
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(authenticationHash)
+                .withAuthenticationHash(mobileIdAuthenticationHash)
                 .withLanguage(Language.EST)
                 .authenticate();
     }
 
     private void makeAuthenticationRequest() {
-        AuthenticationHash authenticationHash = new AuthenticationHash();
-        authenticationHash.setHashInBase64("kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw==");
-        authenticationHash.setHashType(HashType.SHA512);
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = new MobileIdAuthenticationHash();
+        mobileIdAuthenticationHash.setHashInBase64("kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw==");
+        mobileIdAuthenticationHash.setHashType(HashType.SHA512);
 
         client
                 .createAuthentication()
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(authenticationHash)
+                .withAuthenticationHash(mobileIdAuthenticationHash)
                 .withLanguage(Language.EST)
                 .authenticate();
     }

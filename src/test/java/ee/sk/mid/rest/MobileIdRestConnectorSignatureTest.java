@@ -4,10 +4,7 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import ee.sk.mid.ClientRequestHeaderFilter;
 import ee.sk.mid.HashType;
 import ee.sk.mid.Language;
-import ee.sk.mid.exception.ParameterMissingException;
-import ee.sk.mid.exception.NotFoundException;
-import ee.sk.mid.exception.ResponseRetrievingException;
-import ee.sk.mid.exception.UnauthorizedException;
+import ee.sk.mid.exception.*;
 import ee.sk.mid.rest.dao.request.SignatureRequest;
 import ee.sk.mid.rest.dao.response.SignatureResponse;
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
@@ -65,7 +62,7 @@ public class MobileIdRestConnectorSignatureTest {
         connector.sign(request);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = ResponseNotFoundException.class)
     public void sign_whenResponseNotFound_shouldThrowException() throws Exception {
         stubNotFoundResponse("/mid-api/signature", "requests/signatureRequest.json");
         SignatureRequest request = createDummySignatureSessionRequest();

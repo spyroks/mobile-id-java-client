@@ -21,7 +21,7 @@ public class SignableHash implements Serializable {
         return Base64.encodeBase64String(hash);
     }
 
-    public void setHashInBase64(String hashInBase64) {
+    public void setHashInBase64(String hashInBase64) throws InvalidBase64CharacterException {
         if (isBase64(hashInBase64)) {
             hash = Base64.decodeBase64(hashInBase64);
         } else {
@@ -38,7 +38,7 @@ public class SignableHash implements Serializable {
     }
 
     public String calculateVerificationCode() {
-        return VerificationCodeCalculator.calculate(hash);
+        return VerificationCodeCalculator.calculateMobileIdVerificationCode(hash);
     }
 
     public boolean areFieldsFilled() {

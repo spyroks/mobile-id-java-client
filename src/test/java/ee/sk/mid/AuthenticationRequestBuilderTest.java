@@ -33,33 +33,33 @@ public class AuthenticationRequestBuilderTest {
 
     @Test
     public void authenticate_withGeneratedHash() throws Exception {
-        AuthenticationHash authenticationHash = AuthenticationHash.generateRandomHash();
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = MobileIdAuthenticationHash.generateRandomHash();
 
         MobileIdAuthentication authentication = builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
                 .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(authenticationHash)
+                .withAuthenticationHash(mobileIdAuthenticationHash)
                 .withLanguage(Language.EST)
                 .authenticate();
 
         assertCorrectSessionRequestMade();
-        assertAuthenticationCorrect(authentication, authenticationHash.getHashInBase64());
+        assertAuthenticationCorrect(authentication, mobileIdAuthenticationHash.getHashInBase64());
     }
 
     @Test
     public void authenticate_withHash() throws Exception {
-        AuthenticationHash authenticationHash = new AuthenticationHash();
-        authenticationHash.setHashInBase64(SHA512_HASH_IN_BASE64);
-        authenticationHash.setHashType(HashType.SHA512);
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = new MobileIdAuthenticationHash();
+        mobileIdAuthenticationHash.setHashInBase64(SHA512_HASH_IN_BASE64);
+        mobileIdAuthenticationHash.setHashType(HashType.SHA512);
 
         MobileIdAuthentication authentication = builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
                 .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(authenticationHash)
+                .withAuthenticationHash(mobileIdAuthenticationHash)
                 .withLanguage(Language.EST)
                 .authenticate();
 
@@ -89,13 +89,13 @@ public class AuthenticationRequestBuilderTest {
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withoutRelyingPartyUUID_shouldThrowException() {
-        AuthenticationHash authenticationHash = AuthenticationHash.generateRandomHash();
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = MobileIdAuthenticationHash.generateRandomHash();
 
         builder
                 .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(authenticationHash)
+                .withAuthenticationHash(mobileIdAuthenticationHash)
                 .withLanguage(Language.EST)
                 .authenticate();
 
@@ -103,39 +103,39 @@ public class AuthenticationRequestBuilderTest {
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withoutRelyingPartyName_shouldThrowException() {
-        AuthenticationHash authenticationHash = AuthenticationHash.generateRandomHash();
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = MobileIdAuthenticationHash.generateRandomHash();
 
         builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(authenticationHash)
+                .withAuthenticationHash(mobileIdAuthenticationHash)
                 .withLanguage(Language.EST)
                 .authenticate();
     }
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withoutPhoneNumber_shouldThrowException() {
-        AuthenticationHash authenticationHash = AuthenticationHash.generateRandomHash();
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = MobileIdAuthenticationHash.generateRandomHash();
 
         builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
                 .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(authenticationHash)
+                .withAuthenticationHash(mobileIdAuthenticationHash)
                 .withLanguage(Language.EST)
                 .authenticate();
     }
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withoutNationalIdentityNumber_shouldThrowException() {
-        AuthenticationHash authenticationHash = AuthenticationHash.generateRandomHash();
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = MobileIdAuthenticationHash.generateRandomHash();
 
         builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
                 .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
                 .withPhoneNumber(VALID_PHONE_1)
-                .withAuthenticationHash(authenticationHash)
+                .withAuthenticationHash(mobileIdAuthenticationHash)
                 .withLanguage(Language.EST)
                 .authenticate();
     }
@@ -153,44 +153,44 @@ public class AuthenticationRequestBuilderTest {
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withHash_withoutHashType_shouldThrowException() {
-        AuthenticationHash authenticationHash = new AuthenticationHash();
-        authenticationHash.setHashInBase64(SHA512_HASH_IN_BASE64);
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = new MobileIdAuthenticationHash();
+        mobileIdAuthenticationHash.setHashInBase64(SHA512_HASH_IN_BASE64);
 
         builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
                 .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(authenticationHash)
+                .withAuthenticationHash(mobileIdAuthenticationHash)
                 .withLanguage(Language.EST)
                 .authenticate();
     }
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withHashType_withoutHash_shouldThrowException() {
-        AuthenticationHash authenticationHash = new AuthenticationHash();
-        authenticationHash.setHashType(HashType.SHA512);
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = new MobileIdAuthenticationHash();
+        mobileIdAuthenticationHash.setHashType(HashType.SHA512);
 
         builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
                 .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(authenticationHash)
+                .withAuthenticationHash(mobileIdAuthenticationHash)
                 .withLanguage(Language.EST)
                 .authenticate();
     }
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withoutLanguage_shouldThrowException() {
-        AuthenticationHash authenticationHash = AuthenticationHash.generateRandomHash();
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = MobileIdAuthenticationHash.generateRandomHash();
 
         builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
                 .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(authenticationHash)
+                .withAuthenticationHash(mobileIdAuthenticationHash)
                 .authenticate();
     }
 
@@ -308,14 +308,14 @@ public class AuthenticationRequestBuilderTest {
     }
 
     private void makeAuthenticationRequest() {
-        AuthenticationHash authenticationHash = AuthenticationHash.generateRandomHash();
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = MobileIdAuthenticationHash.generateRandomHash();
 
         builder
                 .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
                 .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
                 .withPhoneNumber(VALID_PHONE_1)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(authenticationHash)
+                .withAuthenticationHash(mobileIdAuthenticationHash)
                 .withLanguage(Language.EST)
                 .authenticate();
     }

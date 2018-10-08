@@ -11,13 +11,11 @@ import java.security.cert.X509Certificate;
 
 public class CertificateParser {
 
-    private static final String BEGIN_CERT = "-----BEGIN CERTIFICATE-----";
-
-    private static final String END_CERT = "-----END CERTIFICATE-----";
-
     private static final Logger logger = LoggerFactory.getLogger(CertificateParser.class);
+    public static final String BEGIN_CERT = "-----BEGIN CERTIFICATE-----";
+    public static final String END_CERT = "-----END CERTIFICATE-----";
 
-    public static X509Certificate parseX509Certificate(String certificateValue) {
+    public static X509Certificate parseX509Certificate(String certificateValue) throws TechnicalErrorException {
         logger.debug("Parsing X509 certificate");
         String certificateString = BEGIN_CERT + "\n" + certificateValue + "\n" + END_CERT;
         try {

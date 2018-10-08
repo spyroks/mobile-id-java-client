@@ -14,8 +14,6 @@ public class MobileIdClient {
     private ClientConfig networkConnectionConfig;
     private TimeUnit pollingSleepTimeUnit = TimeUnit.SECONDS;
     private long pollingSleepTimeout = 1L;
-    private TimeUnit sessionStatusResponseSocketOpenTimeUnit;
-    private long sessionStatusResponseSocketOpenTimeValue;
 
     public CertificateRequestBuilder getCertificate() {
         MobileIdRestConnector connector = new MobileIdRestConnector(hostUrl, networkConnectionConfig);
@@ -56,11 +54,6 @@ public class MobileIdClient {
         this.networkConnectionConfig = networkConnectionConfig;
     }
 
-    public void setSessionStatusResponseSocketOpenTime(TimeUnit timeUnit, long timeValue) {
-        sessionStatusResponseSocketOpenTimeUnit = timeUnit;
-        sessionStatusResponseSocketOpenTimeValue = timeValue;
-    }
-
     public void setPollingSleepTimeout(TimeUnit unit, long timeout) {
         pollingSleepTimeUnit = unit;
         pollingSleepTimeout = timeout;
@@ -74,7 +67,6 @@ public class MobileIdClient {
     private SessionStatusPoller createSessionStatusPoller(MobileIdRestConnector connector) {
         SessionStatusPoller sessionStatusPoller = new SessionStatusPoller(connector);
         sessionStatusPoller.setPollingSleepTime(pollingSleepTimeUnit, pollingSleepTimeout);
-        sessionStatusPoller.setResponseSocketOpenTime(sessionStatusResponseSocketOpenTimeUnit, sessionStatusResponseSocketOpenTimeValue);
         return sessionStatusPoller;
     }
 }

@@ -1,7 +1,6 @@
 package ee.sk.mid.rest;
 
 import ee.sk.mid.exception.*;
-import ee.sk.mid.exception.NotFoundException;
 import ee.sk.mid.rest.dao.SessionStatus;
 import ee.sk.mid.rest.dao.request.AuthenticationRequest;
 import ee.sk.mid.rest.dao.request.CertificateRequest;
@@ -14,7 +13,10 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.*;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -22,7 +24,6 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
-import java.util.concurrent.TimeUnit;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
@@ -81,7 +82,6 @@ public class MobileIdRestConnector implements MobileIdConnector {
         UriBuilder uriBuilder = UriBuilder
                 .fromUri(endpointUrl)
                 .path(path);
-        addResponseSocketOpenTimeUrlParameter(request, uriBuilder);
         URI uri = uriBuilder.build(request.getSessionId());
         try {
             return prepareClient(uri).get(SessionStatus.class);
@@ -103,16 +103,16 @@ public class MobileIdRestConnector implements MobileIdConnector {
         return postRequest(uri, request, AuthenticationResponse.class);
     }
 
-    private <T, V> T postRequest(URI uri, V request, Class<T> responseType) {
+    private <T, V> T postRequest(URI uri, V request, Class<T> responseType) throws MobileIdException {
         try {
             Entity<V> requestEntity = Entity.entity(request, MediaType.APPLICATION_JSON);
             return prepareClient(uri).post(requestEntity, responseType);
         } catch (InternalServerErrorException e) {
             logger.warn("Error getting response from cert-store/MSSP for URI " + uri + ": " + e.getMessage());
             throw new ResponseRetrievingException();
-        } catch (javax.ws.rs.NotFoundException e) {
+        } catch (NotFoundException e) {
             logger.warn("Response not found for URI " + uri + ": " + e.getMessage());
-            throw new NotFoundException();
+            throw new ResponseNotFoundException();
         } catch (BadRequestException e) {
             logger.warn("Request is invalid for URI " + uri + ": " + e.getMessage());
             throw new ParameterMissingException();
@@ -129,14 +129,5 @@ public class MobileIdRestConnector implements MobileIdConnector {
                 .target(uri)
                 .request()
                 .accept(APPLICATION_JSON_TYPE);
-    }
-
-    private void addResponseSocketOpenTimeUrlParameter(SessionStatusRequest request, UriBuilder uriBuilder) {
-        if (request.isResponseSocketOpenTimeSet()) {
-            TimeUnit timeUnit = request.getResponseSocketOpenTimeUnit();
-            long timeValue = request.getResponseSocketOpenTimeValue();
-            long queryTimeoutInMilliseconds = timeUnit.toMillis(timeValue);
-            uriBuilder.queryParam("timeoutMs", queryTimeoutInMilliseconds);
-        }
     }
 }

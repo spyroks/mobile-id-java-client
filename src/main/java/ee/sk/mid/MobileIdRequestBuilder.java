@@ -23,13 +23,13 @@ public abstract class MobileIdRequestBuilder {
     private Language language;
     private String displayText;
 
+    protected MobileIdRequestBuilder(MobileIdConnector connector) {
+        this.connector = connector;
+    }
+
     protected MobileIdRequestBuilder(MobileIdConnector connector, SessionStatusPoller sessionStatusPoller) {
         this.connector = connector;
         this.sessionStatusPoller = sessionStatusPoller;
-    }
-
-    protected MobileIdRequestBuilder(MobileIdConnector connector) {
-        this.connector = connector;
     }
 
     protected MobileIdRequestBuilder withRelyingPartyUUID(String relyingPartyUUID) {
@@ -130,7 +130,7 @@ public abstract class MobileIdRequestBuilder {
         return language == null;
     }
 
-    protected void validateParameters() {
+    protected void validateParameters() throws ParameterMissingException {
         if (isBlank(relyingPartyUUID)) {
             logger.error("Relying Party UUID parameter must be set");
             throw new ParameterMissingException("Relying Party UUID parameter must be set");

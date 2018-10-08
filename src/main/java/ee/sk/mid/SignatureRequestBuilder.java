@@ -98,7 +98,7 @@ public class SignatureRequestBuilder extends MobileIdRequestBuilder {
         return signature;
     }
 
-    protected void validateParameters() {
+    protected void validateParameters() throws ParameterMissingException {
         super.validateParameters();
         if (isHashSet() && isSignableDataSet()) {
             logger.error("Signable data or hash with hash type must be set");
@@ -110,7 +110,7 @@ public class SignatureRequestBuilder extends MobileIdRequestBuilder {
         }
     }
 
-    private void validateResponse(SessionStatus sessionStatus) {
+    private void validateResponse(SessionStatus sessionStatus) throws TechnicalErrorException {
         if (sessionStatus.getSignature() == null || isBlank(sessionStatus.getSignature().getValueInBase64())) {
             logger.error("Signature was not present in the response");
             throw new TechnicalErrorException("Signature was not present in the response");

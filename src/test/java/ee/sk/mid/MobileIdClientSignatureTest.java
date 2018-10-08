@@ -151,7 +151,7 @@ public class MobileIdClientSignatureTest {
         makeSignatureRequest();
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = ResponseNotFoundException.class)
     public void sign_whenResponseNotFound_shouldThrowException() throws IOException {
         stubNotFoundResponse("/mid-api/signature", "requests/signatureRequest.json");
         makeSignatureRequest();
@@ -177,14 +177,6 @@ public class MobileIdClientSignatureTest {
         long duration = measureSigningDuration();
         assertThat("Duration is " + duration, duration > 2000L, is(true));
         assertThat("Duration is " + duration, duration < 3000L, is(true));
-    }
-
-    @Test
-    public void setSessionStatusResponseSocketTimeout() {
-        client.setSessionStatusResponseSocketOpenTime(TimeUnit.SECONDS, 10L);
-        MobileIdSignature signature = createSignature();
-        assertThat(signature, is(notNullValue()));
-        verify(getRequestedFor(urlEqualTo("/mid-api/signature/session/2c52caf4-13b0-41c4-bdc6-aa268403cc00?timeoutMs=10000")));
     }
 
     @Test

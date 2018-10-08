@@ -15,9 +15,9 @@ public class MobileIdAuthentication implements Serializable {
     private String algorithmName;
     private X509Certificate certificate;
 
-    public byte[] getSignatureValue() {
+    public byte[] getSignatureValue() throws InvalidBase64CharacterException {
         if (!Base64.isBase64(signatureValueInBase64)) {
-            throw new InvalidBase64CharacterException("Failed to parse signature value in base64. Probably incorrectly encoded base64 string: '" + signatureValueInBase64);
+            throw new InvalidBase64CharacterException("Failed to parse signature value in base64. Probably incorrectly encoded base64 string: '" + signatureValueInBase64 + "'");
         }
         return Base64.decodeBase64(signatureValueInBase64);
     }

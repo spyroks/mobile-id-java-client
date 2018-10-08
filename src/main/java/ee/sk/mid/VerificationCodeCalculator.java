@@ -4,7 +4,7 @@ public class VerificationCodeCalculator {
 
     private static final int MINIMUM_HASH_LENGTH = 20;
 
-    public static String calculate(byte[] hash) {
+    public static String calculateMobileIdVerificationCode(byte[] hash) {
         return String.format("%04d", validateHash(hash) ? ((0xFC & hash[0]) << 5) | (hash[(hash.length / 2) - 1] & 0x7F) : 0);
     }
 

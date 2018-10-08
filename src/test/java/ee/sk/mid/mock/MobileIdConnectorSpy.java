@@ -55,10 +55,6 @@ public class MobileIdConnectorSpy implements MobileIdConnector {
         return certificateRequestUsed;
     }
 
-    public void setCertificateRequestUsed(CertificateRequest certificateRequestUsed) {
-        this.certificateRequestUsed = certificateRequestUsed;
-    }
-
     public AuthenticationRequest getAuthenticationRequestUsed() {
         return authenticationRequestUsed;
     }

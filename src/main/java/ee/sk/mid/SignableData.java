@@ -31,6 +31,6 @@ public class SignableData implements Serializable {
     }
 
     public String calculateVerificationCode() {
-        return VerificationCodeCalculator.calculate(calculateHash());
+        return VerificationCodeCalculator.calculateMobileIdVerificationCode(calculateHash());
     }
 }

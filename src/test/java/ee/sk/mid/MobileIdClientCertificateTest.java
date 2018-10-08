@@ -49,8 +49,8 @@ public class MobileIdClientCertificateTest {
         assertCertificateResponseValid(certificate);
     }
 
-    @Test(expected = NotFoundException.class)
-    public void getCertificate_whenCertificateNotFound_shouldThrowException() throws Exception {
+    @Test(expected = CertificateNotPresentException.class)
+    public void getCertificate_whenCertificateNotPresent_shouldThrowException() throws Exception {
         stubRequestWithResponse("/mid-api/certificate", "requests/certificateChoiceRequest.json", "responses/certificateChoiceResponseWhenCertificateNotFound.json");
         makeGetCertificateRequest();
     }
@@ -67,7 +67,7 @@ public class MobileIdClientCertificateTest {
         makeGetCertificateRequest();
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = ResponseNotFoundException.class)
     public void getCertificate_whenResponseNotFound_shouldThrowException() throws IOException {
         stubNotFoundResponse("/mid-api/certificate", "requests/certificateChoiceRequest.json");
         makeGetCertificateRequest();

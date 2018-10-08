@@ -2,10 +2,7 @@ package ee.sk.mid.rest;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import ee.sk.mid.ClientRequestHeaderFilter;
-import ee.sk.mid.exception.NotFoundException;
-import ee.sk.mid.exception.ParameterMissingException;
-import ee.sk.mid.exception.ResponseRetrievingException;
-import ee.sk.mid.exception.UnauthorizedException;
+import ee.sk.mid.exception.*;
 import ee.sk.mid.rest.dao.request.CertificateRequest;
 import ee.sk.mid.rest.dao.response.CertificateChoiceResponse;
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
@@ -18,6 +15,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static ee.sk.mid.mock.MobileIdRestServiceStubs.*;
 import static ee.sk.mid.mock.TestData.*;
@@ -54,7 +52,7 @@ public class MobileIdRestConnectorCertificateTest {
         connector.getCertificate(request);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = ResponseNotFoundException.class)
     public void getCertificate_whenResponseNotFound_shouldThrowException() throws IOException {
         stubNotFoundResponse("/mid-api/certificate", "requests/certificateChoiceRequest.json");
         CertificateRequest request = createDummyCertificateRequest();

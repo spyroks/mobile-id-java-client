@@ -1,7 +1,7 @@
 package ee.sk.mid;
 
 import ee.sk.mid.exception.ExpiredException;
-import ee.sk.mid.exception.NotFoundException;
+import ee.sk.mid.exception.CertificateNotPresentException;
 import ee.sk.mid.exception.ParameterMissingException;
 import ee.sk.mid.exception.TechnicalErrorException;
 import ee.sk.mid.mock.MobileIdConnectorSpy;
@@ -78,8 +78,8 @@ public class CertificateRequestBuilderTest {
                 .fetch();
     }
 
-    @Test(expected = NotFoundException.class)
-    public void getCertificate_withCertificateNotFound_shouldThrowException() {
+    @Test(expected = CertificateNotPresentException.class)
+    public void getCertificate_withCertificateNotPresent_shouldThrowException() {
         connector.getCertificateChoiceResponseToRespond().setResult("NOT_FOUND");
         makeCertificateRequest();
     }

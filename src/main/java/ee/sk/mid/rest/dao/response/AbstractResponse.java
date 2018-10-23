@@ -1,10 +1,12 @@
 package ee.sk.mid.rest.dao.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-public class AbstractResponse {
+import java.io.Serializable;
 
-    @JsonProperty("sessionID")
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class AbstractResponse implements Serializable {
+
     private String sessionId;
 
     public AbstractResponse() {

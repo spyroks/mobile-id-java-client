@@ -4,8 +4,4 @@ public class ResponseNotFoundException extends MobileIdException {
 
     public ResponseNotFoundException() {
     }
-
-    public ResponseNotFoundException(String message) {
-        super(message);
-    }
 }

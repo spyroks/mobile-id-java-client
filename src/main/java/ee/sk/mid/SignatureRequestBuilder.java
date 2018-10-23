@@ -68,9 +68,9 @@ public class SignatureRequestBuilder extends MobileIdRequestBuilder {
         validateParameters();
         SignatureRequest request = createSignatureRequest();
         SignatureResponse response = getSignatureResponse(request);
-        SessionStatus sessionStatus = getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);
-        validateResponse(sessionStatus);
-        return createMobileIdSignature(sessionStatus);
+        SessionStatus status = getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);
+        validateResponse(status);
+        return createMobileIdSignature(status);
     }
 
     private SignatureRequest createSignatureRequest() {
@@ -90,8 +90,8 @@ public class SignatureRequestBuilder extends MobileIdRequestBuilder {
         return getConnector().sign(request);
     }
 
-    private MobileIdSignature createMobileIdSignature(SessionStatus sessionStatus) {
-        SessionSignature sessionSignature = sessionStatus.getSignature();
+    private MobileIdSignature createMobileIdSignature(SessionStatus status) {
+        SessionSignature sessionSignature = status.getSignature();
         MobileIdSignature signature = new MobileIdSignature();
         signature.setValueInBase64(sessionSignature.getValueInBase64());
         signature.setAlgorithmName(sessionSignature.getAlgorithm());
@@ -110,8 +110,8 @@ public class SignatureRequestBuilder extends MobileIdRequestBuilder {
         }
     }
 
-    private void validateResponse(SessionStatus sessionStatus) throws TechnicalErrorException {
-        if (sessionStatus.getSignature() == null || isBlank(sessionStatus.getSignature().getValueInBase64())) {
+    private void validateResponse(SessionStatus status) throws TechnicalErrorException {
+        if (status.getSignature() == null || isBlank(status.getSignature().getValueInBase64())) {
             logger.error("Signature was not present in the response");
             throw new TechnicalErrorException("Signature was not present in the response");
         }

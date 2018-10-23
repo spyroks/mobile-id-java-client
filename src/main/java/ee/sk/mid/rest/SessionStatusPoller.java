@@ -35,17 +35,17 @@ public class SessionStatusPoller {
     }
 
     private SessionStatus pollForFinalSessionStatus(String sessionId, String path) throws InterruptedException {
-        SessionStatus sessionStatus = null;
-        while (sessionStatus == null || equalsIgnoreCase("RUNNING", sessionStatus.getState())) {
-            sessionStatus = pollSessionStatus(sessionId, path);
-            if (equalsIgnoreCase("COMPLETE", sessionStatus.getState())) {
+        SessionStatus status = null;
+        while (status == null || equalsIgnoreCase("RUNNING", status.getState())) {
+            status = pollSessionStatus(sessionId, path);
+            if (equalsIgnoreCase("COMPLETE", status.getState())) {
                 break;
             }
             logger.debug("Sleeping for " + pollingSleepTimeout + " " + pollingSleepTimeUnit);
             pollingSleepTimeUnit.sleep(pollingSleepTimeout);
         }
         logger.debug("Got session final session status response");
-        return sessionStatus;
+        return status;
     }
 
     private SessionStatus pollSessionStatus(String sessionId, String path) {

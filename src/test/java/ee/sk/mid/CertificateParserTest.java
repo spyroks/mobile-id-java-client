@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 
-import static ee.sk.mid.mock.SessionStatusResultDummy.CERTIFICATE;
+import static ee.sk.mid.mock.TestData.CERTIFICATE;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 

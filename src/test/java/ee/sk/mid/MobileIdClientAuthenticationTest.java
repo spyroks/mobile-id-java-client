@@ -16,7 +16,8 @@ import java.util.concurrent.TimeUnit;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED;
-import static ee.sk.mid.mock.MobileIdRestServiceStubs.*;
+import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
+import static ee.sk.mid.mock.MobileIdRestServiceStub.*;
 import static ee.sk.mid.mock.TestData.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -31,8 +32,8 @@ public class MobileIdClientAuthenticationTest {
     @Before
     public void setUp() throws IOException {
         client = new MobileIdClient();
-        client.setRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1);
-        client.setRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1);
+        client.setRelyingPartyUUID(VALID_RELYING_PARTY_UUID);
+        client.setRelyingPartyName(VALID_RELYING_PARTY_NAME);
         client.setHostUrl("http://localhost:18089");
         stubRequestWithResponse("/mid-api/authentication", "requests/authenticationRequest.json", "responses/authenticationResponse.json");
         stubRequestWithResponse("/mid-api/authentication", "requests/authenticationRequestWithDisplayText.json", "responses/authenticationResponse.json");
@@ -41,125 +42,115 @@ public class MobileIdClientAuthenticationTest {
 
     @Test
     public void authenticate() {
-        MobileIdAuthenticationHash mobileIdAuthenticationHash = new MobileIdAuthenticationHash();
-        mobileIdAuthenticationHash.setHashInBase64("kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw==");
-        mobileIdAuthenticationHash.setHashType(HashType.SHA512);
+        MobileIdAuthenticationHash authenticationHash = createAuthenticationSHA512Hash();
 
-        assertThat(mobileIdAuthenticationHash.calculateVerificationCode(), is("4677"));
+        assertThat(authenticationHash.calculateVerificationCode(), is("4677"));
 
-        MobileIdAuthentication authentication = client
-                .createAuthentication()
-                .withPhoneNumber(VALID_PHONE_1)
-                .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(mobileIdAuthenticationHash)
-                .withLanguage(Language.EST)
-                .authenticate();
+        MobileIdAuthentication authentication = createAuthentication(client, VALID_PHONE, VALID_NAT_IDENTITY, authenticationHash);
 
-        assertAuthenticationResponseValid(authentication);
+        assertAuthenticationCreated(authentication, authenticationHash.getHashInBase64());
     }
 
     @Test
     public void authenticate_withDisplayText() {
-        MobileIdAuthenticationHash mobileIdAuthenticationHash = new MobileIdAuthenticationHash();
-        mobileIdAuthenticationHash.setHashInBase64("kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw==");
-        mobileIdAuthenticationHash.setHashType(HashType.SHA512);
+        MobileIdAuthenticationHash authenticationHash = createAuthenticationSHA512Hash();
 
-        assertThat(mobileIdAuthenticationHash.calculateVerificationCode(), is("4677"));
+        assertThat(authenticationHash.calculateVerificationCode(), is("4677"));
 
         MobileIdAuthentication authentication = client
                 .createAuthentication()
-                .withPhoneNumber(VALID_PHONE_1)
-                .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(mobileIdAuthenticationHash)
+                .withPhoneNumber(VALID_PHONE)
+                .withNationalIdentityNumber(VALID_NAT_IDENTITY)
+                .withAuthenticationHash(authenticationHash)
                 .withLanguage(Language.EST)
                 .withDisplayText("Log into internet banking system")
                 .authenticate();
 
-        assertAuthenticationResponseValid(authentication);
+        assertAuthenticationCreated(authentication, authenticationHash.getHashInBase64());
     }
 
     @Test(expected = SessionTimeoutException.class)
     public void authenticate_whenTimeout_shouldThrowException() throws IOException {
         stubRequestWithResponse("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusWhenTimeout.json");
-        makeAuthenticationRequest();
+        makeValidAuthenticationRequest(client);
     }
 
     @Test(expected = ResponseRetrievingException.class)
     public void authenticate_whenResponseRetrievingError_shouldThrowException() throws IOException {
         stubRequestWithResponse("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusWhenError.json");
-        makeAuthenticationRequest();
+        makeValidAuthenticationRequest(client);
     }
 
     @Test(expected = NotMIDClientException.class)
     public void authenticate_whenNotMIDClient_shouldThrowException() throws IOException {
         stubRequestWithResponse("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusWhenNotMIDClient.json");
-        makeAuthenticationRequest();
+        makeValidAuthenticationRequest(client);
     }
 
     @Test(expected = ExpiredException.class)
     public void authenticate_whenMSSPTransactionExpired_shouldThrowException() throws IOException {
         stubRequestWithResponse("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusWhenExpiredTransaction.json");
-        makeAuthenticationRequest();
+        makeValidAuthenticationRequest(client);
     }
 
     @Test(expected = UserCancellationException.class)
     public void authenticate_whenUserCancelled_shouldThrowException() throws IOException {
         stubRequestWithResponse("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusWhenUserCancelled.json");
-        makeAuthenticationRequest();
+        makeValidAuthenticationRequest(client);
     }
 
     @Test(expected = MIDNotReadyException.class)
     public void authenticate_whenMIDNotReady_shouldThrowException() throws IOException {
         stubRequestWithResponse("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusWhenMIDNotReady.json");
-        makeAuthenticationRequest();
+        makeValidAuthenticationRequest(client);
     }
 
     @Test(expected = SimNotAvailableException.class)
     public void authenticate_whenSimNotAvailable_shouldThrowException() throws IOException {
         stubRequestWithResponse("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusWhenPhoneAbsent.json");
-        makeAuthenticationRequest();
+        makeValidAuthenticationRequest(client);
     }
 
     @Test(expected = DeliveryException.class)
     public void authenticate_whenDeliveryError_shouldThrowException() throws IOException {
         stubRequestWithResponse("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusWhenDeliveryError.json");
-        makeAuthenticationRequest();
+        makeValidAuthenticationRequest(client);
     }
 
     @Test(expected = InvalidCardResponseException.class)
     public void authenticate_whenInvalidCardResponse_shouldThrowException() throws IOException {
         stubRequestWithResponse("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusWhenSimError.json");
-        makeAuthenticationRequest();
+        makeValidAuthenticationRequest(client);
     }
 
     @Test(expected = SignatureHashMismatchException.class)
     public void authenticate_whenSignatureHashMismatch_shouldThrowException() throws IOException {
         stubRequestWithResponse("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusWhenSignatureHashMismatch.json");
-        makeAuthenticationRequest();
+        makeValidAuthenticationRequest(client);
     }
 
     @Test(expected = ResponseRetrievingException.class)
-    public void authenticate_whenGettingSessionIdFailed_shouldThrowException() throws IOException {
+    public void authenticate_whenGettingResponseFailed_shouldThrowException() throws IOException {
         stubInternalServerErrorResponse("/mid-api/authentication", "requests/authenticationRequest.json");
-        makeAuthenticationRequest();
+        makeValidAuthenticationRequest(client);
     }
 
     @Test(expected = ResponseNotFoundException.class)
     public void authenticate_whenResponseNotFound_shouldThrowException() throws IOException {
         stubNotFoundResponse("/mid-api/authentication", "requests/authenticationRequest.json");
-        makeAuthenticationRequest();
+        makeValidAuthenticationRequest(client);
     }
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withWrongRequestParams_shouldThrowException() throws IOException {
         stubBadRequestResponse("/mid-api/authentication", "requests/authenticationRequest.json");
-        makeAuthenticationRequest();
+        makeValidAuthenticationRequest(client);
     }
 
     @Test(expected = UnauthorizedException.class)
     public void authenticate_withWrongAuthenticationParams_shouldThrowException() throws IOException {
         stubUnauthorizedResponse("/mid-api/authentication", "requests/authenticationRequest.json");
-        makeAuthenticationRequest();
+        makeValidAuthenticationRequest(client);
     }
 
     @Test
@@ -181,7 +172,7 @@ public class MobileIdClientAuthenticationTest {
         headersToAdd.put(headerName, headerValue);
         ClientConfig clientConfig = getClientConfigWithCustomRequestHeaders(headersToAdd);
         client.setNetworkConnectionConfig(clientConfig);
-        makeAuthenticationRequest();
+        makeValidAuthenticationRequest(client);
 
         verify(postRequestedFor(urlEqualTo("/mid-api/authentication"))
                 .withHeader(headerName, equalTo(headerValue)));
@@ -189,52 +180,18 @@ public class MobileIdClientAuthenticationTest {
 
     private long measureAuthenticationDuration() {
         long startTime = System.currentTimeMillis();
-        MobileIdAuthentication authentication = createAuthentication();
+
+        MobileIdAuthenticationHash authenticationHash = createAuthenticationSHA512Hash();
+        MobileIdAuthentication authentication = createAuthentication(client, VALID_PHONE, VALID_NAT_IDENTITY, authenticationHash);
+
         long endTime = System.currentTimeMillis();
         assertThat(authentication, is(notNullValue()));
         return endTime - startTime;
-    }
-
-    private MobileIdAuthentication createAuthentication() {
-        MobileIdAuthenticationHash mobileIdAuthenticationHash = new MobileIdAuthenticationHash();
-        mobileIdAuthenticationHash.setHashInBase64("kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw==");
-        mobileIdAuthenticationHash.setHashType(HashType.SHA512);
-
-        return client
-                .createAuthentication()
-                .withPhoneNumber(VALID_PHONE_1)
-                .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(mobileIdAuthenticationHash)
-                .withLanguage(Language.EST)
-                .authenticate();
-    }
-
-    private void makeAuthenticationRequest() {
-        MobileIdAuthenticationHash mobileIdAuthenticationHash = new MobileIdAuthenticationHash();
-        mobileIdAuthenticationHash.setHashInBase64("kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw==");
-        mobileIdAuthenticationHash.setHashType(HashType.SHA512);
-
-        client
-                .createAuthentication()
-                .withPhoneNumber(VALID_PHONE_1)
-                .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .withAuthenticationHash(mobileIdAuthenticationHash)
-                .withLanguage(Language.EST)
-                .authenticate();
     }
 
     private ClientConfig getClientConfigWithCustomRequestHeaders(Map<String, String> headers) {
         ClientConfig clientConfig = new ClientConfig().connectorProvider(new ApacheConnectorProvider());
         clientConfig.register(new ClientRequestHeaderFilter(headers));
         return clientConfig;
-    }
-
-    private void assertAuthenticationResponseValid(MobileIdAuthentication authentication) {
-        assertThat(authentication, is(notNullValue()));
-        assertThat(authentication.getResult(), is("OK"));
-        assertThat(authentication.getSignatureValueInBase64(), startsWith("luvjsi1+1iLN9yfDFEh/BE8h"));
-        assertThat(authentication.getAlgorithmName(), is("sha256WithRSAEncryption"));
-        assertThat(authentication.getCertificate(), is(notNullValue()));
-        assertThat(authentication.getSignedHashInBase64(), is("kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw=="));
     }
 }

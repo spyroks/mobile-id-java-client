@@ -85,7 +85,7 @@ public class MobileIdRestConnector implements MobileIdConnector {
         URI uri = uriBuilder.build(request.getSessionId());
         try {
             return prepareClient(uri).get(SessionStatus.class);
-        } catch (javax.ws.rs.NotFoundException e) {
+        } catch (NotFoundException e) {
             logger.warn("Session " + request + " not found: " + e.getMessage());
             throw new SessionNotFoundException();
         }
@@ -128,6 +128,7 @@ public class MobileIdRestConnector implements MobileIdConnector {
                 .register(new LoggingFilter())
                 .target(uri)
                 .request()
+                .header("X-Forwarded-For", "192.10.11.12")
                 .accept(APPLICATION_JSON_TYPE);
     }
 }

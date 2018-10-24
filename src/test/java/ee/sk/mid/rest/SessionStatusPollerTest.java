@@ -8,10 +8,9 @@ import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
-import static ee.sk.mid.mock.SessionStatusResultDummy.*;
+import static ee.sk.mid.mock.SessionStatusDummy.*;
 import static ee.sk.mid.mock.TestData.SESSION_ID;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 public class SessionStatusPollerTest {
@@ -30,29 +29,32 @@ public class SessionStatusPollerTest {
 
     @Test
     public void getFirstCompleteResponse() {
-        connector.getResponses().add(createCompleteSessionStatus());
+        connector.getResponses().add(createSuccessfulSessionStatus());
         SessionStatus status = poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
+
         assertThat(connector.getSessionIdUsed(), is(SESSION_ID));
         assertThat(connector.getResponseNumber(), is(1));
-        assertCompleteStateReceived(status);
+        assertCompleteSessionStatus(status);
     }
 
     @Test
     public void pollAndGetThirdCompleteResponse() {
         connector.getResponses().add(createRunningSessionStatus());
         connector.getResponses().add(createRunningSessionStatus());
-        connector.getResponses().add(createCompleteSessionStatus());
+        connector.getResponses().add(createSuccessfulSessionStatus());
         SessionStatus status = poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
+
         assertThat(connector.getResponseNumber(), is(3));
-        assertCompleteStateReceived(status);
+        assertCompleteSessionStatus(status);
     }
 
     @Test
     public void setPollingSleepTime() {
         poller.setPollingSleepTime(TimeUnit.MILLISECONDS, 200L);
         addMultipleRunningSessionResponses();
-        connector.getResponses().add(createCompleteSessionStatus());
+        connector.getResponses().add(createSuccessfulSessionStatus());
         long duration = measurePollingDuration();
+
         assertThat(duration > 1000L, is(true));
         assertThat(duration < 1100L, is(true));
     }
@@ -119,7 +121,7 @@ public class SessionStatusPollerTest {
 
     @Test(expected = TechnicalErrorException.class)
     public void getUnknownResult_shouldThrowException() {
-        SessionStatus status = createCompleteSessionStatus();
+        SessionStatus status = createSuccessfulSessionStatus();
         status.setResult("HACKERMAN");
         connector.getResponses().add(status);
         poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
@@ -127,7 +129,7 @@ public class SessionStatusPollerTest {
 
     @Test(expected = TechnicalErrorException.class)
     public void getMissingResult_shouldThrowException() {
-        SessionStatus status = createCompleteSessionStatus();
+        SessionStatus status = createSuccessfulSessionStatus();
         status.setResult(null);
         connector.getResponses().add(status);
         poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
@@ -137,30 +139,12 @@ public class SessionStatusPollerTest {
         long startTime = System.currentTimeMillis();
         SessionStatus status = poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
         long endTime = System.currentTimeMillis();
-        assertCompleteStateReceived(status);
+        assertCompleteSessionStatus(status);
         return endTime - startTime;
     }
 
     private void addMultipleRunningSessionResponses() {
         for (int i = 0; i < 5; i++)
             connector.getResponses().add(createRunningSessionStatus());
-    }
-
-    private void assertCompleteStateReceived(SessionStatus status) {
-        assertThat(status, is(notNullValue()));
-        assertThat(status.getState(), is("COMPLETE"));
-    }
-
-    private SessionStatus createCompleteSessionStatus() {
-        SessionStatus sessionStatus = new SessionStatus();
-        sessionStatus.setState("COMPLETE");
-        sessionStatus.setResult(createSessionResult());
-        return sessionStatus;
-    }
-
-    private SessionStatus createRunningSessionStatus() {
-        SessionStatus status = new SessionStatus();
-        status.setState("RUNNING");
-        return status;
     }
 }

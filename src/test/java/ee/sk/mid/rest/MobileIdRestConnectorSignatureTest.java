@@ -2,9 +2,10 @@ package ee.sk.mid.rest;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import ee.sk.mid.ClientRequestHeaderFilter;
-import ee.sk.mid.HashType;
-import ee.sk.mid.Language;
-import ee.sk.mid.exception.*;
+import ee.sk.mid.exception.ParameterMissingException;
+import ee.sk.mid.exception.ResponseNotFoundException;
+import ee.sk.mid.exception.ResponseRetrievingException;
+import ee.sk.mid.exception.UnauthorizedException;
 import ee.sk.mid.rest.dao.request.SignatureRequest;
 import ee.sk.mid.rest.dao.response.SignatureResponse;
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
@@ -17,8 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static ee.sk.mid.mock.MobileIdRestServiceStubs.*;
-import static ee.sk.mid.mock.TestData.*;
+import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createValidSignatureRequest;
+import static ee.sk.mid.mock.MobileIdRestServiceStub.*;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -37,7 +38,7 @@ public class MobileIdRestConnectorSignatureTest {
     @Test
     public void sign() throws Exception {
         stubRequestWithResponse("/mid-api/signature", "requests/signatureRequest.json", "responses/signatureResponse.json");
-        SignatureRequest request = createDummySignatureSessionRequest();
+        SignatureRequest request = createValidSignatureRequest();
         SignatureResponse response = connector.sign(request);
 
         assertThat(response, is(notNullValue()));
@@ -47,7 +48,7 @@ public class MobileIdRestConnectorSignatureTest {
     @Test
     public void sign_withDisplayText() throws Exception {
         stubRequestWithResponse("/mid-api/signature", "requests/signatureRequestWithDisplayText.json", "responses/signatureResponse.json");
-        SignatureRequest request = createDummySignatureSessionRequest();
+        SignatureRequest request = createValidSignatureRequest();
         request.setDisplayText("Authorize transfer of €10");
         SignatureResponse response = connector.sign(request);
 
@@ -56,30 +57,30 @@ public class MobileIdRestConnectorSignatureTest {
     }
 
     @Test(expected = ResponseRetrievingException.class)
-    public void sign_whenGettingSessionIdFailed_shouldThrowException() throws Exception {
+    public void sign_whenGettingResponseFailed_shouldThrowException() throws Exception {
         stubInternalServerErrorResponse("/mid-api/signature", "requests/signatureRequest.json");
-        SignatureRequest request = createDummySignatureSessionRequest();
+        SignatureRequest request = createValidSignatureRequest();
         connector.sign(request);
     }
 
     @Test(expected = ResponseNotFoundException.class)
     public void sign_whenResponseNotFound_shouldThrowException() throws Exception {
         stubNotFoundResponse("/mid-api/signature", "requests/signatureRequest.json");
-        SignatureRequest request = createDummySignatureSessionRequest();
+        SignatureRequest request = createValidSignatureRequest();
         connector.sign(request);
     }
 
     @Test(expected = ParameterMissingException.class)
     public void sign_withWrongRequestParams_shouldThrowException() throws Exception {
         stubBadRequestResponse("/mid-api/signature", "requests/signatureRequest.json");
-        SignatureRequest request = createDummySignatureSessionRequest();
+        SignatureRequest request = createValidSignatureRequest();
         connector.sign(request);
     }
 
     @Test(expected = UnauthorizedException.class)
     public void sign_withWrongAuthenticationParams_shouldThrowException() throws Exception {
         stubUnauthorizedResponse("/mid-api/signature", "requests/signatureRequest.json");
-        SignatureRequest request = createDummySignatureSessionRequest();
+        SignatureRequest request = createValidSignatureRequest();
         connector.sign(request);
     }
 
@@ -92,23 +93,11 @@ public class MobileIdRestConnectorSignatureTest {
         headers.put(headerName, headerValue);
         connector = new MobileIdRestConnector("http://localhost:18089", getClientConfigWithCustomRequestHeader(headers));
         stubRequestWithResponse("/mid-api/signature", "requests/signatureRequest.json", "responses/signatureResponse.json");
-        SignatureRequest request = createDummySignatureSessionRequest();
+        SignatureRequest request = createValidSignatureRequest();
         connector.sign(request);
 
         verify(postRequestedFor(urlEqualTo("/mid-api/signature"))
                 .withHeader(headerName, equalTo(headerValue)));
-    }
-
-    private SignatureRequest createDummySignatureSessionRequest() {
-        SignatureRequest request = new SignatureRequest();
-        request.setRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1);
-        request.setRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1);
-        request.setPhoneNumber(VALID_PHONE_1);
-        request.setNationalIdentityNumber(VALID_NAT_IDENTITY_1);
-        request.setHash("AE7S1QxYjqtVv+Tgukv2bMMi9gDCbc9ca2vy/iIG6ug=");
-        request.setHashType(HashType.SHA256);
-        request.setLanguage(Language.EST);
-        return request;
     }
 
     private ClientConfig getClientConfigWithCustomRequestHeader(Map<String, String> headers) {

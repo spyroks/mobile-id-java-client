@@ -6,8 +6,7 @@ import ee.sk.mid.rest.dao.response.AuthenticationResponse;
 import ee.sk.mid.rest.dao.response.CertificateChoiceResponse;
 import ee.sk.mid.rest.dao.response.SignatureResponse;
 
-import static ee.sk.mid.mock.SessionStatusResultDummy.CERTIFICATE;
-import static ee.sk.mid.mock.SessionStatusResultDummy.createSessionResult;
+import static ee.sk.mid.mock.TestData.CERTIFICATE;
 import static ee.sk.mid.mock.TestData.SESSION_ID;
 
 public class MobileIdRestServiceResponseDummy {
@@ -23,10 +22,10 @@ public class MobileIdRestServiceResponseDummy {
         return new SignatureResponse(SESSION_ID);
     }
 
-    public static SessionStatus createDummySignatureSessionStatusResponse() {
+    public static SessionStatus createDummySignatureSessionStatus() {
         SessionStatus status = new SessionStatus();
         status.setState("COMPLETE");
-        status.setResult(createSessionResult());
+        status.setResult("OK");
         SessionSignature signature = new SessionSignature();
         signature.setValueInBase64("luvjsi1+1iLN9yfDFEh/BE8h");
         signature.setAlgorithm("sha256WithRSAEncryption");
@@ -38,13 +37,13 @@ public class MobileIdRestServiceResponseDummy {
         return new AuthenticationResponse(SESSION_ID);
     }
 
-    public static SessionStatus createDummyAuthenticationSessionStatusResponse() {
+    public static SessionStatus createDummyAuthenticationSessionStatus() {
         SessionSignature signature = new SessionSignature();
         signature.setValueInBase64("c2FtcGxlIHNpZ25hdHVyZQ0K");
         signature.setAlgorithm("sha512WithRSAEncryption");
         SessionStatus status = new SessionStatus();
         status.setState("COMPLETE");
-        status.setResult(createSessionResult());
+        status.setResult("OK");
         status.setSignature(signature);
         status.setCertificate(CERTIFICATE);
         return status;

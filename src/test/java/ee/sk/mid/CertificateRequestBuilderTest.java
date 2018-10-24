@@ -31,10 +31,10 @@ public class CertificateRequestBuilderTest {
     @Test
     public void getCertificate() {
         X509Certificate certificate = builder
-                .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
-                .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
-                .withPhoneNumber(VALID_PHONE_1)
-                .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withPhoneNumber(VALID_PHONE)
+                .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .fetch();
 
         assertValidCertificateChoiceRequestMade();
@@ -44,9 +44,9 @@ public class CertificateRequestBuilderTest {
     @Test(expected = ParameterMissingException.class)
     public void getCertificate_withoutRelyingPartyUUID_shouldThrowException() {
         builder
-                .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
-                .withPhoneNumber(VALID_PHONE_1)
-                .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withPhoneNumber(VALID_PHONE)
+                .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .fetch();
 
     }
@@ -54,27 +54,27 @@ public class CertificateRequestBuilderTest {
     @Test(expected = ParameterMissingException.class)
     public void getCertificate_withoutRelyingPartyName_shouldThrowException() {
         builder
-                .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
-                .withPhoneNumber(VALID_PHONE_1)
-                .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withPhoneNumber(VALID_PHONE)
+                .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .fetch();
     }
 
     @Test(expected = ParameterMissingException.class)
     public void getCertificate_withoutPhoneNumber_shouldThrowException() {
         builder
-                .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
-                .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
-                .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .fetch();
     }
 
     @Test(expected = ParameterMissingException.class)
     public void getCertificate_withoutNationalIdentityNumber_shouldThrowException() {
         builder
-                .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
-                .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
-                .withPhoneNumber(VALID_PHONE_1)
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withPhoneNumber(VALID_PHONE)
                 .fetch();
     }
 
@@ -114,23 +114,23 @@ public class CertificateRequestBuilderTest {
         makeCertificateRequest();
     }
 
+    private void makeCertificateRequest() {
+        builder
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withPhoneNumber(VALID_PHONE)
+                .withNationalIdentityNumber(VALID_NAT_IDENTITY)
+                .fetch();
+    }
+
     private void assertValidCertificateChoiceRequestMade() {
-        assertThat(connector.getCertificateRequestUsed().getRelyingPartyUUID(), is(RELYING_PARTY_UUID_OF_USER_1));
-        assertThat(connector.getCertificateRequestUsed().getRelyingPartyName(), is(RELYING_PARTY_NAME_OF_USER_1));
-        assertThat(connector.getCertificateRequestUsed().getPhoneNumber(), is(VALID_PHONE_1));
-        assertThat(connector.getCertificateRequestUsed().getNationalIdentityNumber(), is(VALID_NAT_IDENTITY_1));
+        assertThat(connector.getCertificateRequestUsed().getRelyingPartyUUID(), is(VALID_RELYING_PARTY_UUID));
+        assertThat(connector.getCertificateRequestUsed().getRelyingPartyName(), is(VALID_RELYING_PARTY_NAME));
+        assertThat(connector.getCertificateRequestUsed().getPhoneNumber(), is(VALID_PHONE));
+        assertThat(connector.getCertificateRequestUsed().getNationalIdentityNumber(), is(VALID_NAT_IDENTITY));
     }
 
     private void assertCertificateCorrect(X509Certificate certificate) {
         assertThat(certificate, is(notNullValue()));
-    }
-
-    private void makeCertificateRequest() {
-        builder
-                .withRelyingPartyUUID(RELYING_PARTY_UUID_OF_USER_1)
-                .withRelyingPartyName(RELYING_PARTY_NAME_OF_USER_1)
-                .withPhoneNumber(VALID_PHONE_1)
-                .withNationalIdentityNumber(VALID_NAT_IDENTITY_1)
-                .fetch();
     }
 }

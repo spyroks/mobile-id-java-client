@@ -153,6 +153,12 @@ public class MobileIdRestServiceRequestDummy {
                 .authenticate();
     }
 
+    public static MobileIdAuthenticationHash createRandomAuthenticationHash() {
+        MobileIdAuthenticationHash authenticationHash = MobileIdAuthenticationHash.generateRandomHash();
+        assertThat(authenticationHash.calculateVerificationCode(), is(notNullValue()));
+        return authenticationHash;
+    }
+
     private static String calculateHashInBase64(HashType hashType) {
         byte[] digestValue = DigestCalculator.calculateDigest(DATA_TO_SIGN, hashType);
         return Base64.encodeBase64String(digestValue);

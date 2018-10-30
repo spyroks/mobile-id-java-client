@@ -1,5 +1,6 @@
 package ee.sk.mid.rest.integration;
 
+import ee.sk.mid.categories.IntegrationTest;
 import ee.sk.mid.exception.ParameterMissingException;
 import ee.sk.mid.exception.UnauthorizedException;
 import ee.sk.mid.rest.MobileIdConnector;
@@ -8,12 +9,14 @@ import ee.sk.mid.rest.dao.request.CertificateRequest;
 import ee.sk.mid.rest.dao.response.CertificateChoiceResponse;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createCertificateRequest;
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createValidCertificateRequest;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertCertificateChosen;
 import static ee.sk.mid.mock.TestData.*;
 
+@Category({IntegrationTest.class})
 public class MobileIdRestConnectorCertificateIT {
 
     private MobileIdConnector connector;

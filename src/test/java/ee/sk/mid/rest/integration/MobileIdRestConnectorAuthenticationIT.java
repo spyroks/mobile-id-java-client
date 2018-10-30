@@ -1,5 +1,6 @@
 package ee.sk.mid.rest.integration;
 
+import ee.sk.mid.categories.IntegrationTest;
 import ee.sk.mid.exception.ParameterMissingException;
 import ee.sk.mid.exception.UnauthorizedException;
 import ee.sk.mid.rest.MobileIdConnector;
@@ -9,6 +10,7 @@ import ee.sk.mid.rest.dao.request.AuthenticationRequest;
 import ee.sk.mid.rest.dao.response.AuthenticationResponse;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createAuthenticationRequest;
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createValidAuthenticationRequest;
@@ -18,6 +20,7 @@ import static ee.sk.mid.mock.TestData.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
+@Category({IntegrationTest.class})
 public class MobileIdRestConnectorAuthenticationIT {
 
     private static final String AUTHENTICATION_SESSION_PATH = "/mid-api/authentication/session/{sessionId}";

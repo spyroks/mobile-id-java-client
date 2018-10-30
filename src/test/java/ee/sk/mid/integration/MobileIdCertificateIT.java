@@ -1,18 +1,21 @@
 package ee.sk.mid.integration;
 
 import ee.sk.mid.MobileIdClient;
+import ee.sk.mid.categories.IntegrationTest;
 import ee.sk.mid.exception.CertificateNotPresentException;
 import ee.sk.mid.exception.ExpiredException;
 import ee.sk.mid.exception.ParameterMissingException;
 import ee.sk.mid.exception.UnauthorizedException;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.security.cert.X509Certificate;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
 import static ee.sk.mid.mock.TestData.*;
 
+@Category({IntegrationTest.class})
 public class MobileIdCertificateIT {
 
     private MobileIdClient client;

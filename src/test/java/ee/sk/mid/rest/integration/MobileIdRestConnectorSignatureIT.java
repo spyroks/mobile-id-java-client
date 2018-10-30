@@ -1,5 +1,6 @@
 package ee.sk.mid.rest.integration;
 
+import ee.sk.mid.categories.IntegrationTest;
 import ee.sk.mid.exception.ParameterMissingException;
 import ee.sk.mid.exception.UnauthorizedException;
 import ee.sk.mid.rest.MobileIdConnector;
@@ -9,6 +10,7 @@ import ee.sk.mid.rest.dao.request.SignatureRequest;
 import ee.sk.mid.rest.dao.response.SignatureResponse;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createSignatureRequest;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignaturePolled;
@@ -17,6 +19,7 @@ import static ee.sk.mid.mock.TestData.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
+@Category({IntegrationTest.class})
 public class MobileIdRestConnectorSignatureIT {
 
     private static final String SIGNATURE_SESSION_PATH = "/mid-api/signature/session/{sessionId}";

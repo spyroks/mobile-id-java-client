@@ -1,15 +1,18 @@
 package ee.sk.mid.integration;
 
 import ee.sk.mid.*;
+import ee.sk.mid.categories.IntegrationTest;
 import ee.sk.mid.exception.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
 import static ee.sk.mid.mock.TestData.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
+@Category({IntegrationTest.class})
 public class MobileIdAuthenticationIT {
 
     private MobileIdClient client;

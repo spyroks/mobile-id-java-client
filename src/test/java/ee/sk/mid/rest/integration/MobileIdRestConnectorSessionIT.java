@@ -1,5 +1,6 @@
 package ee.sk.mid.rest.integration;
 
+import ee.sk.mid.categories.IntegrationTest;
 import ee.sk.mid.exception.SessionNotFoundException;
 import ee.sk.mid.rest.MobileIdConnector;
 import ee.sk.mid.rest.MobileIdRestConnector;
@@ -11,6 +12,7 @@ import ee.sk.mid.rest.dao.response.AuthenticationResponse;
 import ee.sk.mid.rest.dao.response.SignatureResponse;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createValidAuthenticationRequest;
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createValidSignatureRequest;
@@ -19,6 +21,7 @@ import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignaturePol
 import static ee.sk.mid.mock.TestData.HOST_URL;
 import static ee.sk.mid.mock.TestData.SESSION_ID;
 
+@Category({IntegrationTest.class})
 public class MobileIdRestConnectorSessionIT {
 
     private static final String SIGNATURE_SESSION_PATH = "/mid-api/signature/session/{sessionId}";

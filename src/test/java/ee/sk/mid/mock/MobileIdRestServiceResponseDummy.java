@@ -25,14 +25,14 @@ public class MobileIdRestServiceResponseDummy {
     }
 
     public static SessionStatus createDummySignatureSessionStatus() {
-        SessionStatus status = new SessionStatus();
-        status.setState("COMPLETE");
-        status.setResult("OK");
+        SessionStatus sessionStatus = new SessionStatus();
+        sessionStatus.setState("COMPLETE");
+        sessionStatus.setResult("OK");
         SessionSignature signature = new SessionSignature();
         signature.setValueInBase64("luvjsi1+1iLN9yfDFEh/BE8h");
         signature.setAlgorithm("sha256WithRSAEncryption");
-        status.setSignature(signature);
-        return status;
+        sessionStatus.setSignature(signature);
+        return sessionStatus;
     }
 
     public static AuthenticationResponse createDummyAuthenticationResponse() {
@@ -43,12 +43,12 @@ public class MobileIdRestServiceResponseDummy {
         SessionSignature signature = new SessionSignature();
         signature.setValueInBase64("c2FtcGxlIHNpZ25hdHVyZQ0K");
         signature.setAlgorithm("sha512WithRSAEncryption");
-        SessionStatus status = new SessionStatus();
-        status.setState("COMPLETE");
-        status.setResult("OK");
-        status.setSignature(signature);
-        status.setCertificate(CERTIFICATE);
-        return status;
+        SessionStatus sessionStatus = new SessionStatus();
+        sessionStatus.setState("COMPLETE");
+        sessionStatus.setResult("OK");
+        sessionStatus.setSignature(signature);
+        sessionStatus.setCertificate(CERTIFICATE);
+        return sessionStatus;
     }
 
     public static void assertCertificateChosen(CertificateChoiceResponse response) {
@@ -57,17 +57,22 @@ public class MobileIdRestServiceResponseDummy {
         assertThat(response.getCertificate(), not(isEmptyOrNullString()));
     }
 
-    public static void assertSignaturePolled(SessionStatus status) {
-        assertThat(status, is(notNullValue()));
-        assertThat(status.getResult(), not(isEmptyOrNullString()));
-        assertThat(status.getSignature(), is(notNullValue()));
-        assertThat(status.getSignature().getValueInBase64(), not(isEmptyOrNullString()));
+    public static void assertSignaturePolled(SessionStatus sessionStatus) {
+        System.out.println(sessionStatus);
+        assertSessionStatusPolled(sessionStatus);
     }
 
-    public static void assertAuthenticationPolled(SessionStatus status) {
-        assertThat(status, is(notNullValue()));
-        assertThat(status.getResult(), not(isEmptyOrNullString()));
-        assertThat(status.getSignature().getValueInBase64(), not(isEmptyOrNullString()));
-        assertThat(status.getCertificate(), not(isEmptyOrNullString()));
+    public static void assertAuthenticationPolled(SessionStatus sessionStatus) {
+        assertSessionStatusPolled(sessionStatus);
+
+        assertThat(sessionStatus.getCertificate(), not(isEmptyOrNullString()));
+    }
+
+    private static void assertSessionStatusPolled(SessionStatus sessionStatus) {
+        assertThat(sessionStatus, is(notNullValue()));
+        assertThat(sessionStatus.getState(), not(isEmptyOrNullString()));
+        assertThat(sessionStatus.getResult(), not(isEmptyOrNullString()));
+        assertThat(sessionStatus.getSignature(), is(notNullValue()));
+        assertThat(sessionStatus.getSignature().getValueInBase64(), not(isEmptyOrNullString()));
     }
 }

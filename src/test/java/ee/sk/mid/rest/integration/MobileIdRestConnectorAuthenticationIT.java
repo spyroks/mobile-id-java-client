@@ -18,7 +18,7 @@ import static ee.sk.mid.mock.TestData.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-public class MobileIdRestConnectorAuthenticationIntegrationTest {
+public class MobileIdRestConnectorAuthenticationIT {
 
     private static final String AUTHENTICATION_SESSION_PATH = "/mid-api/authentication/session/{sessionId}";
 
@@ -37,9 +37,9 @@ public class MobileIdRestConnectorAuthenticationIntegrationTest {
         assertThat(response, is(notNullValue()));
         assertThat(response.getSessionId(), not(isEmptyOrNullString()));
 
-        SessionStatus status = pollSessionStatus(connector, response.getSessionId(), AUTHENTICATION_SESSION_PATH);
+        SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionId(), AUTHENTICATION_SESSION_PATH);
 
-        assertAuthenticationPolled(status);
+        assertAuthenticationPolled(sessionStatus);
     }
 
     @Test
@@ -51,9 +51,9 @@ public class MobileIdRestConnectorAuthenticationIntegrationTest {
         assertThat(response, is(notNullValue()));
         assertThat(response.getSessionId(), not(isEmptyOrNullString()));
 
-        SessionStatus status = pollSessionStatus(connector, response.getSessionId(), AUTHENTICATION_SESSION_PATH);
+        SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionId(), AUTHENTICATION_SESSION_PATH);
 
-        assertAuthenticationPolled(status);
+        assertAuthenticationPolled(sessionStatus);
     }
 
     @Test(expected = ParameterMissingException.class)

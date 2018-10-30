@@ -14,7 +14,7 @@ import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createValidCertific
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertCertificateChosen;
 import static ee.sk.mid.mock.TestData.*;
 
-public class MobileIdRestConnectorCertificateIntegrationTest {
+public class MobileIdRestConnectorCertificateIT {
 
     private MobileIdConnector connector;
 

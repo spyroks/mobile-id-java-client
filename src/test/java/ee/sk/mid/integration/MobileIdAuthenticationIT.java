@@ -10,7 +10,7 @@ import static ee.sk.mid.mock.TestData.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-public class MobileIdAuthenticationIntegrationTest {
+public class MobileIdAuthenticationIT {
 
     private MobileIdClient client;
 
@@ -41,7 +41,7 @@ public class MobileIdAuthenticationIntegrationTest {
         MobileIdAuthenticationHash authenticationHash = createRandomAuthenticationHash();
 
         MobileIdAuthentication authentication = client
-                .createAuthentication()
+                .createAuthenticationRequestBuilder()
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withAuthenticationHash(authenticationHash)

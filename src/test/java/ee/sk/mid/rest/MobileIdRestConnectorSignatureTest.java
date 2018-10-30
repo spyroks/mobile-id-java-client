@@ -49,7 +49,7 @@ public class MobileIdRestConnectorSignatureTest {
     public void sign_withDisplayText() throws Exception {
         stubRequestWithResponse("/mid-api/signature", "requests/signatureRequestWithDisplayText.json", "responses/signatureResponse.json");
         SignatureRequest request = createValidSignatureRequest();
-        request.setDisplayText("Authorize transfer of €10");
+        request.setDisplayText("Authorize transfer of 10 euros");
         SignatureResponse response = connector.sign(request);
 
         assertThat(response, is(notNullValue()));

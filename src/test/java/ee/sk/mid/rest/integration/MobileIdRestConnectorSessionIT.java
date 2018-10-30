@@ -3,6 +3,7 @@ package ee.sk.mid.rest.integration;
 import ee.sk.mid.exception.SessionNotFoundException;
 import ee.sk.mid.rest.MobileIdConnector;
 import ee.sk.mid.rest.MobileIdRestConnector;
+import ee.sk.mid.rest.dao.SessionStatus;
 import ee.sk.mid.rest.dao.request.AuthenticationRequest;
 import ee.sk.mid.rest.dao.request.SessionStatusRequest;
 import ee.sk.mid.rest.dao.request.SignatureRequest;
@@ -13,10 +14,12 @@ import org.junit.Test;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createValidAuthenticationRequest;
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createValidSignatureRequest;
+import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertAuthenticationPolled;
+import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignaturePolled;
 import static ee.sk.mid.mock.TestData.HOST_URL;
 import static ee.sk.mid.mock.TestData.SESSION_ID;
 
-public class MobileIdRestConnectorSessionIntegrationTest {
+public class MobileIdRestConnectorSessionIT {
 
     private static final String SIGNATURE_SESSION_PATH = "/mid-api/signature/session/{sessionId}";
     private static final String AUTHENTICATION_SESSION_PATH = "/mid-api/authentication/session/{sessionId}";
@@ -34,7 +37,9 @@ public class MobileIdRestConnectorSessionIntegrationTest {
         SignatureResponse signatureResponse = connector.sign(signatureRequest);
 
         SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(signatureResponse.getSessionId());
-        connector.getSessionStatus(sessionStatusRequest, SIGNATURE_SESSION_PATH);
+        SessionStatus sessionStatus = connector.getSessionStatus(sessionStatusRequest, SIGNATURE_SESSION_PATH);
+
+        assertSignaturePolled(sessionStatus);
     }
 
     @Test
@@ -43,7 +48,9 @@ public class MobileIdRestConnectorSessionIntegrationTest {
         AuthenticationResponse authenticationResponse = connector.authenticate(authenticationRequest);
 
         SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(authenticationResponse.getSessionId());
-        connector.getSessionStatus(sessionStatusRequest, AUTHENTICATION_SESSION_PATH);
+        SessionStatus sessionStatus = connector.getSessionStatus(sessionStatusRequest, AUTHENTICATION_SESSION_PATH);
+
+        assertAuthenticationPolled(sessionStatus);
     }
 
     @Test(expected = SessionNotFoundException.class)

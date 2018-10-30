@@ -7,12 +7,11 @@ import org.junit.Test;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
 import static ee.sk.mid.mock.TestData.*;
-import static ee.sk.mid.mock.TestData.VALID_NAT_IDENTITY;
-import static ee.sk.mid.mock.TestData.VALID_PHONE;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-public class MobileIdSignatureIntegrationTest {
+public class MobileIdSignatureIT {
 
     private MobileIdClient client;
 
@@ -38,12 +37,12 @@ public class MobileIdSignatureIntegrationTest {
         hashToSign.setHashType(HashType.SHA256);
 
         MobileIdSignature signature = client
-                .createSignature()
+                .createSignatureRequestBuilder()
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withSignableHash(hashToSign)
                 .withLanguage(Language.EST)
-                .withDisplayText("Authorize transfer of €10")
+                .withDisplayText("Authorize transfer of 10 euros")
                 .sign();
 
         assertSignatureCreated(signature);

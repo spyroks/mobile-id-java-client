@@ -13,7 +13,7 @@ import java.security.cert.X509Certificate;
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
 import static ee.sk.mid.mock.TestData.*;
 
-public class MobileIdCertificateIntegrationTest {
+public class MobileIdCertificateIT {
 
     private MobileIdClient client;
 

@@ -2,9 +2,9 @@ package ee.sk.mid;
 
 public enum MobileIdAuthenticationError {
 
-    INVALID_RESULT("Response result verification failed."),
-    SIGNATURE_VERIFICATION_FAILURE("Signature verification failed."),
-    CERTIFICATE_EXPIRED("Signer's certificate expired.");
+    INVALID_RESULT("Response result verification failed"),
+    SIGNATURE_VERIFICATION_FAILURE("Signature verification failed"),
+    CERTIFICATE_EXPIRED("Signer's certificate expired");
 
     private String message;
 

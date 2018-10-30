@@ -13,13 +13,13 @@ import static org.junit.Assert.assertThat;
 public class SessionStatusPollerDummy {
 
     public static SessionStatus pollSessionStatus(MobileIdConnector connector, String sessionId, String path) throws InterruptedException {
-        SessionStatus status = null;
-        while (status == null || StringUtils.equalsIgnoreCase("RUNNING", status.getState())) {
+        SessionStatus sessionStatus = null;
+        while (sessionStatus == null || "RUNNING".equalsIgnoreCase(sessionStatus.getState())) {
             SessionStatusRequest request = new SessionStatusRequest(sessionId);
-            status = connector.getSessionStatus(request, path);
+            sessionStatus = connector.getSessionStatus(request, path);
             TimeUnit.SECONDS.sleep(1);
         }
-        assertThat(status.getState(), is("COMPLETE"));
-        return status;
+        assertThat(sessionStatus.getState(), is("COMPLETE"));
+        return sessionStatus;
     }
 }

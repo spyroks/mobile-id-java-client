@@ -25,9 +25,9 @@ public class SessionStatusPoller {
     public SessionStatus fetchFinalSessionStatus(String sessionId, String path) throws TechnicalErrorException {
         logger.debug("Starting to poll session status for session " + sessionId);
         try {
-            SessionStatus status = pollForFinalSessionStatus(sessionId, path);
-            validateResult(status);
-            return status;
+            SessionStatus sessionStatus = pollForFinalSessionStatus(sessionId, path);
+            validateResult(sessionStatus);
+            return sessionStatus;
         } catch (InterruptedException e) {
             logger.error("Failed to poll session status: " + e.getMessage());
             throw new TechnicalErrorException("Failed to poll session status: " + e.getMessage(), e);
@@ -35,17 +35,17 @@ public class SessionStatusPoller {
     }
 
     private SessionStatus pollForFinalSessionStatus(String sessionId, String path) throws InterruptedException {
-        SessionStatus status = null;
-        while (status == null || equalsIgnoreCase("RUNNING", status.getState())) {
-            status = pollSessionStatus(sessionId, path);
-            if (equalsIgnoreCase("COMPLETE", status.getState())) {
+        SessionStatus sessionStatus = null;
+        while (sessionStatus == null || equalsIgnoreCase("RUNNING", sessionStatus.getState())) {
+            sessionStatus = pollSessionStatus(sessionId, path);
+            if (equalsIgnoreCase("COMPLETE", sessionStatus.getState())) {
                 break;
             }
             logger.debug("Sleeping for " + pollingSleepTimeout + " " + pollingSleepTimeUnit);
             pollingSleepTimeUnit.sleep(pollingSleepTimeout);
         }
         logger.debug("Got session final session status response");
-        return status;
+        return sessionStatus;
     }
 
     private SessionStatus pollSessionStatus(String sessionId, String path) {
@@ -58,8 +58,8 @@ public class SessionStatusPoller {
         return new SessionStatusRequest(sessionId);
     }
 
-    private void validateResult(SessionStatus status) throws TechnicalErrorException {
-        String result = status.getResult();
+    private void validateResult(SessionStatus sessionStatus) throws TechnicalErrorException {
+        String result = sessionStatus.getResult();
         if (result == null) {
             logger.error("Result is missing in the session status response");
             throw new TechnicalErrorException("Result is missing in the session status response");

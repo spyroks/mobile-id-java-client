@@ -194,7 +194,15 @@
                 </executions>
 
                 <configuration>
+                    <licenseName>mit</licenseName>
+                    <organizationName>SK ID Solutions AS </organizationName>
+                    <projectName>Mobile ID sample Java client</projectName>
+                    <inceptionYear>2018</inceptionYear>
                     <encoding>UTF-8</encoding>
+                    <roots>
+                        <root>src/main/java</root>
+                        <root>src/test/java</root>
+                    </roots>
                     <licensesOutputDirectory>${project.basedir}/licenses</licensesOutputDirectory>
                     <fileTemplate>${project.basedir}/src/main/resources/third-party-file-template.ftl</fileTemplate>
                     <outputDirectory>${project.basedir}</outputDirectory>

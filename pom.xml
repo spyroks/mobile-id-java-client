@@ -203,9 +203,10 @@
                         <root>src/main/java</root>
                         <root>src/test/java</root>
                     </roots>
-                    <licensesOutputDirectory>${project.basedir}/licenses</licensesOutputDirectory>
-                    <fileTemplate>${project.basedir}/src/main/resources/third-party-file-template.ftl</fileTemplate>
+                    <licensesOutputDirectory>${project.basedir}/src/license</licensesOutputDirectory>
+                    <fileTemplate>${project.basedir}/src/license/third-party-file-template.ftl</fileTemplate>
                     <outputDirectory>${project.basedir}</outputDirectory>
+                    <thirdPartyFilename>LICENSE-3RD-PARTY</thirdPartyFilename>
                 </configuration>
             </plugin>
 

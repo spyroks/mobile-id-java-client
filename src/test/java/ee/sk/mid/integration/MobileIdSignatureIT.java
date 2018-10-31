@@ -1,9 +1,11 @@
 package ee.sk.mid.integration;
 
 import ee.sk.mid.*;
+import ee.sk.mid.categories.IntegrationTest;
 import ee.sk.mid.exception.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
 import static ee.sk.mid.mock.TestData.*;
@@ -12,7 +14,8 @@ import static ee.sk.mid.mock.TestData.VALID_PHONE;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-public class MobileIdSignatureIntegrationTest {
+@Category({IntegrationTest.class})
+public class MobileIdSignatureIT {
 
     private MobileIdClient client;
 
@@ -38,12 +41,12 @@ public class MobileIdSignatureIntegrationTest {
         hashToSign.setHashType(HashType.SHA256);
 
         MobileIdSignature signature = client
-                .createSignature()
+                .createSignatureRequestBuilder()
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withSignableHash(hashToSign)
                 .withLanguage(Language.EST)
-                .withDisplayText("Authorize transfer of €10")
+                .withDisplayText("Authorize transfer of 10 euros")
                 .sign();
 
         assertSignatureCreated(signature);

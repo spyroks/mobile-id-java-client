@@ -53,6 +53,7 @@ public class SessionStatus implements Serializable {
                 "state='" + state + '\'' +
                 ", result='" + result + '\'' +
                 ", signature='" + signature + '\'' +
+                ", certificate='" + certificate + '\'' +
                 '}';
     }
 }

@@ -30,11 +30,11 @@ public class SessionStatusPollerTest {
     @Test
     public void getFirstCompleteResponse() {
         connector.getResponses().add(createSuccessfulSessionStatus());
-        SessionStatus status = poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
+        SessionStatus sessionStatus = poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
 
         assertThat(connector.getSessionIdUsed(), is(SESSION_ID));
         assertThat(connector.getResponseNumber(), is(1));
-        assertCompleteSessionStatus(status);
+        assertCompleteSessionStatus(sessionStatus);
     }
 
     @Test
@@ -42,10 +42,10 @@ public class SessionStatusPollerTest {
         connector.getResponses().add(createRunningSessionStatus());
         connector.getResponses().add(createRunningSessionStatus());
         connector.getResponses().add(createSuccessfulSessionStatus());
-        SessionStatus status = poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
+        SessionStatus sessionStatus = poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
 
         assertThat(connector.getResponseNumber(), is(3));
-        assertCompleteSessionStatus(status);
+        assertCompleteSessionStatus(sessionStatus);
     }
 
     @Test
@@ -121,25 +121,25 @@ public class SessionStatusPollerTest {
 
     @Test(expected = TechnicalErrorException.class)
     public void getUnknownResult_shouldThrowException() {
-        SessionStatus status = createSuccessfulSessionStatus();
-        status.setResult("HACKERMAN");
-        connector.getResponses().add(status);
+        SessionStatus sessionStatus = createSuccessfulSessionStatus();
+        sessionStatus.setResult("HACKERMAN");
+        connector.getResponses().add(sessionStatus);
         poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
     }
 
     @Test(expected = TechnicalErrorException.class)
     public void getMissingResult_shouldThrowException() {
-        SessionStatus status = createSuccessfulSessionStatus();
-        status.setResult(null);
-        connector.getResponses().add(status);
+        SessionStatus sessionStatus = createSuccessfulSessionStatus();
+        sessionStatus.setResult(null);
+        connector.getResponses().add(sessionStatus);
         poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
     }
 
     private long measurePollingDuration() {
         long startTime = System.currentTimeMillis();
-        SessionStatus status = poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
+        SessionStatus sessionStatus = poller.fetchFinalSessionStatus(SESSION_ID, AUTHENTICATION_SESSION_PATH);
         long endTime = System.currentTimeMillis();
-        assertCompleteSessionStatus(status);
+        assertCompleteSessionStatus(sessionStatus);
         return endTime - startTime;
     }
 

@@ -42,82 +42,82 @@ public class MobileIdRestConnectorSessionTest {
 
     @Test
     public void getRunningSessionStatus() throws IOException {
-        SessionStatus status = getStubbedSessionStatusWithResponse("responses/sessionStatusRunning.json");
+        SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusRunning.json");
 
-        assertThat(status, is(notNullValue()));
-        assertThat(status.getState(), is("RUNNING"));
+        assertThat(sessionStatus, is(notNullValue()));
+        assertThat(sessionStatus.getState(), is("RUNNING"));
     }
 
     @Test
     public void getSessionStatus_forSuccessfulAuthenticationRequest() throws Exception {
-        SessionStatus status = getStubbedSessionStatusWithResponse("responses/sessionStatusForSuccessfulAuthenticationRequest.json");
+        SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusForSuccessfulAuthenticationRequest.json");
 
-        assertSuccessfulSessionStatus(status);
+        assertSuccessfulSessionStatus(sessionStatus);
 
-        assertThat(status.getSignature(), is(notNullValue()));
-        assertThat(status.getSignature().getValueInBase64(), startsWith("luvjsi1+1iLN9yfDFEh/BE8hXtAKhAIxilv"));
-        assertThat(status.getSignature().getAlgorithm(), is("sha256WithRSAEncryption"));
-        assertThat(status.getCertificate(), startsWith("MIIHhjCCBW6gAwIBAgIQDNYLtVwrKURYStr"));
+        assertThat(sessionStatus.getSignature(), is(notNullValue()));
+        assertThat(sessionStatus.getSignature().getValueInBase64(), startsWith("luvjsi1+1iLN9yfDFEh/BE8hXtAKhAIxilv"));
+        assertThat(sessionStatus.getSignature().getAlgorithm(), is("sha256WithRSAEncryption"));
+        assertThat(sessionStatus.getCertificate(), startsWith("MIIHhjCCBW6gAwIBAgIQDNYLtVwrKURYStr"));
     }
 
     @Test
     public void getSessionStatus_whenTimeout() throws IOException {
-        SessionStatus status = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenTimeout.json");
-        assertErrorSessionStatus(status, "TIMEOUT");
+        SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenTimeout.json");
+        assertErrorSessionStatus(sessionStatus, "TIMEOUT");
     }
 
     @Test
     public void getSessionStatus_whenError() throws IOException {
-        SessionStatus status = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenError.json");
-        assertErrorSessionStatus(status, "ERROR");
+        SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenError.json");
+        assertErrorSessionStatus(sessionStatus, "ERROR");
     }
 
     @Test
     public void getSessionStatus_whenNotMIDClient() throws IOException {
-        SessionStatus status = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenNotMIDClient.json");
-        assertErrorSessionStatus(status, "NOT_MID_CLIENT");
+        SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenNotMIDClient.json");
+        assertErrorSessionStatus(sessionStatus, "NOT_MID_CLIENT");
     }
 
     @Test
     public void getSessionStatus_whenExpiredTransaction() throws IOException {
-        SessionStatus status = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenExpiredTransaction.json");
-        assertErrorSessionStatus(status, "EXPIRED_TRANSACTION");
+        SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenExpiredTransaction.json");
+        assertErrorSessionStatus(sessionStatus, "EXPIRED_TRANSACTION");
     }
 
     @Test
     public void getSessionStatus_whenUserCancelled() throws IOException {
-        SessionStatus status = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenUserCancelled.json");
-        assertErrorSessionStatus(status, "USER_CANCELLED");
+        SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenUserCancelled.json");
+        assertErrorSessionStatus(sessionStatus, "USER_CANCELLED");
     }
 
     @Test
     public void getSessionStatus_whenMIDNotReady() throws IOException {
-        SessionStatus status = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenMIDNotReady.json");
-        assertErrorSessionStatus(status, "MID_NOT_READY");
+        SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenMIDNotReady.json");
+        assertErrorSessionStatus(sessionStatus, "MID_NOT_READY");
     }
 
     @Test
     public void getSessionStatus_whenPhoneAbsent() throws IOException {
-        SessionStatus status = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenPhoneAbsent.json");
-        assertErrorSessionStatus(status, "PHONE_ABSENT");
+        SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenPhoneAbsent.json");
+        assertErrorSessionStatus(sessionStatus, "PHONE_ABSENT");
     }
 
     @Test
     public void getSessionStatus_whenDeliveryError() throws IOException {
-        SessionStatus status = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenDeliveryError.json");
-        assertErrorSessionStatus(status, "DELIVERY_ERROR");
+        SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenDeliveryError.json");
+        assertErrorSessionStatus(sessionStatus, "DELIVERY_ERROR");
     }
 
     @Test
     public void getSessionStatus_whenSimError() throws IOException {
-        SessionStatus status = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenSimError.json");
-        assertErrorSessionStatus(status, "SIM_ERROR");
+        SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenSimError.json");
+        assertErrorSessionStatus(sessionStatus, "SIM_ERROR");
     }
 
     @Test
     public void getSessionStatus_whenSignatureHashMismatch() throws IOException {
-        SessionStatus status = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenSignatureHashMismatch.json");
-        assertErrorSessionStatus(status, "SIGNATURE_HASH_MISMATCH");
+        SessionStatus sessionStatus = getStubbedSessionStatusWithResponse("responses/sessionStatusWhenSignatureHashMismatch.json");
+        assertErrorSessionStatus(sessionStatus, "SIGNATURE_HASH_MISMATCH");
     }
 
     private SessionStatus getStubbedSessionStatusWithResponse(String responseFile) throws IOException {

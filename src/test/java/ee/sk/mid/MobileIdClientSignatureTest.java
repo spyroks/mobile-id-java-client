@@ -56,12 +56,12 @@ public class MobileIdClientSignatureTest {
         assertThat(hashToSign.calculateVerificationCode(), is("0108"));
 
         MobileIdSignature signature = client
-                .createSignature()
+                .createSignatureRequestBuilder()
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withSignableHash(hashToSign)
                 .withLanguage(Language.EST)
-                .withDisplayText("Authorize transfer of €10")
+                .withDisplayText("Authorize transfer of 10 euros")
                 .sign();
 
         assertSignatureCreated(signature);

@@ -54,7 +54,7 @@ public class AuthenticationResponseValidatorTest {
         MobileIdAuthenticationResult authenticationResult = validator.validate(response);
 
         assertThat(authenticationResult.isValid(), is(false));
-        assertThat(authenticationResult.getErrors().contains(INVALID_RESULT.getMessage()), is(true));
+        assertThat(authenticationResult.getErrors().contains("Response result verification failed"), is(true));
         assertAuthenticationIdentityValid(authenticationResult.getAuthenticationIdentity(), response.getCertificate());
     }
 
@@ -64,7 +64,7 @@ public class AuthenticationResponseValidatorTest {
         MobileIdAuthenticationResult authenticationResult = validator.validate(response);
 
         assertThat(authenticationResult.isValid(), is(false));
-        assertThat(authenticationResult.getErrors().contains(SIGNATURE_VERIFICATION_FAILURE.getMessage()), is(true));
+        assertThat(authenticationResult.getErrors().contains("Signature verification failed"), is(true));
         assertAuthenticationIdentityValid(authenticationResult.getAuthenticationIdentity(), response.getCertificate());
     }
 
@@ -74,7 +74,7 @@ public class AuthenticationResponseValidatorTest {
         MobileIdAuthenticationResult authenticationResult = validator.validate(response);
 
         assertThat(authenticationResult.isValid(), is(false));
-        assertThat(authenticationResult.getErrors().contains(CERTIFICATE_EXPIRED.getMessage()), is(true));
+        assertThat(authenticationResult.getErrors().contains("Signer's certificate expired"), is(true));
         assertAuthenticationIdentityValid(authenticationResult.getAuthenticationIdentity(), response.getCertificate());
     }
 
@@ -132,16 +132,22 @@ public class AuthenticationResponseValidatorTest {
     private void assertAuthenticationIdentityValid(AuthenticationIdentity authenticationIdentity, X509Certificate certificate) throws InvalidNameException {
         LdapName ln = new LdapName(certificate.getSubjectDN().getName());
         for (Rdn rdn : ln.getRdns()) {
-            if (rdn.getType().equalsIgnoreCase("GIVENNAME")) {
-                assertThat(authenticationIdentity.getGivenName(), is(rdn.getValue().toString()));
-            } else if (rdn.getType().equalsIgnoreCase("SURNAME")) {
-                assertThat(authenticationIdentity.getSurName(), is(rdn.getValue().toString()));
-            } else if (rdn.getType().equalsIgnoreCase("SERIALNUMBER")) {
-                assertThat(authenticationIdentity.getIdentityCode(), is(rdn.getValue().toString()));
-            } else if (rdn.getType().equalsIgnoreCase("C")) {
-                assertThat(authenticationIdentity.getCountry(), is(rdn.getValue().toString()));
+            String type = rdn.getType().toUpperCase();
+            String valueFromCertificate = rdn.getValue().toString();
+            switch (type) {
+                case "GIVENNAME":
+                    assertThat(authenticationIdentity.getGivenName(), is(valueFromCertificate));
+                    break;
+                case "SURNAME":
+                    assertThat(authenticationIdentity.getSurName(), is(valueFromCertificate));
+                    break;
+                case "SERIALNUMBER":
+                    assertThat(authenticationIdentity.getIdentityCode(), is(valueFromCertificate));
+                    break;
+                case "C":
+                    assertThat(authenticationIdentity.getCountry(), is(valueFromCertificate));
+                    break;
             }
-
         }
     }
 }

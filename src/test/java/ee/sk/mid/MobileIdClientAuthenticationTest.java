@@ -58,7 +58,7 @@ public class MobileIdClientAuthenticationTest {
         assertThat(authenticationHash.calculateVerificationCode(), is("4677"));
 
         MobileIdAuthentication authentication = client
-                .createAuthentication()
+                .createAuthenticationRequestBuilder()
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withAuthenticationHash(authenticationHash)

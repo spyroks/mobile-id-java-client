@@ -64,7 +64,7 @@ public class MobileIdRestServiceRequestDummy {
 
     public static X509Certificate createCertificate(MobileIdClient client) {
         return client
-                .getCertificate()
+                .createCertificateRequestBuilder()
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .fetch();
@@ -82,7 +82,7 @@ public class MobileIdRestServiceRequestDummy {
         assertThat(hashToSign.calculateVerificationCode(), is("0108"));
 
         return client
-                .createSignature()
+                .createSignatureRequestBuilder()
                 .withPhoneNumber(phoneNumber)
                 .withNationalIdentityNumber(nationalIdentityNumber)
                 .withSignableHash(hashToSign)
@@ -92,7 +92,7 @@ public class MobileIdRestServiceRequestDummy {
 
     public static MobileIdAuthentication createAuthentication(MobileIdClient client, String phoneNumber, String nationalIdentityNumber, MobileIdAuthenticationHash authenticationHash) {
         return client
-                .createAuthentication()
+                .createAuthenticationRequestBuilder()
                 .withPhoneNumber(phoneNumber)
                 .withNationalIdentityNumber(nationalIdentityNumber)
                 .withAuthenticationHash(authenticationHash)
@@ -113,7 +113,7 @@ public class MobileIdRestServiceRequestDummy {
 
     public static void makeCertificateRequest(MobileIdClient client, String phoneNumber, String nationalIdentityNumber) {
         client
-                .getCertificate()
+                .createCertificateRequestBuilder()
                 .withPhoneNumber(phoneNumber)
                 .withNationalIdentityNumber(nationalIdentityNumber)
                 .fetch();
@@ -129,7 +129,7 @@ public class MobileIdRestServiceRequestDummy {
         hashToSign.setHashType(HashType.SHA256);
 
         client
-                .createSignature()
+                .createSignatureRequestBuilder()
                 .withPhoneNumber(phoneNumber)
                 .withNationalIdentityNumber(nationalIdentityNumber)
                 .withSignableHash(hashToSign)
@@ -145,7 +145,7 @@ public class MobileIdRestServiceRequestDummy {
         MobileIdAuthenticationHash authenticationHash = createAuthenticationSHA512Hash();
 
         client
-                .createAuthentication()
+                .createAuthenticationRequestBuilder()
                 .withPhoneNumber(phoneNumber)
                 .withNationalIdentityNumber(nationalIdentityNumber)
                 .withAuthenticationHash(authenticationHash)

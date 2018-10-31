@@ -1,5 +1,6 @@
 package ee.sk.mid.rest.integration;
 
+import ee.sk.mid.categories.IntegrationTest;
 import ee.sk.mid.exception.ParameterMissingException;
 import ee.sk.mid.exception.UnauthorizedException;
 import ee.sk.mid.rest.MobileIdConnector;
@@ -9,6 +10,7 @@ import ee.sk.mid.rest.dao.request.SignatureRequest;
 import ee.sk.mid.rest.dao.response.SignatureResponse;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createSignatureRequest;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignaturePolled;
@@ -17,7 +19,8 @@ import static ee.sk.mid.mock.TestData.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-public class MobileIdRestConnectorSignatureIntegrationTest {
+@Category({IntegrationTest.class})
+public class MobileIdRestConnectorSignatureIT {
 
     private static final String SIGNATURE_SESSION_PATH = "/mid-api/signature/session/{sessionId}";
 
@@ -36,23 +39,23 @@ public class MobileIdRestConnectorSignatureIntegrationTest {
         assertThat(response, is(notNullValue()));
         assertThat(response.getSessionId(), not(isEmptyOrNullString()));
 
-        SessionStatus status = pollSessionStatus(connector, response.getSessionId(), SIGNATURE_SESSION_PATH);
+        SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionId(), SIGNATURE_SESSION_PATH);
 
-        assertSignaturePolled(status);
+        assertSignaturePolled(sessionStatus);
     }
 
     @Test
     public void sign_withDisplayText() throws InterruptedException {
         SignatureRequest request = createSignatureRequest(VALID_RELYING_PARTY_UUID, VALID_RELYING_PARTY_NAME, VALID_PHONE, VALID_NAT_IDENTITY);
-        request.setDisplayText("Authorize transfer of €10");
+        request.setDisplayText("Authorize transfer of 10 euros");
         SignatureResponse response = connector.sign(request);
 
         assertThat(response, is(notNullValue()));
         assertThat(response.getSessionId(), not(isEmptyOrNullString()));
 
-        SessionStatus status = pollSessionStatus(connector, response.getSessionId(), SIGNATURE_SESSION_PATH);
+        SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionId(), SIGNATURE_SESSION_PATH);
 
-        assertSignaturePolled(status);
+        assertSignaturePolled(sessionStatus);
     }
 
     @Test(expected = ParameterMissingException.class)

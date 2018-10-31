@@ -15,14 +15,14 @@ public class MobileIdClient {
     private TimeUnit pollingSleepTimeUnit = TimeUnit.SECONDS;
     private long pollingSleepTimeout = 1L;
 
-    public CertificateRequestBuilder getCertificate() {
+    public CertificateRequestBuilder createCertificateRequestBuilder() {
         MobileIdRestConnector connector = new MobileIdRestConnector(hostUrl, networkConnectionConfig);
         CertificateRequestBuilder builder = new CertificateRequestBuilder(connector);
         populateBuilderFields(builder);
         return builder;
     }
 
-    public SignatureRequestBuilder createSignature() {
+    public SignatureRequestBuilder createSignatureRequestBuilder() {
         MobileIdRestConnector connector = new MobileIdRestConnector(hostUrl, networkConnectionConfig);
         SessionStatusPoller sessionStatusPoller = createSessionStatusPoller(connector);
         SignatureRequestBuilder builder = new SignatureRequestBuilder(connector, sessionStatusPoller);
@@ -30,7 +30,7 @@ public class MobileIdClient {
         return builder;
     }
 
-    public AuthenticationRequestBuilder createAuthentication() {
+    public AuthenticationRequestBuilder createAuthenticationRequestBuilder() {
         MobileIdRestConnector connector = new MobileIdRestConnector(hostUrl, networkConnectionConfig);
         SessionStatusPoller sessionStatusPoller = createSessionStatusPoller(connector);
         AuthenticationRequestBuilder builder = new AuthenticationRequestBuilder(connector, sessionStatusPoller);

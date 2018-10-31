@@ -68,9 +68,9 @@ public class AuthenticationRequestBuilder extends MobileIdRequestBuilder {
         validateParameters();
         AuthenticationRequest request = createAuthenticationSessionRequest();
         AuthenticationResponse response = getAuthenticationResponse(request);
-        SessionStatus status = getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), AUTHENTICATION_SESSION_PATH);
-        validateResponse(status);
-        return createMobileIdAuthentication(status);
+        SessionStatus sessionStatus = getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), AUTHENTICATION_SESSION_PATH);
+        validateResponse(sessionStatus);
+        return createMobileIdAuthentication(sessionStatus);
     }
 
     private AuthenticationRequest createAuthenticationSessionRequest() {
@@ -90,10 +90,10 @@ public class AuthenticationRequestBuilder extends MobileIdRequestBuilder {
         return getConnector().authenticate(request);
     }
 
-    private MobileIdAuthentication createMobileIdAuthentication(SessionStatus status) {
-        String sessionResult = status.getResult();
-        SessionSignature sessionSignature = status.getSignature();
-        String certificate = status.getCertificate();
+    private MobileIdAuthentication createMobileIdAuthentication(SessionStatus sessionStatus) {
+        String sessionResult = sessionStatus.getResult();
+        SessionSignature sessionSignature = sessionStatus.getSignature();
+        String certificate = sessionStatus.getCertificate();
         MobileIdAuthentication authentication = new MobileIdAuthentication();
         authentication.setResult(sessionResult);
         authentication.setSignatureValueInBase64(sessionSignature.getValueInBase64());
@@ -116,12 +116,12 @@ public class AuthenticationRequestBuilder extends MobileIdRequestBuilder {
         }
     }
 
-    private void validateResponse(SessionStatus status) throws TechnicalErrorException {
-        if (status.getSignature() == null || isBlank(status.getSignature().getValueInBase64())) {
+    private void validateResponse(SessionStatus sessionStatus) throws TechnicalErrorException {
+        if (sessionStatus.getSignature() == null || isBlank(sessionStatus.getSignature().getValueInBase64())) {
             logger.error("Signature was not present in the response");
             throw new TechnicalErrorException("Signature was not present in the response");
         }
-        if (status.getCertificate() == null || isBlank(status.getCertificate())) {
+        if (sessionStatus.getCertificate() == null || isBlank(sessionStatus.getCertificate())) {
             logger.error("Certificate was not present in the response");
             throw new TechnicalErrorException("Certificate was not present in the response");
         }

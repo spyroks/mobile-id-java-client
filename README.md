@@ -1,5 +1,7 @@
 # mobile-id-java-client
 
+[![Build Status](https://travis-ci.org/spyroks/mobile-id-java-client.svg?branch=master)](https://travis-ci.org/spyroks/mobile-id-java-client)
+[![Coverage Status](https://img.shields.io/codecov/c/github/spyroks/mobile-id-java-client.svg)](https://codecov.io/gh/spyroks/mobile-id-java-client)
 
 ### License management
 

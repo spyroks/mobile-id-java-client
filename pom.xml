@@ -13,13 +13,17 @@
     <description>Mobile-ID Java client is a Java library that can be used for easy integration of the Mobile-ID solution to information systems or e-services</description>
     <licenses>
         <license>
-            <name>GNU Lesser General Public License, Version 3.0</name>
-            <url>https://www.gnu.org/licenses/lgpl-3.0.html</url>
+            <name>MIT License</name>
         </license>
     </licenses>
     <developers>
         <developer>
             <name>Denis Rästas</name>
+            <organization>Nortal</organization>
+            <organizationUrl>http://www.nortal.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Juhan Aasaru</name>
             <organization>Nortal</organization>
             <organizationUrl>http://www.nortal.com</organizationUrl>
         </developer>
@@ -239,10 +243,9 @@
                     <licensesOutputDirectory>${project.basedir}/src/license</licensesOutputDirectory>
                     <fileTemplate>${project.basedir}/src/license/third-party-file-template.ftl</fileTemplate>
                     <outputDirectory>${project.basedir}</outputDirectory>
-                    <thirdPartyFilename>LICENSE-3RD-PARTY</thirdPartyFilename>
+                    <thirdPartyFilename>LICENSE.3RD-PARTY</thirdPartyFilename>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 

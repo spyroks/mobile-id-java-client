@@ -21,7 +21,7 @@ public class SignableDataTest {
     }
 
     @Test
-    public void signableData_withSha256() {
+    public void signableData_withSHA256() {
         signableData.setHashType(HashType.SHA256);
         assertThat(signableData.getHashType().getHashTypeName(), is("SHA256"));
         assertThat(signableData.calculateHashInBase64(), is(SHA256_HASH_IN_BASE64));
@@ -30,7 +30,7 @@ public class SignableDataTest {
     }
 
     @Test
-    public void signableData_withSha384() {
+    public void signableData_withSHA384() {
         signableData.setHashType(HashType.SHA384);
         assertThat(signableData.getHashType().getHashTypeName(), is("SHA384"));
         assertThat(signableData.calculateHashInBase64(), is(SHA384_HASH_IN_BASE64));
@@ -39,7 +39,7 @@ public class SignableDataTest {
     }
 
     @Test
-    public void signableData_withSha512() {
+    public void signableData_withSHA512() {
         signableData.setHashType(HashType.SHA512);
         assertThat(signableData.getHashType().getHashTypeName(), is("SHA512"));
         assertThat(signableData.calculateHashInBase64(), is(SHA512_HASH_IN_BASE64));

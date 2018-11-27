@@ -118,7 +118,7 @@ public abstract class MobileIdRequestBuilder {
         return displayText;
     }
 
-    protected boolean isHashSet() {
+    protected boolean isSignableHashSet() {
         return hashToSign == null || !hashToSign.areFieldsFilled();
     }
 
@@ -142,6 +142,17 @@ public abstract class MobileIdRequestBuilder {
         if (isBlank(phoneNumber) || isBlank(nationalIdentityNumber)) {
             logger.error("Phone number and national identity must be set");
             throw new ParameterMissingException("Phone number and national identity must be set");
+        }
+    }
+
+    protected void validateExtraParameters() throws ParameterMissingException {
+        if (isSignableHashSet() && isSignableDataSet()) {
+            logger.error("Signable data or hash with hash type must be set");
+            throw new ParameterMissingException("Signable data or hash with hash type must be set");
+        }
+        if (isLanguageSet()) {
+            logger.error("Language for user dialog in mobile phone must be set");
+            throw new ParameterMissingException("Language for user dialog in mobile phone must be set");
         }
     }
 }

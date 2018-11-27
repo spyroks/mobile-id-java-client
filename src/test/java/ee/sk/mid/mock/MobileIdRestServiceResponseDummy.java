@@ -51,20 +51,28 @@ public class MobileIdRestServiceResponseDummy {
         return sessionStatus;
     }
 
-    public static void assertCertificateChosen(CertificateChoiceResponse response) {
+    public static void assertCertificateChoiceResponse(CertificateChoiceResponse response) {
         assertThat(response, is(notNullValue()));
         assertThat(response.getResult(), is("OK"));
         assertThat(response.getCertificate(), not(isEmptyOrNullString()));
     }
 
+    public static void assertSignatureResponse(SignatureResponse response) {
+        assertThat(response, is(notNullValue()));
+        assertThat(response.getSessionId(), not(isEmptyOrNullString()));
+    }
+
+    public static void assertAuthenticationResponse(AuthenticationResponse response) {
+        assertThat(response, is(notNullValue()));
+        assertThat(response.getSessionId(), not(isEmptyOrNullString()));
+    }
+
     public static void assertSignaturePolled(SessionStatus sessionStatus) {
-        System.out.println(sessionStatus);
         assertSessionStatusPolled(sessionStatus);
     }
 
     public static void assertAuthenticationPolled(SessionStatus sessionStatus) {
         assertSessionStatusPolled(sessionStatus);
-
         assertThat(sessionStatus.getCertificate(), not(isEmptyOrNullString()));
     }
 

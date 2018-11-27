@@ -2,6 +2,9 @@ package ee.sk.mid;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import ee.sk.mid.exception.*;
+import ee.sk.mid.rest.dao.SessionStatus;
+import ee.sk.mid.rest.dao.request.SignatureRequest;
+import ee.sk.mid.rest.dao.response.SignatureResponse;
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.junit.Before;
@@ -16,10 +19,11 @@ import java.util.concurrent.TimeUnit;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED;
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
+import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignaturePolled;
+import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignatureResponse;
 import static ee.sk.mid.mock.MobileIdRestServiceStub.*;
 import static ee.sk.mid.mock.TestData.*;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 public class MobileIdClientSignatureTest {
@@ -34,7 +38,7 @@ public class MobileIdClientSignatureTest {
         client = new MobileIdClient();
         client.setRelyingPartyUUID(VALID_RELYING_PARTY_UUID);
         client.setRelyingPartyName(VALID_RELYING_PARTY_NAME);
-        client.setHostUrl("http://localhost:18089");
+        client.setHostUrl(LOCALHOST_URL);
         stubRequestWithResponse("/mid-api/signature", "requests/signatureRequest.json", "responses/signatureResponse.json");
         stubRequestWithResponse("/mid-api/signature", "requests/signatureRequestWithDisplayText.json", "responses/signatureResponse.json");
         stubRequestWithResponse("/mid-api/signature/session/2c52caf4-13b0-41c4-bdc6-aa268403cc00", "responses/sessionStatusForSuccessfulSigningRequest.json");
@@ -48,6 +52,61 @@ public class MobileIdClientSignatureTest {
     }
 
     @Test
+    public void sign_withSignableHash() {
+        SignableHash hashToSign = new SignableHash();
+        hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
+        hashToSign.setHashType(HashType.SHA256);
+
+        SignatureRequest request = client
+                .createSignatureRequestBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withPhoneNumber(VALID_PHONE)
+                .withNationalIdentityNumber(VALID_NAT_IDENTITY)
+                .withSignableHash(hashToSign)
+                .withLanguage(Language.EST)
+                .build();
+
+        assertCorrectSignatureRequestMade(request);
+
+        SignatureResponse response = client.getConnector().sign(request);
+        assertSignatureResponse(response);
+
+        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);
+        assertSignaturePolled(sessionStatus);
+
+        MobileIdSignature signature = client.createMobileIdSignature(sessionStatus);
+        assertSignatureCreated(signature);
+    }
+
+    @Test
+    public void sign_withSignableData() {
+        SignableData dataToSign = new SignableData(DATA_TO_SIGN);
+        dataToSign.setHashType(HashType.SHA256);
+
+        SignatureRequest request = client
+                .createSignatureRequestBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withPhoneNumber(VALID_PHONE)
+                .withNationalIdentityNumber(VALID_NAT_IDENTITY)
+                .withSignableData(dataToSign)
+                .withLanguage(Language.EST)
+                .build();
+
+        assertCorrectSignatureRequestMade(request);
+
+        SignatureResponse response = client.getConnector().sign(request);
+        assertSignatureResponse(response);
+
+        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);
+        assertSignaturePolled(sessionStatus);
+
+        MobileIdSignature signature = client.createMobileIdSignature(sessionStatus);
+        assertSignatureCreated(signature);
+    }
+
+    @Test
     public void sign_withDisplayText() {
         SignableHash hashToSign = new SignableHash();
         hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
@@ -55,15 +114,24 @@ public class MobileIdClientSignatureTest {
 
         assertThat(hashToSign.calculateVerificationCode(), is("0108"));
 
-        MobileIdSignature signature = client
+        SignatureRequest request = client
                 .createSignatureRequestBuilder()
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withSignableHash(hashToSign)
                 .withLanguage(Language.EST)
                 .withDisplayText("Authorize transfer of 10 euros")
-                .sign();
+                .build();
 
+        assertCorrectSignatureRequestMade(request);
+
+        SignatureResponse response = client.getConnector().sign(request);
+        assertSignatureResponse(response);
+
+        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);
+        assertSignaturePolled(sessionStatus);
+
+        MobileIdSignature signature = client.createMobileIdSignature(sessionStatus);
         assertSignatureCreated(signature);
     }
 
@@ -179,8 +247,8 @@ public class MobileIdClientSignatureTest {
     private long measureSigningDuration() {
         long startTime = System.currentTimeMillis();
         MobileIdSignature signature = createValidSignature(client);
+        assertSignatureCreated(signature);
         long endTime = System.currentTimeMillis();
-        assertThat(signature, is(notNullValue()));
         return endTime - startTime;
     }
 

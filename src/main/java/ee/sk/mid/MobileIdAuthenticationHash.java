@@ -13,8 +13,8 @@ public class MobileIdAuthenticationHash extends SignableHash {
     }
 
     private static byte[] getRandomBytes() {
-        byte randBytes[] = new byte[64];
-        new SecureRandom().nextBytes(randBytes);
-        return randBytes;
+        byte[] randomBytes = new byte[64];
+        new SecureRandom().nextBytes(randomBytes);
+        return randomBytes;
     }
 }

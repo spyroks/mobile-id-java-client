@@ -22,6 +22,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createValidCertificateRequest;
 import static ee.sk.mid.mock.MobileIdRestServiceStub.*;
+import static ee.sk.mid.mock.TestData.LOCALHOST_URL;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
@@ -34,7 +35,7 @@ public class MobileIdRestConnectorCertificateTest {
 
     @Before
     public void setUp() {
-        connector = new MobileIdRestConnector("http://localhost:18089");
+        connector = new MobileIdRestConnector(LOCALHOST_URL);
     }
 
     @Test

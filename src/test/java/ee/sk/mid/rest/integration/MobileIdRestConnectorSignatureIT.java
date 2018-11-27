@@ -12,12 +12,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.assertCorrectSignatureRequestMade;
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createSignatureRequest;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignaturePolled;
+import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignatureResponse;
 import static ee.sk.mid.mock.SessionStatusPollerDummy.pollSessionStatus;
 import static ee.sk.mid.mock.TestData.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
 @Category({IntegrationTest.class})
 public class MobileIdRestConnectorSignatureIT {
@@ -28,19 +28,18 @@ public class MobileIdRestConnectorSignatureIT {
 
     @Before
     public void setUp() {
-        connector = new MobileIdRestConnector(HOST_URL);
+        connector = new MobileIdRestConnector(TEST_HOST_URL);
     }
 
     @Test
     public void sign() throws Exception {
         SignatureRequest request = createSignatureRequest(VALID_RELYING_PARTY_UUID, VALID_RELYING_PARTY_NAME, VALID_PHONE, VALID_NAT_IDENTITY);
-        SignatureResponse response = connector.sign(request);
+        assertCorrectSignatureRequestMade(request);
 
-        assertThat(response, is(notNullValue()));
-        assertThat(response.getSessionId(), not(isEmptyOrNullString()));
+        SignatureResponse response = connector.sign(request);
+        assertSignatureResponse(response);
 
         SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionId(), SIGNATURE_SESSION_PATH);
-
         assertSignaturePolled(sessionStatus);
     }
 
@@ -48,13 +47,12 @@ public class MobileIdRestConnectorSignatureIT {
     public void sign_withDisplayText() throws InterruptedException {
         SignatureRequest request = createSignatureRequest(VALID_RELYING_PARTY_UUID, VALID_RELYING_PARTY_NAME, VALID_PHONE, VALID_NAT_IDENTITY);
         request.setDisplayText("Authorize transfer of 10 euros");
-        SignatureResponse response = connector.sign(request);
+        assertCorrectSignatureRequestMade(request);
 
-        assertThat(response, is(notNullValue()));
-        assertThat(response.getSessionId(), not(isEmptyOrNullString()));
+        SignatureResponse response = connector.sign(request);
+        assertSignatureResponse(response);
 
         SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionId(), SIGNATURE_SESSION_PATH);
-
         assertSignaturePolled(sessionStatus);
     }
 

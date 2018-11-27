@@ -14,11 +14,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createValidAuthenticationRequest;
-import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createValidSignatureRequest;
-import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertAuthenticationPolled;
-import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignaturePolled;
-import static ee.sk.mid.mock.TestData.HOST_URL;
+import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
+import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.*;
+import static ee.sk.mid.mock.TestData.TEST_HOST_URL;
 import static ee.sk.mid.mock.TestData.SESSION_ID;
 
 @Category({IntegrationTest.class})
@@ -31,28 +29,32 @@ public class MobileIdRestConnectorSessionIT {
 
     @Before
     public void setUp() {
-        connector = new MobileIdRestConnector(HOST_URL);
+        connector = new MobileIdRestConnector(TEST_HOST_URL);
     }
 
     @Test
     public void getSessionStatus_forSuccessfulSigningRequest() {
         SignatureRequest signatureRequest = createValidSignatureRequest();
+        assertCorrectSignatureRequestMade(signatureRequest);
+
         SignatureResponse signatureResponse = connector.sign(signatureRequest);
+        assertSignatureResponse(signatureResponse);
 
         SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(signatureResponse.getSessionId());
         SessionStatus sessionStatus = connector.getSessionStatus(sessionStatusRequest, SIGNATURE_SESSION_PATH);
-
         assertSignaturePolled(sessionStatus);
     }
 
     @Test
     public void getSessionStatus_forSuccessfulAuthenticationRequest() {
         AuthenticationRequest authenticationRequest = createValidAuthenticationRequest();
+        assertCorrectAuthenticationRequestMade(authenticationRequest);
+
         AuthenticationResponse authenticationResponse = connector.authenticate(authenticationRequest);
+        assertAuthenticationResponse(authenticationResponse);
 
         SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(authenticationResponse.getSessionId());
         SessionStatus sessionStatus = connector.getSessionStatus(sessionStatusRequest, AUTHENTICATION_SESSION_PATH);
-
         assertAuthenticationPolled(sessionStatus);
     }
 
@@ -65,7 +67,10 @@ public class MobileIdRestConnectorSessionIT {
     @Test(expected = SessionNotFoundException.class)
     public void getSessionStatus_whenSessionStatusNotFound_shouldThrowException() {
         SignatureRequest signatureRequest = createValidSignatureRequest();
+        assertCorrectSignatureRequestMade(signatureRequest);
+
         SignatureResponse signatureResponse = connector.sign(signatureRequest);
+        assertSignatureResponse(signatureResponse);
 
         SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(signatureResponse.getSessionId());
         connector.getSessionStatus(sessionStatusRequest, AUTHENTICATION_SESSION_PATH);

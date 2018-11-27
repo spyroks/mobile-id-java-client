@@ -2,21 +2,14 @@ package ee.sk.mid;
 
 import ee.sk.mid.exception.MobileIdException;
 import ee.sk.mid.exception.ParameterMissingException;
-import ee.sk.mid.exception.TechnicalErrorException;
 import ee.sk.mid.rest.MobileIdConnector;
 import ee.sk.mid.rest.SessionStatusPoller;
-import ee.sk.mid.rest.dao.SessionSignature;
-import ee.sk.mid.rest.dao.SessionStatus;
 import ee.sk.mid.rest.dao.request.AuthenticationRequest;
-import ee.sk.mid.rest.dao.response.AuthenticationResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
 public class AuthenticationRequestBuilder extends MobileIdRequestBuilder {
 
-    private static final String AUTHENTICATION_SESSION_PATH = "/mid-api/authentication/session/{sessionId}";
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationRequestBuilder.class);
 
     public AuthenticationRequestBuilder(MobileIdConnector connector, SessionStatusPoller sessionStatusPoller) {
@@ -64,16 +57,12 @@ public class AuthenticationRequestBuilder extends MobileIdRequestBuilder {
         return this;
     }
 
-    public MobileIdAuthentication authenticate() throws MobileIdException {
+    public AuthenticationRequest build() throws MobileIdException {
         validateParameters();
-        AuthenticationRequest request = createAuthenticationSessionRequest();
-        AuthenticationResponse response = getAuthenticationResponse(request);
-        SessionStatus sessionStatus = getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), AUTHENTICATION_SESSION_PATH);
-        validateResponse(sessionStatus);
-        return createMobileIdAuthentication(sessionStatus);
+        return createAuthenticationRequest();
     }
 
-    private AuthenticationRequest createAuthenticationSessionRequest() {
+    private AuthenticationRequest createAuthenticationRequest() {
         AuthenticationRequest request = new AuthenticationRequest();
         request.setRelyingPartyUUID(getRelyingPartyUUID());
         request.setRelyingPartyName(getRelyingPartyName());
@@ -86,44 +75,8 @@ public class AuthenticationRequestBuilder extends MobileIdRequestBuilder {
         return request;
     }
 
-    private AuthenticationResponse getAuthenticationResponse(AuthenticationRequest request) {
-        return getConnector().authenticate(request);
-    }
-
-    private MobileIdAuthentication createMobileIdAuthentication(SessionStatus sessionStatus) {
-        String sessionResult = sessionStatus.getResult();
-        SessionSignature sessionSignature = sessionStatus.getSignature();
-        String certificate = sessionStatus.getCertificate();
-        MobileIdAuthentication authentication = new MobileIdAuthentication();
-        authentication.setResult(sessionResult);
-        authentication.setSignatureValueInBase64(sessionSignature.getValueInBase64());
-        authentication.setAlgorithmName(sessionSignature.getAlgorithm());
-        authentication.setCertificate(CertificateParser.parseX509Certificate(certificate));
-        authentication.setSignedHashInBase64(getHashInBase64());
-        authentication.setHashType(getHashType());
-        return authentication;
-    }
-
     protected void validateParameters() throws ParameterMissingException {
         super.validateParameters();
-        if (isHashSet() && isSignableDataSet()) {
-            logger.error("Signable data or hash with hash type must be set");
-            throw new ParameterMissingException("Signable data or hash with hash type must be set");
-        }
-        if (isLanguageSet()) {
-            logger.error("Language for user dialog in mobile phone must be set");
-            throw new ParameterMissingException("Language for user dialog in mobile phone must be set");
-        }
-    }
-
-    private void validateResponse(SessionStatus sessionStatus) throws TechnicalErrorException {
-        if (sessionStatus.getSignature() == null || isBlank(sessionStatus.getSignature().getValueInBase64())) {
-            logger.error("Signature was not present in the response");
-            throw new TechnicalErrorException("Signature was not present in the response");
-        }
-        if (sessionStatus.getCertificate() == null || isBlank(sessionStatus.getCertificate())) {
-            logger.error("Certificate was not present in the response");
-            throw new TechnicalErrorException("Certificate was not present in the response");
-        }
+        super.validateExtraParameters();
     }
 }

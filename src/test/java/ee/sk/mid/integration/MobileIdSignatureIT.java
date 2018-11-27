@@ -3,15 +3,19 @@ package ee.sk.mid.integration;
 import ee.sk.mid.*;
 import ee.sk.mid.categories.IntegrationTest;
 import ee.sk.mid.exception.*;
+import ee.sk.mid.rest.dao.SessionStatus;
+import ee.sk.mid.rest.dao.request.SignatureRequest;
+import ee.sk.mid.rest.dao.response.SignatureResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
+import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignaturePolled;
+import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignatureResponse;
 import static ee.sk.mid.mock.TestData.*;
-import static ee.sk.mid.mock.TestData.VALID_NAT_IDENTITY;
-import static ee.sk.mid.mock.TestData.VALID_PHONE;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 @Category({IntegrationTest.class})
@@ -24,7 +28,7 @@ public class MobileIdSignatureIT {
         client = new MobileIdClient();
         client.setRelyingPartyUUID(VALID_RELYING_PARTY_UUID);
         client.setRelyingPartyName(VALID_RELYING_PARTY_NAME);
-        client.setHostUrl(HOST_URL);
+        client.setHostUrl(TEST_HOST_URL);
     }
 
     @Test
@@ -40,15 +44,24 @@ public class MobileIdSignatureIT {
         hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
         hashToSign.setHashType(HashType.SHA256);
 
-        MobileIdSignature signature = client
+        SignatureRequest request = client
                 .createSignatureRequestBuilder()
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withSignableHash(hashToSign)
                 .withLanguage(Language.EST)
                 .withDisplayText("Authorize transfer of 10 euros")
-                .sign();
+                .build();
 
+        assertCorrectSignatureRequestMade(request);
+
+        SignatureResponse response = client.getConnector().sign(request);
+        assertSignatureResponse(response);
+
+        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);
+        assertSignaturePolled(sessionStatus);
+
+        MobileIdSignature signature = client.createMobileIdSignature(sessionStatus);
         assertSignatureCreated(signature);
     }
 
@@ -141,8 +154,8 @@ public class MobileIdSignatureIT {
     private long measureSigningDuration() {
         long startTime = System.currentTimeMillis();
         MobileIdSignature signature = createSignature(client, VALID_PHONE_WITH_TIMEOUT, VALID_NAT_IDENTITY_WITH_TIMEOUT);
+        assertSignatureCreated(signature);
         long endTime = System.currentTimeMillis();
-        assertThat(signature, is(notNullValue()));
         return endTime - startTime;
     }
 }

@@ -1,15 +1,24 @@
 package ee.sk.mid.integration;
 
-import ee.sk.mid.*;
+import ee.sk.mid.Language;
+import ee.sk.mid.MobileIdAuthentication;
+import ee.sk.mid.MobileIdAuthenticationHash;
+import ee.sk.mid.MobileIdClient;
 import ee.sk.mid.categories.IntegrationTest;
 import ee.sk.mid.exception.*;
+import ee.sk.mid.rest.dao.SessionStatus;
+import ee.sk.mid.rest.dao.request.AuthenticationRequest;
+import ee.sk.mid.rest.dao.response.AuthenticationResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
+import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertAuthenticationPolled;
+import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertAuthenticationResponse;
 import static ee.sk.mid.mock.TestData.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 @Category({IntegrationTest.class})
@@ -22,36 +31,37 @@ public class MobileIdAuthenticationIT {
         client = new MobileIdClient();
         client.setRelyingPartyUUID(VALID_RELYING_PARTY_UUID);
         client.setRelyingPartyName(VALID_RELYING_PARTY_NAME);
-        client.setHostUrl(HOST_URL);
+        client.setHostUrl(TEST_HOST_URL);
     }
 
     @Test
     public void authenticate() {
         MobileIdAuthenticationHash authenticationHash = createRandomAuthenticationHash();
-
         MobileIdAuthentication authentication = createAuthentication(client, VALID_PHONE, VALID_NAT_IDENTITY, authenticationHash);
 
         assertAuthenticationCreated(authentication, authenticationHash.getHashInBase64());
-
-        AuthenticationResponseValidator validator = new AuthenticationResponseValidator();
-        MobileIdAuthenticationResult authenticationResult = validator.validate(authentication);
-
-        assertAuthenticationResultValid(authenticationResult);
     }
 
     @Test
     public void authenticate_withDisplayText() {
         MobileIdAuthenticationHash authenticationHash = createRandomAuthenticationHash();
 
-        MobileIdAuthentication authentication = client
+        AuthenticationRequest request = client
                 .createAuthenticationRequestBuilder()
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withAuthenticationHash(authenticationHash)
                 .withLanguage(Language.EST)
                 .withDisplayText("Log into internet banking system")
-                .authenticate();
+                .build();
 
+        AuthenticationResponse response = client.getConnector().authenticate(request);
+        assertAuthenticationResponse(response);
+
+        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), AUTHENTICATION_SESSION_PATH);
+        assertAuthenticationPolled(sessionStatus);
+
+        MobileIdAuthentication authentication = client.createMobileIdAuthentication(sessionStatus);
         assertAuthenticationCreated(authentication, authenticationHash.getHashInBase64());
     }
 
@@ -146,21 +156,8 @@ public class MobileIdAuthenticationIT {
     private long measureAuthenticationDuration(MobileIdAuthenticationHash authenticationHash) {
         long startTime = System.currentTimeMillis();
         MobileIdAuthentication authentication = createAuthentication(client, VALID_PHONE_WITH_TIMEOUT, VALID_NAT_IDENTITY_WITH_TIMEOUT, authenticationHash);
+        assertAuthenticationCreated(authentication, authenticationHash.getHashInBase64());
         long endTime = System.currentTimeMillis();
-        assertThat(authentication, is(notNullValue()));
         return endTime - startTime;
-    }
-
-    private void assertAuthenticationResultValid(MobileIdAuthenticationResult authenticationResult) {
-        assertThat(authenticationResult.isValid(), is(true));
-        assertThat(authenticationResult.getErrors().isEmpty(), is(true));
-        assertAuthenticationIdentityValid(authenticationResult.getAuthenticationIdentity());
-    }
-
-    private void assertAuthenticationIdentityValid(AuthenticationIdentity authenticationIdentity) {
-        assertThat(authenticationIdentity.getGivenName(), not(isEmptyOrNullString()));
-        assertThat(authenticationIdentity.getSurName(), not(isEmptyOrNullString()));
-        assertThat(authenticationIdentity.getIdentityCode(), not(isEmptyOrNullString()));
-        assertThat(authenticationIdentity.getCountry(), not(isEmptyOrNullString()));
     }
 }

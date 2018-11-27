@@ -12,13 +12,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createAuthenticationRequest;
-import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createValidAuthenticationRequest;
+import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertAuthenticationPolled;
+import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertAuthenticationResponse;
 import static ee.sk.mid.mock.SessionStatusPollerDummy.pollSessionStatus;
 import static ee.sk.mid.mock.TestData.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
 @Category({IntegrationTest.class})
 public class MobileIdRestConnectorAuthenticationIT {
@@ -29,19 +27,18 @@ public class MobileIdRestConnectorAuthenticationIT {
 
     @Before
     public void setUp() {
-        connector = new MobileIdRestConnector(HOST_URL);
+        connector = new MobileIdRestConnector(TEST_HOST_URL);
     }
 
     @Test
     public void authenticate() throws Exception {
         AuthenticationRequest request = createValidAuthenticationRequest();
-        AuthenticationResponse response = connector.authenticate(request);
+        assertCorrectAuthenticationRequestMade(request);
 
-        assertThat(response, is(notNullValue()));
-        assertThat(response.getSessionId(), not(isEmptyOrNullString()));
+        AuthenticationResponse response = connector.authenticate(request);
+        assertAuthenticationResponse(response);
 
         SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionId(), AUTHENTICATION_SESSION_PATH);
-
         assertAuthenticationPolled(sessionStatus);
     }
 
@@ -49,13 +46,12 @@ public class MobileIdRestConnectorAuthenticationIT {
     public void authenticate_withDisplayText() throws InterruptedException {
         AuthenticationRequest request = createValidAuthenticationRequest();
         request.setDisplayText("Log into internet banking system");
-        AuthenticationResponse response = connector.authenticate(request);
+        assertCorrectAuthenticationRequestMade(request);
 
-        assertThat(response, is(notNullValue()));
-        assertThat(response.getSessionId(), not(isEmptyOrNullString()));
+        AuthenticationResponse response = connector.authenticate(request);
+        assertAuthenticationResponse(response);
 
         SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionId(), AUTHENTICATION_SESSION_PATH);
-
         assertAuthenticationPolled(sessionStatus);
     }
 

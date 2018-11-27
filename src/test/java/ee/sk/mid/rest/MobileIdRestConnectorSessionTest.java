@@ -14,14 +14,14 @@ import static ee.sk.mid.mock.MobileIdRestServiceStub.stubNotFoundResponse;
 import static ee.sk.mid.mock.MobileIdRestServiceStub.stubRequestWithResponse;
 import static ee.sk.mid.mock.SessionStatusDummy.assertErrorSessionStatus;
 import static ee.sk.mid.mock.SessionStatusDummy.assertSuccessfulSessionStatus;
+import static ee.sk.mid.mock.TestData.AUTHENTICATION_SESSION_PATH;
+import static ee.sk.mid.mock.TestData.LOCALHOST_URL;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.junit.Assert.assertThat;
 
 public class MobileIdRestConnectorSessionTest {
-
-    private static final String AUTHENTICATION_SESSION_PATH = "/mid-api/authentication/session/{sessionId}";
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(18089);
@@ -30,7 +30,7 @@ public class MobileIdRestConnectorSessionTest {
 
     @Before
     public void setUp() {
-        connector = new MobileIdRestConnector("http://localhost:18089");
+        connector = new MobileIdRestConnector(LOCALHOST_URL);
     }
 
     @Test(expected = SessionNotFoundException.class)

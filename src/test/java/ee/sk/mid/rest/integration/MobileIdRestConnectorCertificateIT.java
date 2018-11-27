@@ -11,9 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createCertificateRequest;
-import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createValidCertificateRequest;
-import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertCertificateChosen;
+import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
+import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertCertificateChoiceResponse;
 import static ee.sk.mid.mock.TestData.*;
 
 @Category({IntegrationTest.class})
@@ -23,15 +22,16 @@ public class MobileIdRestConnectorCertificateIT {
 
     @Before
     public void setUp() {
-        connector = new MobileIdRestConnector(HOST_URL);
+        connector = new MobileIdRestConnector(TEST_HOST_URL);
     }
 
     @Test
     public void getCertificate() {
         CertificateRequest request = createValidCertificateRequest();
-        CertificateChoiceResponse response = connector.getCertificate(request);
+        assertCorrectCertificateRequestMade(request);
 
-        assertCertificateChosen(response);
+        CertificateChoiceResponse response = connector.getCertificate(request);
+        assertCertificateChoiceResponse(response);
     }
 
     @Test(expected = ParameterMissingException.class)

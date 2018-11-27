@@ -3,7 +3,6 @@ package ee.sk.mid.mock;
 import ee.sk.mid.rest.MobileIdConnector;
 import ee.sk.mid.rest.dao.SessionStatus;
 import ee.sk.mid.rest.dao.request.SessionStatusRequest;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.concurrent.TimeUnit;
 

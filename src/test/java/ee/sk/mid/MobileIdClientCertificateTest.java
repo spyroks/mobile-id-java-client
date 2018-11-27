@@ -16,8 +16,7 @@ import java.util.Map;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
 import static ee.sk.mid.mock.MobileIdRestServiceStub.*;
-import static ee.sk.mid.mock.TestData.VALID_RELYING_PARTY_NAME;
-import static ee.sk.mid.mock.TestData.VALID_RELYING_PARTY_UUID;
+import static ee.sk.mid.mock.TestData.*;
 
 public class MobileIdClientCertificateTest {
 
@@ -31,7 +30,7 @@ public class MobileIdClientCertificateTest {
         client = new MobileIdClient();
         client.setRelyingPartyUUID(VALID_RELYING_PARTY_UUID);
         client.setRelyingPartyName(VALID_RELYING_PARTY_NAME);
-        client.setHostUrl("http://localhost:18089");
+        client.setHostUrl(LOCALHOST_URL);
         stubRequestWithResponse("/mid-api/certificate", "requests/certificateChoiceRequest.json", "responses/certificateChoiceResponse.json");
     }
 

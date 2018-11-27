@@ -25,7 +25,7 @@ public class MobileIdCertificateIT {
         client = new MobileIdClient();
         client.setRelyingPartyUUID(VALID_RELYING_PARTY_UUID);
         client.setRelyingPartyName(VALID_RELYING_PARTY_NAME);
-        client.setHostUrl(HOST_URL);
+        client.setHostUrl(TEST_HOST_URL);
     }
 
     @Test

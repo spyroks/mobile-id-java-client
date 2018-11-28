@@ -2,6 +2,8 @@ package ee.sk.mid;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import ee.sk.mid.exception.*;
+import ee.sk.mid.rest.MobileIdConnector;
+import ee.sk.mid.rest.MobileIdRestConnector;
 import ee.sk.mid.rest.dao.SessionStatus;
 import ee.sk.mid.rest.dao.request.AuthenticationRequest;
 import ee.sk.mid.rest.dao.response.AuthenticationResponse;
@@ -25,6 +27,8 @@ import static ee.sk.mid.mock.MobileIdRestServiceStub.*;
 import static ee.sk.mid.mock.TestData.*;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class MobileIdClientAuthenticationTest {
 
@@ -68,7 +72,7 @@ public class MobileIdClientAuthenticationTest {
 
         assertCorrectAuthenticationRequestMade(request);
 
-        AuthenticationResponse response = client.getConnector().authenticate(request);
+        AuthenticationResponse response = client.getMobileIdConnector().authenticate(request);
         assertAuthenticationResponse(response);
 
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), AUTHENTICATION_SESSION_PATH);
@@ -94,7 +98,7 @@ public class MobileIdClientAuthenticationTest {
 
         assertCorrectAuthenticationRequestMade(request);
 
-        AuthenticationResponse response = client.getConnector().authenticate(request);
+        AuthenticationResponse response = client.getMobileIdConnector().authenticate(request);
         assertAuthenticationResponse(response);
 
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), AUTHENTICATION_SESSION_PATH);
@@ -211,6 +215,23 @@ public class MobileIdClientAuthenticationTest {
 
         verify(postRequestedFor(urlEqualTo("/mid-api/authentication"))
                 .withHeader(headerName, equalTo(headerValue)));
+    }
+
+    @Test
+    public void verifyMobileIdConnector_whenConnectorIsNotProvided() {
+        MobileIdConnector connector = client.getMobileIdConnector();
+        assertThat(connector instanceof MobileIdRestConnector, is(true));
+    }
+
+    @Test
+    public void verifyMobileIdConnector_whenConnectorIsProvided() {
+        final String mock = "Mock";
+        SessionStatus status = mock(SessionStatus.class);
+        when(status.getState()).thenReturn(mock);
+        MobileIdConnector connector = mock(MobileIdConnector.class);
+        when(connector.getSessionStatus(null, null)).thenReturn(status);
+        client.setMobileIdConnector(connector);
+        assertThat(client.getMobileIdConnector().getSessionStatus(null, null).getState(), is(mock));
     }
 
     private long measureAuthenticationDuration() {

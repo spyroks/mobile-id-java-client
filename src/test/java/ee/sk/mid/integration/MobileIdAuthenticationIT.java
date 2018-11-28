@@ -69,7 +69,7 @@ public class MobileIdAuthenticationIT {
                 .withDisplayText("Log into internet banking system")
                 .build();
 
-        AuthenticationResponse response = client.getConnector().authenticate(request);
+        AuthenticationResponse response = client.getMobileIdConnector().authenticate(request);
         assertAuthenticationResponse(response);
 
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), AUTHENTICATION_SESSION_PATH);

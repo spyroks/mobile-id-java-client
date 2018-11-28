@@ -1,7 +1,6 @@
 package ee.sk.mid.rest.dao;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
@@ -11,9 +10,7 @@ public class SessionStatus implements Serializable {
     private String state;
     private String result;
     private SessionSignature signature;
-
-    @JsonProperty("cert")
-    private String certificate;
+    private String cert;
 
     public String getState() {
         return state;
@@ -39,12 +36,12 @@ public class SessionStatus implements Serializable {
         this.signature = signature;
     }
 
-    public String getCertificate() {
-        return certificate;
+    public String getCert() {
+        return cert;
     }
 
-    public void setCertificate(String certificate) {
-        this.certificate = certificate;
+    public void setCert(String cert) {
+        this.cert = cert;
     }
 
     @Override
@@ -53,7 +50,7 @@ public class SessionStatus implements Serializable {
                 "state='" + state + '\'' +
                 ", result='" + result + '\'' +
                 ", signature='" + signature + '\'' +
-                ", certificate='" + certificate + '\'' +
+                ", cert='" + cert + '\'' +
                 '}';
     }
 }

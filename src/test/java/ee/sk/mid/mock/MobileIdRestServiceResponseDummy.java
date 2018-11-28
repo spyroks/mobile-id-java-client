@@ -29,7 +29,7 @@ public class MobileIdRestServiceResponseDummy {
         sessionStatus.setState("COMPLETE");
         sessionStatus.setResult("OK");
         SessionSignature signature = new SessionSignature();
-        signature.setValueInBase64("luvjsi1+1iLN9yfDFEh/BE8h");
+        signature.setValue("luvjsi1+1iLN9yfDFEh/BE8h");
         signature.setAlgorithm("sha256WithRSAEncryption");
         sessionStatus.setSignature(signature);
         return sessionStatus;
@@ -41,13 +41,13 @@ public class MobileIdRestServiceResponseDummy {
 
     public static SessionStatus createDummyAuthenticationSessionStatus() {
         SessionSignature signature = new SessionSignature();
-        signature.setValueInBase64("c2FtcGxlIHNpZ25hdHVyZQ0K");
+        signature.setValue("c2FtcGxlIHNpZ25hdHVyZQ0K");
         signature.setAlgorithm("sha512WithRSAEncryption");
         SessionStatus sessionStatus = new SessionStatus();
         sessionStatus.setState("COMPLETE");
         sessionStatus.setResult("OK");
         sessionStatus.setSignature(signature);
-        sessionStatus.setCertificate(AUTH_CERTIFICATE_EE);
+        sessionStatus.setCert(AUTH_CERTIFICATE_EE);
         return sessionStatus;
     }
 
@@ -73,7 +73,7 @@ public class MobileIdRestServiceResponseDummy {
 
     public static void assertAuthenticationPolled(SessionStatus sessionStatus) {
         assertSessionStatusPolled(sessionStatus);
-        assertThat(sessionStatus.getCertificate(), not(isEmptyOrNullString()));
+        assertThat(sessionStatus.getCert(), not(isEmptyOrNullString()));
     }
 
     private static void assertSessionStatusPolled(SessionStatus sessionStatus) {
@@ -81,6 +81,6 @@ public class MobileIdRestServiceResponseDummy {
         assertThat(sessionStatus.getState(), not(isEmptyOrNullString()));
         assertThat(sessionStatus.getResult(), not(isEmptyOrNullString()));
         assertThat(sessionStatus.getSignature(), is(notNullValue()));
-        assertThat(sessionStatus.getSignature().getValueInBase64(), not(isEmptyOrNullString()));
+        assertThat(sessionStatus.getSignature().getValue(), not(isEmptyOrNullString()));
     }
 }

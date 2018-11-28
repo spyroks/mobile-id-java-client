@@ -4,6 +4,7 @@ import ee.sk.mid.exception.CertificateNotPresentException;
 import ee.sk.mid.exception.ExpiredException;
 import ee.sk.mid.exception.MobileIdException;
 import ee.sk.mid.exception.TechnicalErrorException;
+import ee.sk.mid.rest.MobileIdConnector;
 import ee.sk.mid.rest.MobileIdRestConnector;
 import ee.sk.mid.rest.SessionStatusPoller;
 import ee.sk.mid.rest.dao.SessionSignature;
@@ -29,7 +30,7 @@ public class MobileIdClient {
     private ClientConfig networkConnectionConfig;
     private TimeUnit pollingSleepTimeUnit = TimeUnit.SECONDS;
     private long pollingSleepTimeout = 1L;
-    private MobileIdRestConnector connector;
+    private MobileIdConnector connector;
     private SessionStatusPoller sessionStatusPoller;
     private MobileIdRequestBuilder builder;
 
@@ -54,8 +55,15 @@ public class MobileIdClient {
         pollingSleepTimeout = timeout;
     }
 
-    public MobileIdRestConnector getConnector() {
+    public MobileIdConnector getMobileIdConnector() {
+        if (null == connector) {
+            setMobileIdConnector(new MobileIdRestConnector(hostUrl, networkConnectionConfig));
+        }
         return connector;
+    }
+
+    public void setMobileIdConnector(MobileIdConnector mobileIdConnector) {
+        this.connector = mobileIdConnector;
     }
 
     public SessionStatusPoller getSessionStatusPoller() {
@@ -63,29 +71,26 @@ public class MobileIdClient {
     }
 
     public CertificateRequestBuilder createCertificateRequestBuilder() {
-        connector = new MobileIdRestConnector(hostUrl, networkConnectionConfig);
-        builder = new CertificateRequestBuilder(connector);
+        builder = new CertificateRequestBuilder(getMobileIdConnector());
         populateBuilderFields(builder);
         return (CertificateRequestBuilder) builder;
     }
 
     public SignatureRequestBuilder createSignatureRequestBuilder() {
-        connector = new MobileIdRestConnector(hostUrl, networkConnectionConfig);
-        sessionStatusPoller = createSessionStatusPoller(connector);
-        builder = new SignatureRequestBuilder(connector, sessionStatusPoller);
+        sessionStatusPoller = createSessionStatusPoller(getMobileIdConnector());
+        builder = new SignatureRequestBuilder(getMobileIdConnector(), sessionStatusPoller);
         populateBuilderFields(builder);
         return (SignatureRequestBuilder) builder;
     }
 
     public AuthenticationRequestBuilder createAuthenticationRequestBuilder() {
-        connector = new MobileIdRestConnector(hostUrl, networkConnectionConfig);
-        sessionStatusPoller = createSessionStatusPoller(connector);
-        builder = new AuthenticationRequestBuilder(connector, sessionStatusPoller);
+        sessionStatusPoller = createSessionStatusPoller(getMobileIdConnector());
+        builder = new AuthenticationRequestBuilder(getMobileIdConnector(), sessionStatusPoller);
         populateBuilderFields(builder);
         return (AuthenticationRequestBuilder) builder;
     }
 
-    private SessionStatusPoller createSessionStatusPoller(MobileIdRestConnector connector) {
+    private SessionStatusPoller createSessionStatusPoller(MobileIdConnector connector) {
         SessionStatusPoller sessionStatusPoller = new SessionStatusPoller(connector);
         sessionStatusPoller.setPollingSleepTime(pollingSleepTimeUnit, pollingSleepTimeout);
         return sessionStatusPoller;
@@ -107,7 +112,7 @@ public class MobileIdClient {
         SessionSignature sessionSignature = sessionStatus.getSignature();
 
         MobileIdSignature signature = new MobileIdSignature();
-        signature.setValueInBase64(sessionSignature.getValueInBase64());
+        signature.setValueInBase64(sessionSignature.getValue());
         signature.setAlgorithmName(sessionSignature.getAlgorithm());
         return signature;
     }
@@ -116,11 +121,11 @@ public class MobileIdClient {
         validateResponse(sessionStatus);
         String sessionResult = sessionStatus.getResult();
         SessionSignature sessionSignature = sessionStatus.getSignature();
-        X509Certificate certificate = CertificateParser.parseX509Certificate(sessionStatus.getCertificate());
+        X509Certificate certificate = CertificateParser.parseX509Certificate(sessionStatus.getCert());
 
         MobileIdAuthentication authentication = new MobileIdAuthentication();
         authentication.setResult(sessionResult);
-        authentication.setSignatureValueInBase64(sessionSignature.getValueInBase64());
+        authentication.setSignatureValueInBase64(sessionSignature.getValue());
         authentication.setAlgorithmName(sessionSignature.getAlgorithm());
         authentication.setCertificate(certificate);
         authentication.setSignedHashInBase64(builder.getHashInBase64());
@@ -149,7 +154,7 @@ public class MobileIdClient {
     }
 
     private void validateResponse(SessionStatus sessionStatus) throws TechnicalErrorException {
-        if (sessionStatus.getSignature() == null || isBlank(sessionStatus.getSignature().getValueInBase64())) {
+        if (sessionStatus.getSignature() == null || isBlank(sessionStatus.getSignature().getValue())) {
             logger.error("Signature was not present in the response");
             throw new TechnicalErrorException("Signature was not present in the response");
         }

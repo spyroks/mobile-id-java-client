@@ -40,21 +40,21 @@ public class SignatureVerifier {
         return ArrayUtils.addAll(digestInfoPrefix, digest);
     }
 
-    public static boolean verifyWithEC(PublicKey signersPublicKey, MobileIdAuthentication authentication) throws TechnicalErrorException {
+    public static boolean verifyWithECDSA(PublicKey signersPublicKey, MobileIdAuthentication authentication) throws TechnicalErrorException {
         try {
             Security.addProvider(new BouncyCastleProvider());
             Signature signature = Signature.getInstance("NONEwithECDSA", "BC");
             signature.initVerify(signersPublicKey);
             byte[] signedDigest = Base64.decodeBase64(authentication.getSignedHashInBase64());
             signature.update(signedDigest);
-            return signature.verify(fromCvcEncoding(authentication.getSignatureValue()));
+            return signature.verify(fromCVCEncoding(authentication.getSignatureValue()));
         } catch (GeneralSecurityException e) {
-            logger.error("Signature verification with EC failed");
-            throw new TechnicalErrorException("Signature verification with EC failed", e);
+            logger.error("Signature verification with ECDSA failed");
+            throw new TechnicalErrorException("Signature verification with ECDSA failed", e);
         }
     }
 
-    private static byte[] fromCvcEncoding(byte[] cvcEncoding) {
+    private static byte[] fromCVCEncoding(byte[] cvcEncoding) {
         byte[][] elements = splitArrayInTheMiddle(cvcEncoding);
         BigInteger r = new BigInteger(1, elements[0]);
         BigInteger s = new BigInteger(1, elements[1]);

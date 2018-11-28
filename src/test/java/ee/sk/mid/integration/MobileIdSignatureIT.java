@@ -54,7 +54,7 @@ public class MobileIdSignatureIT {
 
         assertCorrectSignatureRequestMade(request);
 
-        SignatureResponse response = client.getConnector().sign(request);
+        SignatureResponse response = client.getMobileIdConnector().sign(request);
         assertSignatureResponse(response);
 
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);

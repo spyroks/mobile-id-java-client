@@ -73,7 +73,7 @@ public class MobileIdRestServiceRequestDummy {
 
         assertCorrectCertificateRequestMade(request);
 
-        CertificateChoiceResponse response = client.getConnector().getCertificate(request);
+        CertificateChoiceResponse response = client.getMobileIdConnector().getCertificate(request);
         return client.createMobileIdCertificate(response);
     }
 
@@ -96,7 +96,7 @@ public class MobileIdRestServiceRequestDummy {
                 .withLanguage(Language.EST)
                 .build();
 
-        SignatureResponse response = client.getConnector().sign(request);
+        SignatureResponse response = client.getMobileIdConnector().sign(request);
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);
         return client.createMobileIdSignature(sessionStatus);
     }
@@ -110,7 +110,7 @@ public class MobileIdRestServiceRequestDummy {
                 .withLanguage(Language.EST)
                 .build();
 
-        AuthenticationResponse response = client.getConnector().authenticate(request);
+        AuthenticationResponse response = client.getMobileIdConnector().authenticate(request);
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), AUTHENTICATION_SESSION_PATH);
         return client.createMobileIdAuthentication(sessionStatus);
     }
@@ -126,7 +126,7 @@ public class MobileIdRestServiceRequestDummy {
                 .withNationalIdentityNumber(nationalIdentityNumber)
                 .build();
 
-        CertificateChoiceResponse response = client.getConnector().getCertificate(request);
+        CertificateChoiceResponse response = client.getMobileIdConnector().getCertificate(request);
         client.createMobileIdCertificate(response);
     }
 
@@ -147,7 +147,7 @@ public class MobileIdRestServiceRequestDummy {
                 .withLanguage(Language.EST)
                 .build();
 
-        SignatureResponse response = client.getConnector().sign(request);
+        SignatureResponse response = client.getMobileIdConnector().sign(request);
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);
         client.createMobileIdSignature(sessionStatus);
     }
@@ -167,7 +167,7 @@ public class MobileIdRestServiceRequestDummy {
                 .withLanguage(Language.EST)
                 .build();
 
-        AuthenticationResponse response = client.getConnector().authenticate(request);
+        AuthenticationResponse response = client.getMobileIdConnector().authenticate(request);
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), AUTHENTICATION_SESSION_PATH);
         client.createMobileIdAuthentication(sessionStatus);
     }

@@ -11,7 +11,7 @@ import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 
-import static ee.sk.mid.SignatureVerifier.verifyWithEC;
+import static ee.sk.mid.SignatureVerifier.verifyWithECDSA;
 import static ee.sk.mid.SignatureVerifier.verifyWithRSA;
 
 public class AuthenticationResponseValidator {
@@ -95,7 +95,7 @@ public class AuthenticationResponseValidator {
 
     private boolean isSignatureValid(MobileIdAuthentication authentication) {
         PublicKey publicKey = authentication.getCertificate().getPublicKey();
-        return isAlgorithmRSA(publicKey) ? verifyWithRSA(publicKey, authentication) : verifyWithEC(publicKey, authentication);
+        return isAlgorithmRSA(publicKey) ? verifyWithRSA(publicKey, authentication) : verifyWithECDSA(publicKey, authentication);
     }
 
     private boolean isAlgorithmRSA(PublicKey publicKey) {

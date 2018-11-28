@@ -55,9 +55,9 @@ public class MobileIdRestConnectorSessionTest {
         assertSuccessfulSessionStatus(sessionStatus);
 
         assertThat(sessionStatus.getSignature(), is(notNullValue()));
-        assertThat(sessionStatus.getSignature().getValueInBase64(), startsWith("luvjsi1+1iLN9yfDFEh/BE8hXtAKhAIxilv"));
+        assertThat(sessionStatus.getSignature().getValue(), startsWith("luvjsi1+1iLN9yfDFEh/BE8hXtAKhAIxilv"));
         assertThat(sessionStatus.getSignature().getAlgorithm(), is("sha256WithRSAEncryption"));
-        assertThat(sessionStatus.getCertificate(), startsWith("MIIHhjCCBW6gAwIBAgIQDNYLtVwrKURYStr"));
+        assertThat(sessionStatus.getCert(), startsWith("MIIHhjCCBW6gAwIBAgIQDNYLtVwrKURYStr"));
     }
 
     @Test

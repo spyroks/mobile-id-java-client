@@ -242,13 +242,13 @@ public class AuthenticationRequestBuilderTest {
 
     @Test(expected = TechnicalErrorException.class)
     public void authenticate_withCertificateBlankInResponse_shouldThrowException() {
-        connector.getSessionStatusToRespond().setCertificate("");
+        connector.getSessionStatusToRespond().setCert("");
         makeAuthenticationRequest(connector);
     }
 
     @Test(expected = TechnicalErrorException.class)
     public void authenticate_withCertificateMissingInResponse_shouldThrowException() {
-        connector.getSessionStatusToRespond().setCertificate(null);
+        connector.getSessionStatusToRespond().setCert(null);
         makeAuthenticationRequest(connector);
     }
 

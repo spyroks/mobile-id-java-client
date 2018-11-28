@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 
-import static ee.sk.mid.mock.TestData.CERTIFICATE;
+import static ee.sk.mid.mock.TestData.AUTH_CERTIFICATE_EE;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -15,8 +15,8 @@ public class CertificateParserTest {
 
     @Test
     public void parseCertificate() throws CertificateEncodingException {
-        X509Certificate x509Certificate = CertificateParser.parseX509Certificate(CERTIFICATE);
-        assertThat(Base64.encodeBase64String(x509Certificate.getEncoded()), is(CERTIFICATE));
+        X509Certificate x509Certificate = CertificateParser.parseX509Certificate(AUTH_CERTIFICATE_EE);
+        assertThat(Base64.encodeBase64String(x509Certificate.getEncoded()), is(AUTH_CERTIFICATE_EE));
     }
 
     @Test(expected = TechnicalErrorException.class)

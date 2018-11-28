@@ -15,7 +15,6 @@ import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignaturePol
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignatureResponse;
 import static ee.sk.mid.mock.TestData.*;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 @Category({IntegrationTest.class})

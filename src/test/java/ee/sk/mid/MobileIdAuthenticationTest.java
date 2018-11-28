@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.security.cert.CertificateEncodingException;
 
-import static ee.sk.mid.mock.TestData.CERTIFICATE;
+import static ee.sk.mid.mock.TestData.AUTH_CERTIFICATE_EE;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -43,14 +43,14 @@ public class MobileIdAuthenticationTest {
         authentication.setResult("OK");
         authentication.setSignatureValueInBase64("SEFDS0VSTUFO");
         authentication.setAlgorithmName(HashType.SHA512.getAlgorithmName());
-        authentication.setCertificate(CertificateParser.parseX509Certificate(CERTIFICATE));
+        authentication.setCertificate(CertificateParser.parseX509Certificate(AUTH_CERTIFICATE_EE));
         authentication.setSignedHashInBase64("K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ==");
         authentication.setHashType(HashType.SHA512);
 
         assertThat(authentication.getResult(), is("OK"));
         assertThat(authentication.getSignatureValueInBase64(), is("SEFDS0VSTUFO"));
         assertThat(authentication.getAlgorithmName(), is("SHA-512"));
-        assertThat(Base64.encodeBase64String(authentication.getCertificate().getEncoded()), is(CERTIFICATE));
+        assertThat(Base64.encodeBase64String(authentication.getCertificate().getEncoded()), is(AUTH_CERTIFICATE_EE));
         assertThat(authentication.getSignedHashInBase64(), is("K74MSLkafRuKZ1Ooucvh2xa4Q3nz+R/hFWIShN96SPHNcem+uQ6mFMe9kkJQqp5EaoZnJeaFpl310TmlzRgNyQ=="));
         assertThat(authentication.getHashType(), is(HashType.SHA512));
     }

@@ -6,7 +6,7 @@ import ee.sk.mid.rest.dao.response.AuthenticationResponse;
 import ee.sk.mid.rest.dao.response.CertificateChoiceResponse;
 import ee.sk.mid.rest.dao.response.SignatureResponse;
 
-import static ee.sk.mid.mock.TestData.CERTIFICATE;
+import static ee.sk.mid.mock.TestData.AUTH_CERTIFICATE_EE;
 import static ee.sk.mid.mock.TestData.SESSION_ID;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -16,7 +16,7 @@ public class MobileIdRestServiceResponseDummy {
     public static CertificateChoiceResponse createDummyCertificateChoiceResponse() {
         CertificateChoiceResponse certificateChoiceResponse = new CertificateChoiceResponse();
         certificateChoiceResponse.setResult("OK");
-        certificateChoiceResponse.setCertificate(CERTIFICATE);
+        certificateChoiceResponse.setCertificate(AUTH_CERTIFICATE_EE);
         return certificateChoiceResponse;
     }
 
@@ -47,7 +47,7 @@ public class MobileIdRestServiceResponseDummy {
         sessionStatus.setState("COMPLETE");
         sessionStatus.setResult("OK");
         sessionStatus.setSignature(signature);
-        sessionStatus.setCertificate(CERTIFICATE);
+        sessionStatus.setCertificate(AUTH_CERTIFICATE_EE);
         return sessionStatus;
     }
 

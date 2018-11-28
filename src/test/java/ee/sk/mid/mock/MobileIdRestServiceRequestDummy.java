@@ -235,5 +235,8 @@ public class MobileIdRestServiceRequestDummy {
         assertThat(authentication.getCertificate(), is(notNullValue()));
         assertThat(authentication.getSignedHashInBase64(), is(expectedHashToSignInBase64));
         assertThat(authentication.getHashType(), Matchers.is(HashType.SHA512));
+
+        AuthenticationResponseValidator validator = new AuthenticationResponseValidator();
+        validator.validate(authentication);
     }
 }

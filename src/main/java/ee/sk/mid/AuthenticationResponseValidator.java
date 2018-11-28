@@ -1,26 +1,25 @@
 package ee.sk.mid;
 
 import ee.sk.mid.exception.TechnicalErrorException;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
-import java.security.GeneralSecurityException;
 import java.security.PublicKey;
-import java.security.Signature;
 import java.security.cert.X509Certificate;
 import java.util.Date;
+
+import static ee.sk.mid.SignatureVerifier.verifyWithEC;
+import static ee.sk.mid.SignatureVerifier.verifyWithRSA;
 
 public class AuthenticationResponseValidator {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationResponseValidator.class);
 
     public MobileIdAuthenticationResult validate(MobileIdAuthentication authentication) {
-        validateAuthenticationResponse(authentication);
+        validateAuthentication(authentication);
         MobileIdAuthenticationResult authenticationResult = new MobileIdAuthenticationResult();
         AuthenticationIdentity identity = constructAuthenticationIdentity(authentication.getCertificate());
         authenticationResult.setAuthenticationIdentity(identity);
@@ -39,7 +38,7 @@ public class AuthenticationResponseValidator {
         return authenticationResult;
     }
 
-    private void validateAuthenticationResponse(MobileIdAuthentication authentication) {
+    private void validateAuthentication(MobileIdAuthentication authentication) throws TechnicalErrorException {
         if (authentication.getCertificate() == null) {
             logger.error("Certificate is not present in the authentication response");
             throw new TechnicalErrorException("Certificate is not present in the authentication response");
@@ -54,7 +53,7 @@ public class AuthenticationResponseValidator {
         }
     }
 
-    private AuthenticationIdentity constructAuthenticationIdentity(X509Certificate certificate) {
+    AuthenticationIdentity constructAuthenticationIdentity(X509Certificate certificate) throws TechnicalErrorException {
         AuthenticationIdentity identity = new AuthenticationIdentity();
         try {
             LdapName ln = new LdapName(certificate.getSubjectDN().getName());
@@ -68,7 +67,7 @@ public class AuthenticationResponseValidator {
                         identity.setSurName(rdn.getValue().toString());
                         break;
                     case "SERIALNUMBER":
-                        identity.setIdentityCode(rdn.getValue().toString());
+                        identity.setIdentityCode(getIdentityNumber(rdn.getValue().toString()));
                         break;
                     case "C":
                         identity.setCountry(rdn.getValue().toString());
@@ -82,27 +81,25 @@ public class AuthenticationResponseValidator {
         }
     }
 
+    private String getIdentityNumber(String identityNumber) {
+        if (identityNumber.contains("PNO")) {
+            return identityNumber.split("-", 2)[1];
+        } else {
+            return identityNumber;
+        }
+    }
+
     private boolean isResultOk(MobileIdAuthentication authentication) {
         return "OK".equalsIgnoreCase(authentication.getResult());
     }
 
     private boolean isSignatureValid(MobileIdAuthentication authentication) {
-        try {
-            PublicKey signersPublicKey = authentication.getCertificate().getPublicKey();
-            Signature signature = Signature.getInstance("NONEwith" + signersPublicKey.getAlgorithm());
-            signature.initVerify(signersPublicKey);
-            byte[] signedHash = Base64.decodeBase64(authentication.getSignedHashInBase64());
-            byte[] signedDigestWithPadding = addPadding(authentication.getHashType().getDigestInfoPrefix(), signedHash);
-            signature.update(signedDigestWithPadding);
-            return signature.verify(authentication.getSignatureValue());
-        } catch (GeneralSecurityException e) {
-            logger.error("Signature verification failed");
-            throw new TechnicalErrorException("Signature verification failed", e);
-        }
+        PublicKey publicKey = authentication.getCertificate().getPublicKey();
+        return isAlgorithmRSA(publicKey) ? verifyWithRSA(publicKey, authentication) : verifyWithEC(publicKey, authentication);
     }
 
-    private static byte[] addPadding(byte[] digestInfoPrefix, byte[] digest) {
-        return ArrayUtils.addAll(digestInfoPrefix, digest);
+    private boolean isAlgorithmRSA(PublicKey publicKey) {
+        return publicKey.getAlgorithm().equals("RSA");
     }
 
     private boolean isCertificateValid(X509Certificate certificate) {

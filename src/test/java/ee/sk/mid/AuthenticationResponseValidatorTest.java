@@ -5,13 +5,11 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.naming.InvalidNameException;
-import javax.naming.ldap.LdapName;
-import javax.naming.ldap.Rdn;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 
 import static ee.sk.mid.mock.TestData.*;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.spy;
@@ -60,7 +58,7 @@ public class AuthenticationResponseValidatorTest {
         MobileIdAuthenticationResult authenticationResult = validator.validate(authentication);
 
         assertThat(authenticationResult.isValid(), is(false));
-        assertThat(authenticationResult.getErrors().contains("Response result verification failed"), is(true));
+        assertThat(authenticationResult.getErrors(), contains("Response result verification failed"));
     }
 
     @Test
@@ -69,7 +67,7 @@ public class AuthenticationResponseValidatorTest {
         MobileIdAuthenticationResult authenticationResult = validator.validate(authentication);
 
         assertThat(authenticationResult.isValid(), is(false));
-        assertThat(authenticationResult.getErrors().contains("Signature verification failed"), is(true));
+        assertThat(authenticationResult.getErrors(), contains("Signature verification failed"));
     }
 
     @Test
@@ -78,15 +76,18 @@ public class AuthenticationResponseValidatorTest {
         MobileIdAuthenticationResult authenticationResult = validator.validate(authentication);
 
         assertThat(authenticationResult.isValid(), is(false));
-        assertThat(authenticationResult.getErrors().contains("Signer's certificate expired"), is(true));
+        assertThat(authenticationResult.getErrors(), contains("Signer's certificate expired"));
     }
 
     @Test
-    public void validate_shouldReturnValidIdentity() throws Exception {
+    public void validate_shouldReturnValidIdentity() {
         MobileIdAuthentication authentication = createValidMobileIdAuthentication();
         MobileIdAuthenticationResult authenticationResult = validator.validate(authentication);
 
-        assertAuthenticationIdentityValid(authenticationResult.getAuthenticationIdentity(), authentication.getCertificate());
+        assertThat(authenticationResult.getAuthenticationIdentity().getGivenName(), is("ANDRES"));
+        assertThat(authenticationResult.getAuthenticationIdentity().getSurName(), is("VOLL"));
+        assertThat(authenticationResult.getAuthenticationIdentity().getIdentityCode(), is("39004170346"));
+        assertThat(authenticationResult.getAuthenticationIdentity().getCountry(), is("EE"));
     }
 
     @Test(expected = TechnicalErrorException.class)
@@ -152,8 +153,8 @@ public class AuthenticationResponseValidatorTest {
 
     @Test
     public void constructAuthenticationIdentity_withEECertificate() {
-        X509Certificate certificateLv = CertificateParser.parseX509Certificate(AUTH_CERTIFICATE_EE);
-        AuthenticationIdentity authenticationIdentity = validator.constructAuthenticationIdentity(certificateLv);
+        X509Certificate certificateEe = CertificateParser.parseX509Certificate(AUTH_CERTIFICATE_EE);
+        AuthenticationIdentity authenticationIdentity = validator.constructAuthenticationIdentity(certificateEe);
 
         assertThat(authenticationIdentity.getIdentityCode(), is("39004170346"));
         assertThat(authenticationIdentity.getCountry(), is("EE"));
@@ -174,42 +175,12 @@ public class AuthenticationResponseValidatorTest {
 
     @Test
     public void constructAuthenticationIdentity_withLTCertificate() {
-        X509Certificate certificateLv = CertificateParser.parseX509Certificate(AUTH_CERTIFICATE_LT);
-        AuthenticationIdentity authenticationIdentity = validator.constructAuthenticationIdentity(certificateLv);
+        X509Certificate certificateLt = CertificateParser.parseX509Certificate(AUTH_CERTIFICATE_LT);
+        AuthenticationIdentity authenticationIdentity = validator.constructAuthenticationIdentity(certificateLt);
 
         assertThat(authenticationIdentity.getIdentityCode(), is("36009067968"));
         assertThat(authenticationIdentity.getCountry(), is("LT"));
         assertThat(authenticationIdentity.getGivenName(), is("FORENAMEPNOLT-36009067968"));
         assertThat(authenticationIdentity.getSurName(), is("SURNAMEPNOLT-36009067968"));
-    }
-
-    private void assertAuthenticationIdentityValid(AuthenticationIdentity authenticationIdentity, X509Certificate certificate) throws InvalidNameException {
-        LdapName ln = new LdapName(certificate.getSubjectDN().getName());
-        for (Rdn rdn : ln.getRdns()) {
-            String type = rdn.getType().toUpperCase();
-            String valueFromCertificate = rdn.getValue().toString();
-            switch (type) {
-                case "GIVENNAME":
-                    assertThat(authenticationIdentity.getGivenName(), is(valueFromCertificate));
-                    break;
-                case "SURNAME":
-                    assertThat(authenticationIdentity.getSurName(), is(valueFromCertificate));
-                    break;
-                case "SERIALNUMBER":
-                    assertThat(authenticationIdentity.getIdentityCode(), is(getIdentityNumber(valueFromCertificate)));
-                    break;
-                case "C":
-                    assertThat(authenticationIdentity.getCountry(), is(valueFromCertificate));
-                    break;
-            }
-        }
-    }
-
-    private String getIdentityNumber(String identityNumber) {
-        if (identityNumber.contains("PNO")) {
-            return identityNumber.split("-", 2)[1];
-        } else {
-            return identityNumber;
-        }
     }
 }

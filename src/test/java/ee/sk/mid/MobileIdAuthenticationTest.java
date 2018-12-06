@@ -5,6 +5,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.security.cert.CertificateEncodingException;
 
 import static ee.sk.mid.mock.TestData.AUTH_CERTIFICATE_EE;
@@ -35,7 +36,7 @@ public class MobileIdAuthenticationTest {
     @Test
     public void getSignatureValueInBytes() {
         authentication.setSignatureValueInBase64("SEFDS0VSTUFO");
-        assertThat(authentication.getSignatureValue(), is("HACKERMAN".getBytes()));
+        assertThat(authentication.getSignatureValue(), is("HACKERMAN".getBytes(StandardCharsets.UTF_8)));
     }
 
     @Test

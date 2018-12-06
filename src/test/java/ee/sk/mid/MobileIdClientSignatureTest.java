@@ -59,8 +59,6 @@ public class MobileIdClientSignatureTest {
 
         SignatureRequest request = client
                 .createSignatureRequestBuilder()
-                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
-                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withSignableHash(hashToSign)
@@ -86,8 +84,6 @@ public class MobileIdClientSignatureTest {
 
         SignatureRequest request = client
                 .createSignatureRequestBuilder()
-                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
-                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withSignableData(dataToSign)

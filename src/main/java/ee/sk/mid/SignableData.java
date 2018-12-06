@@ -3,6 +3,7 @@ package ee.sk.mid;
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class SignableData implements Serializable {
 
@@ -10,7 +11,7 @@ public class SignableData implements Serializable {
     private HashType hashType = HashType.SHA512;
 
     public SignableData(byte[] dataToSign) {
-        this.dataToSign = dataToSign;
+        this.dataToSign = Arrays.copyOf(dataToSign, dataToSign.length);
     }
 
     public HashType getHashType() {

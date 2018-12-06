@@ -4,6 +4,8 @@ import ee.sk.mid.exception.InvalidBase64CharacterException;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.nio.charset.StandardCharsets;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -31,6 +33,6 @@ public class MobileIdSignatureTest {
     @Test
     public void getSignatureValueInBytes() {
         signature.setValueInBase64("SEFDS0VSTUFO");
-        assertThat(signature.getValue(), is("HACKERMAN".getBytes()));
+        assertThat(signature.getValue(), is("HACKERMAN".getBytes(StandardCharsets.UTF_8)));
     }
 }

@@ -1,5 +1,7 @@
 package ee.sk.mid.mock;
 
+import java.nio.charset.StandardCharsets;
+
 public class TestData {
 
     public static final String SIGNATURE_SESSION_PATH = "/mid-api/signature/session/{sessionId}";
@@ -31,8 +33,8 @@ public class TestData {
     public static final String WRONG_PHONE = "0000";
     public static final String WRONG_NAT_IDENTITY = "0000";
 
-    public static final byte[] DATA_TO_SIGN = "HACKERMAN".getBytes();
-    public static final byte[] HASH_TO_SIGN = "HACKERMAN".getBytes();
+    public static final byte[] DATA_TO_SIGN = "HACKERMAN".getBytes(StandardCharsets.UTF_8);
+    public static final byte[] HASH_TO_SIGN = "HACKERMAN".getBytes(StandardCharsets.UTF_8);
     public static final String SHA256_HASH_IN_BASE64 = "AE7S1QxYjqtVv+Tgukv2bMMi9gDCbc9ca2vy/iIG6ug=";
     public static final String SHA384_HASH_IN_BASE64 = "tciNHij/GJQovJJFEvpOOnanZQjpys2PoAooHxooR6EopvGvsTfXJAwpqOKZC2sV";
     public static final String SHA512_HASH_IN_BASE64 = "kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw==";

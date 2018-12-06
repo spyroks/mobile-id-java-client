@@ -72,6 +72,8 @@ public class AuthenticationResponseValidator {
                     case "C":
                         identity.setCountry(rdn.getValue().toString());
                         break;
+                    default:
+                        break;
                 }
             }
             return identity;
@@ -81,12 +83,8 @@ public class AuthenticationResponseValidator {
         }
     }
 
-    private String getIdentityNumber(String identityNumber) {
-        if (identityNumber.contains("PNO")) {
-            return identityNumber.split("-", 2)[1];
-        } else {
-            return identityNumber;
-        }
+    private String getIdentityNumber(String serialNumber) {
+        return serialNumber.replaceAll("^PNO[A-Z][A-Z]-", "");
     }
 
     private boolean isResultOk(MobileIdAuthentication authentication) {
@@ -95,11 +93,15 @@ public class AuthenticationResponseValidator {
 
     private boolean isSignatureValid(MobileIdAuthentication authentication) {
         PublicKey publicKey = authentication.getCertificate().getPublicKey();
-        return isAlgorithmRSA(publicKey) ? verifyWithRSA(publicKey, authentication) : verifyWithECDSA(publicKey, authentication);
-    }
 
-    private boolean isAlgorithmRSA(PublicKey publicKey) {
-        return publicKey.getAlgorithm().equals("RSA");
+        switch (publicKey.getAlgorithm()) {
+            case "RSA":
+                return verifyWithRSA(publicKey, authentication);
+            case "EC":
+                return verifyWithECDSA(publicKey, authentication);
+            default:
+                throw new IllegalArgumentException("Unsupported algorithm " + publicKey.getAlgorithm());
+        }
     }
 
     private boolean isCertificateValid(X509Certificate certificate) {

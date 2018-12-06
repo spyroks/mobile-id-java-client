@@ -10,7 +10,7 @@
     <version>1.0</version>
 
     <name>Mobile-ID Java client</name>
-    <description>Mobile-ID Java client is a Java library that can be used for easy integration of the Mobile-ID solution to information systems or e-services</description>
+    <description>Mobile-ID Java client is a Java library that can be used for easy integration of the Mobile-ID solutions to information systems or e-services</description>
     <licenses>
         <license>
             <name>MIT License</name>

@@ -2,6 +2,8 @@ package ee.sk.mid;
 
 import org.junit.Test;
 
+import java.nio.charset.StandardCharsets;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -42,7 +44,7 @@ public class VerificationCodeCalculatorTest {
     }
 
     private byte[] getStringDigest(String hash, HashType hashType) {
-        return DigestCalculator.calculateDigest(hash.getBytes(), hashType);
+        return DigestCalculator.calculateDigest(hash.getBytes(StandardCharsets.UTF_8), hashType);
     }
 
     private String calculateVerificationCode(byte[] dummyDocumentHash) {

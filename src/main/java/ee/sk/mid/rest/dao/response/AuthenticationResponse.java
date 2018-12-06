@@ -5,7 +5,7 @@ public class AuthenticationResponse extends AbstractResponse {
     public AuthenticationResponse() {
     }
 
-    public AuthenticationResponse(String sessionId) {
-        super(sessionId);
+    public AuthenticationResponse(String sessionID) {
+        super(sessionID);
     }
 }

@@ -54,7 +54,7 @@ public class MobileIdConnectorStub implements MobileIdConnector {
 
     @Override
     public SessionStatus getSessionStatus(SessionStatusRequest request, String path) throws SessionNotFoundException {
-        sessionIdUsed = request.getSessionId();
+        sessionIdUsed = request.getSessionID();
         requestUsed = request;
         return responses.get(responseNumber++);
     }

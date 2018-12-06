@@ -43,7 +43,7 @@ public class MobileIdRestConnectorSignatureTest {
         SignatureResponse response = connector.sign(request);
 
         assertThat(response, is(notNullValue()));
-        assertThat(response.getSessionId(), is("2c52caf4-13b0-41c4-bdc6-aa268403cc00"));
+        assertThat(response.getSessionID(), is("2c52caf4-13b0-41c4-bdc6-aa268403cc00"));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class MobileIdRestConnectorSignatureTest {
         SignatureResponse response = connector.sign(request);
 
         assertThat(response, is(notNullValue()));
-        assertThat(response.getSessionId(), is("2c52caf4-13b0-41c4-bdc6-aa268403cc00"));
+        assertThat(response.getSessionID(), is("2c52caf4-13b0-41c4-bdc6-aa268403cc00"));
     }
 
     @Test(expected = ResponseRetrievingException.class)

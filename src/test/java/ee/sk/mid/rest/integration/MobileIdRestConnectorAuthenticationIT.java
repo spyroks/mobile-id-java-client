@@ -38,7 +38,7 @@ public class MobileIdRestConnectorAuthenticationIT {
         AuthenticationResponse response = connector.authenticate(request);
         assertAuthenticationResponse(response);
 
-        SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionId(), AUTHENTICATION_SESSION_PATH);
+        SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionID(), AUTHENTICATION_SESSION_PATH);
         assertAuthenticationPolled(sessionStatus);
     }
 
@@ -51,7 +51,7 @@ public class MobileIdRestConnectorAuthenticationIT {
         AuthenticationResponse response = connector.authenticate(request);
         assertAuthenticationResponse(response);
 
-        SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionId(), AUTHENTICATION_SESSION_PATH);
+        SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionID(), AUTHENTICATION_SESSION_PATH);
         assertAuthenticationPolled(sessionStatus);
     }
 

@@ -70,7 +70,7 @@ public class MobileIdClientSignatureTest {
         SignatureResponse response = client.getMobileIdConnector().sign(request);
         assertSignatureResponse(response);
 
-        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);
+        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), SIGNATURE_SESSION_PATH);
         assertSignaturePolled(sessionStatus);
 
         MobileIdSignature signature = client.createMobileIdSignature(sessionStatus);
@@ -95,7 +95,7 @@ public class MobileIdClientSignatureTest {
         SignatureResponse response = client.getMobileIdConnector().sign(request);
         assertSignatureResponse(response);
 
-        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);
+        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), SIGNATURE_SESSION_PATH);
         assertSignaturePolled(sessionStatus);
 
         MobileIdSignature signature = client.createMobileIdSignature(sessionStatus);
@@ -124,7 +124,7 @@ public class MobileIdClientSignatureTest {
         SignatureResponse response = client.getMobileIdConnector().sign(request);
         assertSignatureResponse(response);
 
-        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);
+        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), SIGNATURE_SESSION_PATH);
         assertSignaturePolled(sessionStatus);
 
         MobileIdSignature signature = client.createMobileIdSignature(sessionStatus);

@@ -78,11 +78,11 @@ public class MobileIdRestConnector implements MobileIdConnector {
 
     @Override
     public SessionStatus getSessionStatus(SessionStatusRequest request, String path) throws SessionNotFoundException {
-        logger.debug("Getting session status for " + request.getSessionId());
+        logger.debug("Getting session status for " + request.getSessionID());
         UriBuilder uriBuilder = UriBuilder
                 .fromUri(endpointUrl)
                 .path(path);
-        URI uri = uriBuilder.build(request.getSessionId());
+        URI uri = uriBuilder.build(request.getSessionID());
         try {
             return prepareClient(uri).get(SessionStatus.class);
         } catch (NotFoundException e) {

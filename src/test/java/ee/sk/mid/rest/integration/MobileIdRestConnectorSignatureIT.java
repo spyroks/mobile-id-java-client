@@ -39,7 +39,7 @@ public class MobileIdRestConnectorSignatureIT {
         SignatureResponse response = connector.sign(request);
         assertSignatureResponse(response);
 
-        SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionId(), SIGNATURE_SESSION_PATH);
+        SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionID(), SIGNATURE_SESSION_PATH);
         assertSignaturePolled(sessionStatus);
     }
 
@@ -52,7 +52,7 @@ public class MobileIdRestConnectorSignatureIT {
         SignatureResponse response = connector.sign(request);
         assertSignatureResponse(response);
 
-        SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionId(), SIGNATURE_SESSION_PATH);
+        SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionID(), SIGNATURE_SESSION_PATH);
         assertSignaturePolled(sessionStatus);
     }
 

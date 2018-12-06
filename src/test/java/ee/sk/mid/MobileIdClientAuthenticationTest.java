@@ -75,7 +75,7 @@ public class MobileIdClientAuthenticationTest {
         AuthenticationResponse response = client.getMobileIdConnector().authenticate(request);
         assertAuthenticationResponse(response);
 
-        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), AUTHENTICATION_SESSION_PATH);
+        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), AUTHENTICATION_SESSION_PATH);
         assertAuthenticationPolled(sessionStatus);
 
         MobileIdAuthentication authentication = client.createMobileIdAuthentication(sessionStatus);
@@ -101,7 +101,7 @@ public class MobileIdClientAuthenticationTest {
         AuthenticationResponse response = client.getMobileIdConnector().authenticate(request);
         assertAuthenticationResponse(response);
 
-        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), AUTHENTICATION_SESSION_PATH);
+        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), AUTHENTICATION_SESSION_PATH);
         assertAuthenticationPolled(sessionStatus);
 
         MobileIdAuthentication authentication = client.createMobileIdAuthentication(sessionStatus);

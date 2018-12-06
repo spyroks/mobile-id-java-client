@@ -5,7 +5,7 @@ public class SignatureResponse extends AbstractResponse {
     public SignatureResponse() {
     }
 
-    public SignatureResponse(String sessionId) {
-        super(sessionId);
+    public SignatureResponse(String sessionID) {
+        super(sessionID);
     }
 }

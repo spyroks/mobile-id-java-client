@@ -40,7 +40,7 @@ public class MobileIdRestConnectorSessionIT {
         SignatureResponse signatureResponse = connector.sign(signatureRequest);
         assertSignatureResponse(signatureResponse);
 
-        SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(signatureResponse.getSessionId());
+        SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(signatureResponse.getSessionID());
         SessionStatus sessionStatus = connector.getSessionStatus(sessionStatusRequest, SIGNATURE_SESSION_PATH);
         assertSignaturePolled(sessionStatus);
     }
@@ -53,7 +53,7 @@ public class MobileIdRestConnectorSessionIT {
         AuthenticationResponse authenticationResponse = connector.authenticate(authenticationRequest);
         assertAuthenticationResponse(authenticationResponse);
 
-        SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(authenticationResponse.getSessionId());
+        SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(authenticationResponse.getSessionID());
         SessionStatus sessionStatus = connector.getSessionStatus(sessionStatusRequest, AUTHENTICATION_SESSION_PATH);
         assertAuthenticationPolled(sessionStatus);
     }
@@ -72,7 +72,7 @@ public class MobileIdRestConnectorSessionIT {
         SignatureResponse signatureResponse = connector.sign(signatureRequest);
         assertSignatureResponse(signatureResponse);
 
-        SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(signatureResponse.getSessionId());
+        SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(signatureResponse.getSessionID());
         connector.getSessionStatus(sessionStatusRequest, AUTHENTICATION_SESSION_PATH);
     }
 }

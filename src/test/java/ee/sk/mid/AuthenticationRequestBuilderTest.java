@@ -267,7 +267,7 @@ public class AuthenticationRequestBuilderTest {
         AuthenticationResponse response = connector.authenticate(request);
 
         SessionStatusPoller poller = new SessionStatusPoller(connector);
-        SessionStatus sessionStatus = poller.fetchFinalSessionStatus(response.getSessionId(), AUTHENTICATION_SESSION_PATH);
+        SessionStatus sessionStatus = poller.fetchFinalSessionStatus(response.getSessionID(), AUTHENTICATION_SESSION_PATH);
 
         MobileIdClient client = new MobileIdClient();
         client.createMobileIdAuthentication(sessionStatus);

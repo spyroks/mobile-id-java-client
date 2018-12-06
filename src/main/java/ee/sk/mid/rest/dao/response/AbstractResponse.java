@@ -7,27 +7,27 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AbstractResponse implements Serializable {
 
-    private String sessionId;
+    private String sessionID;
 
     public AbstractResponse() {
     }
 
-    public AbstractResponse(String sessionId) {
-        this.sessionId = sessionId;
+    public AbstractResponse(String sessionID) {
+        this.sessionID = sessionID;
     }
 
-    public String getSessionId() {
-        return sessionId;
+    public String getSessionID() {
+        return sessionID;
     }
 
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+    public void setSessionID(String sessionID) {
+        this.sessionID = sessionID;
     }
 
     @Override
     public String toString() {
         return "AbstractResponse{" +
-                "sessionId='" + sessionId + '\'' +
+                "sessionID='" + sessionID + '\'' +
                 '}';
     }
 }

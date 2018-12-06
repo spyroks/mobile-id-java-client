@@ -83,7 +83,7 @@ public class MobileIdConnectorSpy implements MobileIdConnector {
 
     @Override
     public SessionStatus getSessionStatus(SessionStatusRequest request, String path) throws SessionNotFoundException {
-        sessionIdUsed = request.getSessionId();
+        sessionIdUsed = request.getSessionID();
         return sessionStatusToRespond;
     }
 }

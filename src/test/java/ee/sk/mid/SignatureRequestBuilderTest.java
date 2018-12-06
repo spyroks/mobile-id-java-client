@@ -265,7 +265,7 @@ public class SignatureRequestBuilderTest {
         SignatureResponse response = connector.sign(request);
 
         SessionStatusPoller poller = new SessionStatusPoller(connector);
-        SessionStatus sessionStatus = poller.fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);
+        SessionStatus sessionStatus = poller.fetchFinalSessionStatus(response.getSessionID(), SIGNATURE_SESSION_PATH);
 
         MobileIdClient client = new MobileIdClient();
         client.createMobileIdSignature(sessionStatus);

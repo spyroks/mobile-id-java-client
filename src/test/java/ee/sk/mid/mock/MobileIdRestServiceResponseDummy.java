@@ -59,12 +59,12 @@ public class MobileIdRestServiceResponseDummy {
 
     public static void assertSignatureResponse(SignatureResponse response) {
         assertThat(response, is(notNullValue()));
-        assertThat(response.getSessionId(), not(isEmptyOrNullString()));
+        assertThat(response.getSessionID(), not(isEmptyOrNullString()));
     }
 
     public static void assertAuthenticationResponse(AuthenticationResponse response) {
         assertThat(response, is(notNullValue()));
-        assertThat(response.getSessionId(), not(isEmptyOrNullString()));
+        assertThat(response.getSessionID(), not(isEmptyOrNullString()));
     }
 
     public static void assertSignaturePolled(SessionStatus sessionStatus) {

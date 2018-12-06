@@ -45,7 +45,7 @@ public class MobileIdRestConnectorAuthenticationTest {
         AuthenticationResponse response = connector.authenticate(request);
 
         assertThat(response, is(notNullValue()));
-        assertThat(response.getSessionId(), is("1dcc1600-29a6-4e95-a95c-d69b31febcfb"));
+        assertThat(response.getSessionID(), is("1dcc1600-29a6-4e95-a95c-d69b31febcfb"));
     }
 
     @Test
@@ -56,7 +56,7 @@ public class MobileIdRestConnectorAuthenticationTest {
         AuthenticationResponse response = connector.authenticate(request);
 
         assertThat(response, is(notNullValue()));
-        assertThat(response.getSessionId(), is("1dcc1600-29a6-4e95-a95c-d69b31febcfb"));
+        assertThat(response.getSessionID(), is("1dcc1600-29a6-4e95-a95c-d69b31febcfb"));
     }
 
     @Test(expected = ResponseRetrievingException.class)

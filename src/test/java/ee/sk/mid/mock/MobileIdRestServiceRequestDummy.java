@@ -97,7 +97,7 @@ public class MobileIdRestServiceRequestDummy {
                 .build();
 
         SignatureResponse response = client.getMobileIdConnector().sign(request);
-        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);
+        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), SIGNATURE_SESSION_PATH);
         return client.createMobileIdSignature(sessionStatus);
     }
 
@@ -111,7 +111,7 @@ public class MobileIdRestServiceRequestDummy {
                 .build();
 
         AuthenticationResponse response = client.getMobileIdConnector().authenticate(request);
-        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), AUTHENTICATION_SESSION_PATH);
+        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), AUTHENTICATION_SESSION_PATH);
         return client.createMobileIdAuthentication(sessionStatus);
     }
 
@@ -148,7 +148,7 @@ public class MobileIdRestServiceRequestDummy {
                 .build();
 
         SignatureResponse response = client.getMobileIdConnector().sign(request);
-        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), SIGNATURE_SESSION_PATH);
+        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), SIGNATURE_SESSION_PATH);
         client.createMobileIdSignature(sessionStatus);
     }
 
@@ -168,7 +168,7 @@ public class MobileIdRestServiceRequestDummy {
                 .build();
 
         AuthenticationResponse response = client.getMobileIdConnector().authenticate(request);
-        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(), AUTHENTICATION_SESSION_PATH);
+        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), AUTHENTICATION_SESSION_PATH);
         client.createMobileIdAuthentication(sessionStatus);
     }
 

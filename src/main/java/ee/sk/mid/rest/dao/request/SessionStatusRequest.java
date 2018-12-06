@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class SessionStatusRequest implements Serializable {
 
-    private String sessionId;
+    private String sessionID;
 
-    public SessionStatusRequest(String sessionId) {
-        this.sessionId = sessionId;
+    public SessionStatusRequest(String sessionID) {
+        this.sessionID = sessionID;
     }
 
-    public String getSessionId() {
-        return sessionId;
+    public String getSessionID() {
+        return sessionID;
     }
 }

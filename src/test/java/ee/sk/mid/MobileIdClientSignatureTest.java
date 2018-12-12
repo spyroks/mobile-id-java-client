@@ -16,14 +16,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED;
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignaturePolled;
-import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignatureResponse;
 import static ee.sk.mid.mock.MobileIdRestServiceStub.*;
 import static ee.sk.mid.mock.TestData.*;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class MobileIdClientSignatureTest {
@@ -68,7 +68,7 @@ public class MobileIdClientSignatureTest {
         assertCorrectSignatureRequestMade(request);
 
         SignatureResponse response = client.getMobileIdConnector().sign(request);
-        assertSignatureResponse(response);
+        assertThat(response.getSessionID(), not(isEmptyOrNullString()));
 
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), SIGNATURE_SESSION_PATH);
         assertSignaturePolled(sessionStatus);
@@ -93,7 +93,8 @@ public class MobileIdClientSignatureTest {
         assertCorrectSignatureRequestMade(request);
 
         SignatureResponse response = client.getMobileIdConnector().sign(request);
-        assertSignatureResponse(response);
+        assertThat(response.getSessionID(), not(isEmptyOrNullString()));
+
 
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), SIGNATURE_SESSION_PATH);
         assertSignaturePolled(sessionStatus);
@@ -122,7 +123,8 @@ public class MobileIdClientSignatureTest {
         assertCorrectSignatureRequestMade(request);
 
         SignatureResponse response = client.getMobileIdConnector().sign(request);
-        assertSignatureResponse(response);
+        assertThat(response.getSessionID(), not(isEmptyOrNullString()));
+
 
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), SIGNATURE_SESSION_PATH);
         assertSignaturePolled(sessionStatus);

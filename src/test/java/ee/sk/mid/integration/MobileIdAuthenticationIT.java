@@ -12,7 +12,6 @@ import org.junit.experimental.categories.Category;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertAuthenticationPolled;
-import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertAuthenticationResponse;
 import static ee.sk.mid.mock.TestData.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -32,8 +31,12 @@ public class MobileIdAuthenticationIT {
 
     @Test
     public void authenticate() {
-        MobileIdAuthenticationHash authenticationHash = createRandomAuthenticationHash();
-        MobileIdAuthentication authentication = createAuthentication(client, VALID_PHONE, VALID_NAT_IDENTITY, authenticationHash);
+        MobileIdAuthenticationHash authenticationHash = MobileIdAuthenticationHash.generateRandomHashOfDefaultType();
+
+        assertThat(authenticationHash.calculateVerificationCode().length(), is(4));
+        assertThat(Integer.valueOf(authenticationHash.calculateVerificationCode()), allOf(greaterThanOrEqualTo(0), lessThanOrEqualTo(8192)));
+
+        MobileIdAuthentication authentication = createAndSendAuthentication(client, VALID_PHONE, VALID_NAT_IDENTITY, authenticationHash);
 
         assertAuthenticationCreated(authentication, authenticationHash.getHashInBase64());
 
@@ -45,8 +48,8 @@ public class MobileIdAuthenticationIT {
 
     @Test
     public void authenticate_whenECC_shouldPass() {
-        MobileIdAuthenticationHash authenticationHash = createRandomAuthenticationHash();
-        MobileIdAuthentication authentication = createAuthentication(client, VALID_ECC_PHONE, VALID_ECC_NAT_IDENTITY, authenticationHash);
+        MobileIdAuthenticationHash authenticationHash = MobileIdAuthenticationHash.generateRandomHashOfDefaultType();
+        MobileIdAuthentication authentication = createAndSendAuthentication(client, VALID_ECC_PHONE, VALID_ECC_NAT_IDENTITY, authenticationHash);
 
         assertAuthenticationCreated(authentication, authenticationHash.getHashInBase64());
 
@@ -58,7 +61,7 @@ public class MobileIdAuthenticationIT {
 
     @Test
     public void authenticate_withDisplayText() {
-        MobileIdAuthenticationHash authenticationHash = createRandomAuthenticationHash();
+        MobileIdAuthenticationHash authenticationHash = MobileIdAuthenticationHash.generateRandomHashOfDefaultType();
 
         AuthenticationRequest request = client
                 .createAuthenticationRequestBuilder()
@@ -70,7 +73,7 @@ public class MobileIdAuthenticationIT {
                 .build();
 
         AuthenticationResponse response = client.getMobileIdConnector().authenticate(request);
-        assertAuthenticationResponse(response);
+        assertThat(response.getSessionID(), not(isEmptyOrNullString()));
 
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), AUTHENTICATION_SESSION_PATH);
         assertAuthenticationPolled(sessionStatus);
@@ -80,12 +83,16 @@ public class MobileIdAuthenticationIT {
     }
 
     @Test
-    public void authenticate_withDelay() {
-        MobileIdAuthenticationHash authenticationHash = createRandomAuthenticationHash();
+    public void authenticate_withDelay_hasCorrectDuration() {
+        MobileIdAuthenticationHash authenticationHash = MobileIdAuthenticationHash.generateRandomHashOfDefaultType();
 
-        long duration = measureAuthenticationDuration(authenticationHash);
-        assertThat("Duration is " + duration, duration > 10000L, is(true));
-        assertThat("Duration is " + duration, duration < 12000L, is(true));
+        long startTime = System.currentTimeMillis();
+        MobileIdAuthentication authentication = createAndSendAuthentication(client, VALID_PHONE_WITH_TIMEOUT, VALID_NAT_IDENTITY_WITH_TIMEOUT, authenticationHash);
+
+        assertAuthenticationCreated(authentication, authenticationHash.getHashInBase64());
+        long duration = System.currentTimeMillis() - startTime;
+
+        assertThat(duration, allOf(greaterThan(10000L), lessThan(12000L)));
     }
 
     @Test(expected = ResponseRetrievingException.class)
@@ -159,20 +166,6 @@ public class MobileIdAuthenticationIT {
     public void authenticate_withUnknownRelyingPartyUUID_shouldThrowException() {
         client.setRelyingPartyUUID(UNKNOWN_RELYING_PARTY_UUID);
         makeAuthenticationRequest(client, VALID_PHONE, VALID_NAT_IDENTITY);
-    }
-
-    @Test(expected = UnauthorizedException.class)
-    public void authenticate_withUnknownRelyingPartyName_shouldThrowException() {
-        client.setRelyingPartyName(UNKNOWN_RELYING_PARTY_NAME);
-        makeAuthenticationRequest(client, VALID_PHONE, VALID_NAT_IDENTITY);
-    }
-
-    private long measureAuthenticationDuration(MobileIdAuthenticationHash authenticationHash) {
-        long startTime = System.currentTimeMillis();
-        MobileIdAuthentication authentication = createAuthentication(client, VALID_PHONE_WITH_TIMEOUT, VALID_NAT_IDENTITY_WITH_TIMEOUT, authenticationHash);
-        assertAuthenticationCreated(authentication, authenticationHash.getHashInBase64());
-        long endTime = System.currentTimeMillis();
-        return endTime - startTime;
     }
 
     private void assertAuthenticationResultValid(MobileIdAuthenticationResult authenticationResult) {

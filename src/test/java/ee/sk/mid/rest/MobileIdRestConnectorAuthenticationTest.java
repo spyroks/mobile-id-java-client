@@ -2,6 +2,8 @@ package ee.sk.mid.rest;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import ee.sk.mid.ClientRequestHeaderFilter;
+import ee.sk.mid.HashType;
+import ee.sk.mid.Language;
 import ee.sk.mid.exception.ParameterMissingException;
 import ee.sk.mid.exception.ResponseNotFoundException;
 import ee.sk.mid.exception.ResponseRetrievingException;
@@ -21,7 +23,7 @@ import java.util.Map;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createValidAuthenticationRequest;
 import static ee.sk.mid.mock.MobileIdRestServiceStub.*;
-import static ee.sk.mid.mock.TestData.LOCALHOST_URL;
+import static ee.sk.mid.mock.TestData.*;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -51,8 +53,17 @@ public class MobileIdRestConnectorAuthenticationTest {
     @Test
     public void authenticate_withDisplayText() throws IOException {
         stubRequestWithResponse("/mid-api/authentication", "requests/authenticationRequestWithDisplayText.json", "responses/authenticationResponse.json");
-        AuthenticationRequest request = createValidAuthenticationRequest();
+
+        AuthenticationRequest request = new AuthenticationRequest();
+        request.setRelyingPartyUUID(VALID_RELYING_PARTY_UUID);
+        request.setRelyingPartyName(VALID_RELYING_PARTY_NAME);
+        request.setPhoneNumber(VALID_PHONE);
+        request.setNationalIdentityNumber(VALID_NAT_IDENTITY);
+        request.setHash("AE7S1QxYjqtVv+Tgukv2bMMi9gDCbc9ca2vy/iIG6ug=");
+        request.setHashType(HashType.SHA256);
+        request.setLanguage(Language.EST);
         request.setDisplayText("Log into internet banking system");
+
         AuthenticationResponse response = connector.authenticate(request);
 
         assertThat(response, is(notNullValue()));

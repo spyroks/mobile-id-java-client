@@ -101,7 +101,7 @@ public class MobileIdRestServiceRequestDummy {
         return client.createMobileIdSignature(sessionStatus);
     }
 
-    public static MobileIdAuthentication createAuthentication(MobileIdClient client, String phoneNumber, String nationalIdentityNumber, MobileIdAuthenticationHash authenticationHash) {
+    public static MobileIdAuthentication createAndSendAuthentication(MobileIdClient client, String phoneNumber, String nationalIdentityNumber, MobileIdAuthenticationHash authenticationHash) {
         AuthenticationRequest request = client
                 .createAuthenticationRequestBuilder()
                 .withPhoneNumber(phoneNumber)
@@ -172,16 +172,17 @@ public class MobileIdRestServiceRequestDummy {
         client.createMobileIdAuthentication(sessionStatus);
     }
 
+    public static MobileIdAuthenticationHash createAuthenticationSHA256Hash() {
+        MobileIdAuthenticationHash authenticationHash = new MobileIdAuthenticationHash();
+        authenticationHash.setHashInBase64(SHA256_HASH_IN_BASE64);
+        authenticationHash.setHashType(HashType.SHA256);
+        return authenticationHash;
+    }
+
     public static MobileIdAuthenticationHash createAuthenticationSHA512Hash() {
         MobileIdAuthenticationHash authenticationHash = new MobileIdAuthenticationHash();
         authenticationHash.setHashInBase64(SHA512_HASH_IN_BASE64);
         authenticationHash.setHashType(HashType.SHA512);
-        assertThat(authenticationHash.calculateVerificationCode(), is(notNullValue()));
-        return authenticationHash;
-    }
-
-    public static MobileIdAuthenticationHash createRandomAuthenticationHash() {
-        MobileIdAuthenticationHash authenticationHash = MobileIdAuthenticationHash.generateRandomHash();
         assertThat(authenticationHash.calculateVerificationCode(), is(notNullValue()));
         return authenticationHash;
     }
@@ -208,6 +209,15 @@ public class MobileIdRestServiceRequestDummy {
         assertThat(request.getLanguage(), is(Language.EST));
     }
 
+    public static void assertMadeCorrectAuthenticationRequesWithSHA256(AuthenticationRequest request) {
+        assertThat(request.getRelyingPartyUUID(), is(VALID_RELYING_PARTY_UUID));
+        assertThat(request.getRelyingPartyName(), is(VALID_RELYING_PARTY_NAME));
+        assertThat(request.getPhoneNumber(), is(VALID_PHONE));
+        assertThat(request.getNationalIdentityNumber(), is(VALID_NAT_IDENTITY));
+        assertThat(request.getHash(), is(SHA256_HASH_IN_BASE64));
+        assertThat(request.getHashType(), is(HashType.SHA256));
+        assertThat(request.getLanguage(), is(Language.EST));
+    }
     public static void assertCorrectAuthenticationRequestMade(AuthenticationRequest request) {
         assertThat(request.getRelyingPartyUUID(), is(VALID_RELYING_PARTY_UUID));
         assertThat(request.getRelyingPartyName(), is(VALID_RELYING_PARTY_NAME));
@@ -234,7 +244,7 @@ public class MobileIdRestServiceRequestDummy {
         assertThat(authentication.getSignatureValueInBase64(), not(isEmptyOrNullString()));
         assertThat(authentication.getCertificate(), is(notNullValue()));
         assertThat(authentication.getSignedHashInBase64(), is(expectedHashToSignInBase64));
-        assertThat(authentication.getHashType(), Matchers.is(HashType.SHA512));
+        assertThat(authentication.getHashType(), Matchers.is(HashType.SHA256));
 
         AuthenticationResponseValidator validator = new AuthenticationResponseValidator();
         validator.validate(authentication);

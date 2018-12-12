@@ -18,6 +18,9 @@ import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.*;
 import static ee.sk.mid.mock.TestData.TEST_HOST_URL;
 import static ee.sk.mid.mock.TestData.SESSION_ID;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 
 @Category({IntegrationTest.class})
 public class MobileIdRestConnectorSessionIT {
@@ -38,7 +41,7 @@ public class MobileIdRestConnectorSessionIT {
         assertCorrectSignatureRequestMade(signatureRequest);
 
         SignatureResponse signatureResponse = connector.sign(signatureRequest);
-        assertSignatureResponse(signatureResponse);
+        assertThat(signatureResponse.getSessionID(), not(isEmptyOrNullString()));
 
         SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(signatureResponse.getSessionID());
         SessionStatus sessionStatus = connector.getSessionStatus(sessionStatusRequest, SIGNATURE_SESSION_PATH);
@@ -51,7 +54,7 @@ public class MobileIdRestConnectorSessionIT {
         assertCorrectAuthenticationRequestMade(authenticationRequest);
 
         AuthenticationResponse authenticationResponse = connector.authenticate(authenticationRequest);
-        assertAuthenticationResponse(authenticationResponse);
+        assertThat(authenticationResponse.getSessionID(), not(isEmptyOrNullString()));
 
         SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(authenticationResponse.getSessionID());
         SessionStatus sessionStatus = connector.getSessionStatus(sessionStatusRequest, AUTHENTICATION_SESSION_PATH);
@@ -70,7 +73,7 @@ public class MobileIdRestConnectorSessionIT {
         assertCorrectSignatureRequestMade(signatureRequest);
 
         SignatureResponse signatureResponse = connector.sign(signatureRequest);
-        assertSignatureResponse(signatureResponse);
+        assertThat(signatureResponse.getSessionID(), not(isEmptyOrNullString()));
 
         SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(signatureResponse.getSessionID());
         connector.getSessionStatus(sessionStatusRequest, AUTHENTICATION_SESSION_PATH);

@@ -12,8 +12,9 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
-import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertCertificateChoiceResponse;
 import static ee.sk.mid.mock.TestData.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 @Category({IntegrationTest.class})
 public class MobileIdRestConnectorCertificateIT {
@@ -31,7 +32,10 @@ public class MobileIdRestConnectorCertificateIT {
         assertCorrectCertificateRequestMade(request);
 
         CertificateChoiceResponse response = connector.getCertificate(request);
-        assertCertificateChoiceResponse(response);
+
+        assertThat(response, is(notNullValue()));
+        assertThat(response.getResult(), is("OK"));
+        assertThat(response.getCertificate(), not(isEmptyOrNullString()));
     }
 
     @Test(expected = ParameterMissingException.class)

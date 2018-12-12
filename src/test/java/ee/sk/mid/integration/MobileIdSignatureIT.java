@@ -12,9 +12,8 @@ import org.junit.experimental.categories.Category;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignaturePolled;
-import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignatureResponse;
 import static ee.sk.mid.mock.TestData.*;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 @Category({IntegrationTest.class})
@@ -55,7 +54,7 @@ public class MobileIdSignatureIT {
         assertCorrectSignatureRequestMade(request);
 
         SignatureResponse response = client.getMobileIdConnector().sign(request);
-        assertSignatureResponse(response);
+        assertThat(response.getSessionID(), not(isEmptyOrNullString()));
 
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), SIGNATURE_SESSION_PATH);
         assertSignaturePolled(sessionStatus);

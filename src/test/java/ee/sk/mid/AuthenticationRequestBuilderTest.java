@@ -5,15 +5,13 @@ import ee.sk.mid.mock.MobileIdConnectorSpy;
 import ee.sk.mid.rest.MobileIdConnector;
 import ee.sk.mid.rest.MobileIdRestConnector;
 import ee.sk.mid.rest.SessionStatusPoller;
+import ee.sk.mid.rest.dao.SessionSignature;
 import ee.sk.mid.rest.dao.SessionStatus;
 import ee.sk.mid.rest.dao.request.AuthenticationRequest;
 import ee.sk.mid.rest.dao.response.AuthenticationResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createRandomAuthenticationHash;
-import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.createDummyAuthenticationResponse;
-import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.createDummyAuthenticationSessionStatus;
 import static ee.sk.mid.mock.SessionStatusDummy.*;
 import static ee.sk.mid.mock.TestData.*;
 
@@ -25,7 +23,7 @@ public class AuthenticationRequestBuilderTest {
     @Before
     public void setUp() {
         connector = new MobileIdConnectorSpy();
-        connector.setAuthenticationResponseToRespond(createDummyAuthenticationResponse());
+        connector.setAuthenticationResponseToRespond(new AuthenticationResponse(SESSION_ID));
         connector.setSessionStatusToRespond(createDummyAuthenticationSessionStatus());
         SessionStatusPoller sessionStatusPoller = new SessionStatusPoller(connector);
         builder = new AuthenticationRequestBuilder(connector, sessionStatusPoller);
@@ -33,7 +31,7 @@ public class AuthenticationRequestBuilderTest {
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withoutRelyingPartyUUID_shouldThrowException() {
-        MobileIdAuthenticationHash mobileIdAuthenticationHash = createRandomAuthenticationHash();
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = MobileIdAuthenticationHash.generateRandomHashOfDefaultType();
 
         AuthenticationRequest request = builder
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
@@ -50,7 +48,7 @@ public class AuthenticationRequestBuilderTest {
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withoutRelyingPartyName_shouldThrowException() {
-        MobileIdAuthenticationHash mobileIdAuthenticationHash = createRandomAuthenticationHash();
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = MobileIdAuthenticationHash.generateRandomHashOfDefaultType();
 
         AuthenticationRequest request = builder
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
@@ -66,7 +64,7 @@ public class AuthenticationRequestBuilderTest {
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withoutPhoneNumber_shouldThrowException() {
-        MobileIdAuthenticationHash mobileIdAuthenticationHash = createRandomAuthenticationHash();
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = MobileIdAuthenticationHash.generateRandomHashOfDefaultType();
 
         AuthenticationRequest request = builder
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
@@ -82,7 +80,7 @@ public class AuthenticationRequestBuilderTest {
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withoutNationalIdentityNumber_shouldThrowException() {
-        MobileIdAuthenticationHash mobileIdAuthenticationHash = createRandomAuthenticationHash();
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = MobileIdAuthenticationHash.generateRandomHashOfDefaultType();
 
         AuthenticationRequest request = builder
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
@@ -148,7 +146,7 @@ public class AuthenticationRequestBuilderTest {
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withoutLanguage_shouldThrowException() {
-        MobileIdAuthenticationHash mobileIdAuthenticationHash = createRandomAuthenticationHash();
+        MobileIdAuthenticationHash mobileIdAuthenticationHash = MobileIdAuthenticationHash.generateRandomHashOfDefaultType();
 
         AuthenticationRequest request = builder
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
@@ -253,7 +251,7 @@ public class AuthenticationRequestBuilderTest {
     }
 
     private void makeAuthenticationRequest(MobileIdConnector connector) {
-        MobileIdAuthenticationHash authenticationHash = createRandomAuthenticationHash();
+        MobileIdAuthenticationHash authenticationHash = MobileIdAuthenticationHash.generateRandomHashOfDefaultType();
 
         AuthenticationRequest request = builder
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
@@ -271,5 +269,17 @@ public class AuthenticationRequestBuilderTest {
 
         MobileIdClient client = new MobileIdClient();
         client.createMobileIdAuthentication(sessionStatus);
+    }
+
+    public static SessionStatus createDummyAuthenticationSessionStatus() {
+        SessionSignature signature = new SessionSignature();
+        signature.setValue("c2FtcGxlIHNpZ25hdHVyZQ0K");
+        signature.setAlgorithm("sha512WithRSAEncryption");
+        SessionStatus sessionStatus = new SessionStatus();
+        sessionStatus.setState("COMPLETE");
+        sessionStatus.setResult("OK");
+        sessionStatus.setSignature(signature);
+        sessionStatus.setCert(AUTH_CERTIFICATE_EE);
+        return sessionStatus;
     }
 }

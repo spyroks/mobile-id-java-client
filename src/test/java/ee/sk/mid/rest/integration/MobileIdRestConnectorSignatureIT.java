@@ -15,9 +15,11 @@ import org.junit.experimental.categories.Category;
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.assertCorrectSignatureRequestMade;
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.createSignatureRequest;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignaturePolled;
-import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertSignatureResponse;
 import static ee.sk.mid.mock.SessionStatusPollerDummy.pollSessionStatus;
 import static ee.sk.mid.mock.TestData.*;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 
 @Category({IntegrationTest.class})
 public class MobileIdRestConnectorSignatureIT {
@@ -37,7 +39,7 @@ public class MobileIdRestConnectorSignatureIT {
         assertCorrectSignatureRequestMade(request);
 
         SignatureResponse response = connector.sign(request);
-        assertSignatureResponse(response);
+        assertThat(response.getSessionID(), not(isEmptyOrNullString()));
 
         SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionID(), SIGNATURE_SESSION_PATH);
         assertSignaturePolled(sessionStatus);
@@ -50,7 +52,7 @@ public class MobileIdRestConnectorSignatureIT {
         assertCorrectSignatureRequestMade(request);
 
         SignatureResponse response = connector.sign(request);
-        assertSignatureResponse(response);
+        assertThat(response.getSessionID(), not(isEmptyOrNullString()));
 
         SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionID(), SIGNATURE_SESSION_PATH);
         assertSignaturePolled(sessionStatus);

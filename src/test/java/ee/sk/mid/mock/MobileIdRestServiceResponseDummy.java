@@ -13,7 +13,6 @@ import static org.junit.Assert.assertThat;
 
 public class MobileIdRestServiceResponseDummy {
 
-
     public static void assertSignaturePolled(SessionStatus sessionStatus) {
         assertSessionStatusPolled(sessionStatus);
     }

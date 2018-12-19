@@ -101,13 +101,13 @@ public class CertificateRequestBuilderTest {
 
     @Test(expected = TechnicalErrorException.class)
     public void getCertificate_withCertificateMissingInResponse_shouldThrowException() {
-        connector.getCertificateChoiceResponseToRespond().setCertificate(null);
+        connector.getCertificateChoiceResponseToRespond().setCert(null);
         makeCertificateRequest(connector);
     }
 
     @Test(expected = TechnicalErrorException.class)
     public void getCertificate_withCertificateBlankInResponse_shouldThrowException() {
-        connector.getCertificateChoiceResponseToRespond().setCertificate("");
+        connector.getCertificateChoiceResponseToRespond().setCert("");
         makeCertificateRequest(connector);
     }
 
@@ -121,7 +121,12 @@ public class CertificateRequestBuilderTest {
 
         CertificateChoiceResponse response = connector.getCertificate(request);
 
-        MobileIdClient client = new MobileIdClient();
+        MobileIdClient client = MobileIdClient.createMobileIdClientBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(LOCALHOST_URL)
+                .build();
+
         client.createMobileIdCertificate(response);
     }
 

@@ -27,10 +27,11 @@ public class MobileIdClientCertificateTest {
 
     @Before
     public void setUp() throws Exception {
-        client = new MobileIdClient();
-        client.setRelyingPartyUUID(VALID_RELYING_PARTY_UUID);
-        client.setRelyingPartyName(VALID_RELYING_PARTY_NAME);
-        client.setHostUrl(LOCALHOST_URL);
+        client = MobileIdClient.createMobileIdClientBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(LOCALHOST_URL)
+                .build();
         stubRequestWithResponse("/mid-api/certificate", "requests/certificateChoiceRequest.json", "responses/certificateChoiceResponse.json");
     }
 

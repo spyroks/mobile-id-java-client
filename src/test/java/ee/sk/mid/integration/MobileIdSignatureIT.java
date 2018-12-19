@@ -23,10 +23,11 @@ public class MobileIdSignatureIT {
 
     @Before
     public void setUp() {
-        client = new MobileIdClient();
-        client.setRelyingPartyUUID(VALID_RELYING_PARTY_UUID);
-        client.setRelyingPartyName(VALID_RELYING_PARTY_NAME);
-        client.setHostUrl(TEST_HOST_URL);
+        client = MobileIdClient.createMobileIdClientBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(DEMO_HOST_URL)
+                .build();
     }
 
     @Test
@@ -63,18 +64,6 @@ public class MobileIdSignatureIT {
         assertSignatureCreated(signature);
     }
 
-    @Test
-    public void sign_withDelay() {
-        long duration = measureSigningDuration();
-        assertThat("Duration is " + duration, duration > 10000L, is(true));
-        assertThat("Duration is " + duration, duration < 12000L, is(true));
-    }
-
-    @Test(expected = ResponseRetrievingException.class)
-    public void sign_whenResponseRetrievingError_shouldThrowException() {
-        makeSignatureRequest(client, VALID_PHONE_ERROR, VALID_NAT_IDENTITY_ERROR);
-    }
-
     @Test(expected = NotMIDClientException.class)
     public void sign_whenNotMIDClient_shouldThrowException() {
         makeSignatureRequest(client, VALID_PHONE_NOT_MID_CLIENT, VALID_NAT_IDENTITY_NOT_MID_CLIENT);
@@ -82,7 +71,21 @@ public class MobileIdSignatureIT {
 
     @Test(expected = ExpiredException.class)
     public void sign_whenMSSPTransactionExpired_shouldThrowException() {
-        makeSignatureRequest(client, VALID_PHONE_EXPIRED_TRANSACTION, VALID_NAT_IDENTITY_EXPIRED_TRANSACTION);
+        SignableHash hashToSign = new SignableHash();
+        hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
+        hashToSign.setHashType(HashType.SHA256);
+
+        SignatureRequest request = client
+                .createSignatureRequestBuilder()
+                .withPhoneNumber(VALID_PHONE_EXPIRED_TRANSACTION)
+                .withNationalIdentityNumber(VALID_NAT_IDENTITY_EXPIRED_TRANSACTION)
+                .withSignableHash(hashToSign)
+                .withLanguage(Language.LIT)
+                .build();
+
+        SignatureResponse response = client.getMobileIdConnector().sign(request);
+        SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), SIGNATURE_SESSION_PATH);
+        client.createMobileIdSignature(sessionStatus);
     }
 
     @Test(expected = UserCancellationException.class)
@@ -108,11 +111,6 @@ public class MobileIdSignatureIT {
     @Test(expected = SignatureHashMismatchException.class)
     public void authenticate_whenSignatureHashMismatch_shouldThrowException() {
         makeSignatureRequest(client, VALID_PHONE_SIGNATURE_HASH_MISMATCH, VALID_NAT_IDENTITY_SIGNATURE_HASH_MISMATCH);
-    }
-
-    @Test(expected = TechnicalErrorException.class)
-    public void sign_whenInternalErrorResult_shouldThrowException() {
-        makeSignatureRequest(client, VALID_PHONE_INTERNAL_ERROR, VALID_NAT_IDENTITY_INTERNAL_ERROR);
     }
 
     @Test(expected = ParameterMissingException.class)
@@ -147,13 +145,5 @@ public class MobileIdSignatureIT {
     public void sign_withUnknownRelyingPartyName_shouldThrowException() {
         client.setRelyingPartyName(UNKNOWN_RELYING_PARTY_NAME);
         makeSignatureRequest(client, VALID_PHONE, VALID_NAT_IDENTITY);
-    }
-
-    private long measureSigningDuration() {
-        long startTime = System.currentTimeMillis();
-        MobileIdSignature signature = createSignature(client, VALID_PHONE_WITH_TIMEOUT, VALID_NAT_IDENTITY_WITH_TIMEOUT);
-        assertSignatureCreated(signature);
-        long endTime = System.currentTimeMillis();
-        return endTime - startTime;
     }
 }

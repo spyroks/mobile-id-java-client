@@ -1,7 +1,6 @@
 package ee.sk.mid.rest.dao.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
@@ -9,9 +8,7 @@ import java.io.Serializable;
 public class CertificateChoiceResponse implements Serializable {
 
     private String result;
-
-    @JsonProperty("cert")
-    private String certificate;
+    private String cert;
 
     public String getResult() {
         return result;
@@ -21,11 +18,11 @@ public class CertificateChoiceResponse implements Serializable {
         this.result = result;
     }
 
-    public String getCertificate() {
-        return certificate;
+    public String getCert() {
+        return cert;
     }
 
-    public void setCertificate(String certificate) {
-        this.certificate = certificate;
+    public void setCert(String cert) {
+        this.cert = cert;
     }
 }

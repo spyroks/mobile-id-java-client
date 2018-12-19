@@ -277,7 +277,12 @@ public class SignatureRequestBuilderTest {
         SessionStatusPoller poller = new SessionStatusPoller(connector);
         SessionStatus sessionStatus = poller.fetchFinalSessionStatus(response.getSessionID(), SIGNATURE_SESSION_PATH);
 
-        MobileIdClient client = new MobileIdClient();
+        MobileIdClient client = MobileIdClient.createMobileIdClientBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(LOCALHOST_URL)
+                .build();
+
         client.createMobileIdSignature(sessionStatus);
     }
 }

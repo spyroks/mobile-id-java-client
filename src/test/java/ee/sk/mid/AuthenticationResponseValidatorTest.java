@@ -84,9 +84,9 @@ public class AuthenticationResponseValidatorTest {
         MobileIdAuthentication authentication = createValidMobileIdAuthentication();
         MobileIdAuthenticationResult authenticationResult = validator.validate(authentication);
 
-        assertThat(authenticationResult.getAuthenticationIdentity().getGivenName(), is("ANDRES"));
-        assertThat(authenticationResult.getAuthenticationIdentity().getSurName(), is("VOLL"));
-        assertThat(authenticationResult.getAuthenticationIdentity().getIdentityCode(), is("39004170346"));
+        assertThat(authenticationResult.getAuthenticationIdentity().getGivenName(), is("MARY ÄNN"));
+        assertThat(authenticationResult.getAuthenticationIdentity().getSurName(), is("O’CONNEŽ-ŠUSLIK TESTNUMBER"));
+        assertThat(authenticationResult.getAuthenticationIdentity().getIdentityCode(), is("60001019906"));
         assertThat(authenticationResult.getAuthenticationIdentity().getCountry(), is("EE"));
     }
 
@@ -156,10 +156,10 @@ public class AuthenticationResponseValidatorTest {
         X509Certificate certificateEe = CertificateParser.parseX509Certificate(AUTH_CERTIFICATE_EE);
         AuthenticationIdentity authenticationIdentity = validator.constructAuthenticationIdentity(certificateEe);
 
-        assertThat(authenticationIdentity.getIdentityCode(), is("39004170346"));
+        assertThat(authenticationIdentity.getGivenName(), is("MARY ÄNN"));
+        assertThat(authenticationIdentity.getSurName(), is("O’CONNEŽ-ŠUSLIK TESTNUMBER"));
+        assertThat(authenticationIdentity.getIdentityCode(), is("60001019906"));
         assertThat(authenticationIdentity.getCountry(), is("EE"));
-        assertThat(authenticationIdentity.getGivenName(), is("ANDRES"));
-        assertThat(authenticationIdentity.getSurName(), is("VOLL"));
     }
 
     @Test
@@ -167,10 +167,10 @@ public class AuthenticationResponseValidatorTest {
         X509Certificate certificateLv = CertificateParser.parseX509Certificate(AUTH_CERTIFICATE_LV);
         AuthenticationIdentity authenticationIdentity = validator.constructAuthenticationIdentity(certificateLv);
 
-        assertThat(authenticationIdentity.getIdentityCode(), is("010117-21234"));
-        assertThat(authenticationIdentity.getCountry(), is("LV"));
         assertThat(authenticationIdentity.getGivenName(), is("FORENAME-010117-21234"));
         assertThat(authenticationIdentity.getSurName(), is("SURNAME-010117-21234"));
+        assertThat(authenticationIdentity.getIdentityCode(), is("010117-21234"));
+        assertThat(authenticationIdentity.getCountry(), is("LV"));
     }
 
     @Test
@@ -178,9 +178,9 @@ public class AuthenticationResponseValidatorTest {
         X509Certificate certificateLt = CertificateParser.parseX509Certificate(AUTH_CERTIFICATE_LT);
         AuthenticationIdentity authenticationIdentity = validator.constructAuthenticationIdentity(certificateLt);
 
-        assertThat(authenticationIdentity.getIdentityCode(), is("36009067968"));
-        assertThat(authenticationIdentity.getCountry(), is("LT"));
         assertThat(authenticationIdentity.getGivenName(), is("FORENAMEPNOLT-36009067968"));
         assertThat(authenticationIdentity.getSurName(), is("SURNAMEPNOLT-36009067968"));
+        assertThat(authenticationIdentity.getIdentityCode(), is("36009067968"));
+        assertThat(authenticationIdentity.getCountry(), is("LT"));
     }
 }

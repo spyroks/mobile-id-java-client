@@ -267,7 +267,12 @@ public class AuthenticationRequestBuilderTest {
         SessionStatusPoller poller = new SessionStatusPoller(connector);
         SessionStatus sessionStatus = poller.fetchFinalSessionStatus(response.getSessionID(), AUTHENTICATION_SESSION_PATH);
 
-        MobileIdClient client = new MobileIdClient();
+        MobileIdClient client = MobileIdClient.createMobileIdClientBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(LOCALHOST_URL)
+                .build();
+
         client.createMobileIdAuthentication(sessionStatus);
     }
 

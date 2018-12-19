@@ -1,10 +1,10 @@
 {
-  "relyingPartyUUID": "e8189051-5634-4fbe-a6e8-fe1b9a9ef445",
-  "relyingPartyName": "ToomasBank",
-  "phoneNumber": "+37200000433",
-  "nationalIdentityNumber": "14212128021",
-  "hash": "AE7S1QxYjqtVv+Tgukv2bMMi9gDCbc9ca2vy/iIG6ug=",
-  "hashType": "SHA256",
+  "relyingPartyUUID": "00000000-0000-0000-0000-000000000000",
+  "relyingPartyName": "DEMO",
+  "phoneNumber": "+37200000766",
+  "nationalIdentityNumber": "60001019906",
+  "hash": "kc42j4tGXa1Pc2LdMcJCKAgpOk9RCQgrBogF6fHA40VSPw1qITw8zQ8g5ZaLcW5jSlq67ehG3uSvQAWIFs3TOw==",
+  "hashType": "SHA512",
   "language": "EST",
   "displayText": "Log into internet banking system"
 }

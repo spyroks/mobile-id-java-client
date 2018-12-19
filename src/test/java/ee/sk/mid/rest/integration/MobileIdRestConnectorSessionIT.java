@@ -4,6 +4,7 @@ import ee.sk.mid.categories.IntegrationTest;
 import ee.sk.mid.exception.SessionNotFoundException;
 import ee.sk.mid.rest.MobileIdConnector;
 import ee.sk.mid.rest.MobileIdRestConnector;
+import ee.sk.mid.rest.SessionStatusPoller;
 import ee.sk.mid.rest.dao.SessionStatus;
 import ee.sk.mid.rest.dao.request.AuthenticationRequest;
 import ee.sk.mid.rest.dao.request.SessionStatusRequest;
@@ -16,7 +17,7 @@ import org.junit.experimental.categories.Category;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.*;
-import static ee.sk.mid.mock.TestData.TEST_HOST_URL;
+import static ee.sk.mid.mock.TestData.DEMO_HOST_URL;
 import static ee.sk.mid.mock.TestData.SESSION_ID;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
@@ -32,7 +33,7 @@ public class MobileIdRestConnectorSessionIT {
 
     @Before
     public void setUp() {
-        connector = new MobileIdRestConnector(TEST_HOST_URL);
+        connector = new MobileIdRestConnector(DEMO_HOST_URL);
     }
 
     @Test
@@ -44,7 +45,8 @@ public class MobileIdRestConnectorSessionIT {
         assertThat(signatureResponse.getSessionID(), not(isEmptyOrNullString()));
 
         SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(signatureResponse.getSessionID());
-        SessionStatus sessionStatus = connector.getSessionStatus(sessionStatusRequest, SIGNATURE_SESSION_PATH);
+        SessionStatusPoller poller = new SessionStatusPoller(connector);
+        SessionStatus sessionStatus = poller.fetchFinalSessionStatus(sessionStatusRequest.getSessionID(), SIGNATURE_SESSION_PATH);
         assertSignaturePolled(sessionStatus);
     }
 
@@ -57,7 +59,8 @@ public class MobileIdRestConnectorSessionIT {
         assertThat(authenticationResponse.getSessionID(), not(isEmptyOrNullString()));
 
         SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(authenticationResponse.getSessionID());
-        SessionStatus sessionStatus = connector.getSessionStatus(sessionStatusRequest, AUTHENTICATION_SESSION_PATH);
+        SessionStatusPoller poller = new SessionStatusPoller(connector);
+        SessionStatus sessionStatus = poller.fetchFinalSessionStatus(sessionStatusRequest.getSessionID(), AUTHENTICATION_SESSION_PATH);
         assertAuthenticationPolled(sessionStatus);
     }
 

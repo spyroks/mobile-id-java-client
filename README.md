@@ -26,7 +26,7 @@ MID REST interface docs: https://github.com/SK-EID/MID
 ## Usage
 * [Configure the client](#configure-the-client)
 * [Configure client network connection](#configure-client-network-connection)
-* [Retrieve signing certificate](#retrieve-signing-certificate)
+* [Retrieve signing cert](#retrieve-signing-cert)
 * [Create a signature](#create-a-signature)
   - [Create a signature from existing hash](#create-a-signature-from-existing-hash)
   - [Create a signature from unhashed data](#create-a-signature-from-unhashed-data)
@@ -60,7 +60,7 @@ client.setPollingSleepTimeout(TimeUnit.SECONDS, 2L);
 
 > Check [Long polling](https://github.com/SK-EID/MID#334-long-polling) documentation chapter for more information.
 
-### Retrieve signing certificate
+### Retrieve signing cert
 ```java
 CertificateRequest request = client
         .createCertificateRequestBuilder()
@@ -70,10 +70,10 @@ CertificateRequest request = client
 
 CertificateChoiceResponse response = client.getMobileIdConnector().getCertificate(request);
 
-X509Certificate certificate = client.createMobileIdCertificate(response);
+X509Certificate cert = client.createMobileIdCertificate(response);
 ```
 
-> **Note** that the certificate retrieving process (before the actual singing) is necessary for the AdES-style digital signatures which require knowledge of the certificate beforehand.
+> **Note** that the cert retrieving process (before the actual singing) is necessary for the AdES-style digital signatures which require knowledge of the cert beforehand.
 
 ### Create a signature
 

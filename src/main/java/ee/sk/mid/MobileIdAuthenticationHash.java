@@ -2,18 +2,26 @@ package ee.sk.mid;
 
 import java.security.SecureRandom;
 
+import static ee.sk.mid.HashType.SHA256;
+
 public class MobileIdAuthenticationHash extends SignableHash {
 
-    public static MobileIdAuthenticationHash generateRandomHash() {
+    private static HashType DEFAULT_HASH_TYPE = SHA256;
+
+    public static MobileIdAuthenticationHash generateRandomHashOfDefaultType() {
+        return generateRandomHashOfType(DEFAULT_HASH_TYPE);
+    }
+
+    public static MobileIdAuthenticationHash generateRandomHashOfType(HashType hashType) {
         MobileIdAuthenticationHash mobileIdAuthenticationHash = new MobileIdAuthenticationHash();
-        byte[] generatedDigest = DigestCalculator.calculateDigest(getRandomBytes(), HashType.SHA512);
-        mobileIdAuthenticationHash.setHash(generatedDigest);
-        mobileIdAuthenticationHash.setHashType(HashType.SHA512);
+        byte[] randomHash = getRandomBytes(hashType.getLengthInBytes());
+        mobileIdAuthenticationHash.setHash(randomHash);
+        mobileIdAuthenticationHash.setHashType(hashType);
         return mobileIdAuthenticationHash;
     }
 
-    private static byte[] getRandomBytes() {
-        byte[] randomBytes = new byte[64];
+    private static byte[] getRandomBytes(int lengthInBytes) {
+        byte[] randomBytes = new byte[lengthInBytes];
         new SecureRandom().nextBytes(randomBytes);
         return randomBytes;
     }

@@ -5,14 +5,13 @@ import ee.sk.mid.mock.MobileIdConnectorSpy;
 import ee.sk.mid.rest.MobileIdConnector;
 import ee.sk.mid.rest.MobileIdRestConnector;
 import ee.sk.mid.rest.SessionStatusPoller;
+import ee.sk.mid.rest.dao.SessionSignature;
 import ee.sk.mid.rest.dao.SessionStatus;
 import ee.sk.mid.rest.dao.request.SignatureRequest;
 import ee.sk.mid.rest.dao.response.SignatureResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.createDummySignatureResponse;
-import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.createDummySignatureSessionStatus;
 import static ee.sk.mid.mock.SessionStatusDummy.*;
 import static ee.sk.mid.mock.TestData.*;
 
@@ -25,7 +24,7 @@ public class SignatureRequestBuilderTest {
     public void setUp() {
         connector = new MobileIdConnectorSpy();
         SessionStatusPoller sessionStatusPoller = new SessionStatusPoller(connector);
-        connector.setSignatureResponseToRespond(createDummySignatureResponse());
+        connector.setSignatureResponseToRespond(new SignatureResponse(SESSION_ID));
         connector.setSessionStatusToRespond(createDummySignatureSessionStatus());
         builder = new SignatureRequestBuilder(connector, sessionStatusPoller);
     }
@@ -246,6 +245,17 @@ public class SignatureRequestBuilderTest {
     public void sign_withSignatureMissingInResponse_shouldThrowException() {
         connector.getSessionStatusToRespond().setSignature(null);
         makeSignatureRequest(connector);
+    }
+
+    private static SessionStatus createDummySignatureSessionStatus() {
+        SessionStatus sessionStatus = new SessionStatus();
+        sessionStatus.setState("COMPLETE");
+        sessionStatus.setResult("OK");
+        SessionSignature signature = new SessionSignature();
+        signature.setValue("luvjsi1+1iLN9yfDFEh/BE8h");
+        signature.setAlgorithm("sha256WithRSAEncryption");
+        sessionStatus.setSignature(signature);
+        return sessionStatus;
     }
 
     private void makeSignatureRequest(MobileIdConnector connector) {

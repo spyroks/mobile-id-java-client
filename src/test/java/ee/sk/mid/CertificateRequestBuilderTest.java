@@ -12,7 +12,6 @@ import ee.sk.mid.rest.dao.response.CertificateChoiceResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.createDummyCertificateChoiceResponse;
 import static ee.sk.mid.mock.TestData.*;
 
 public class CertificateRequestBuilderTest {
@@ -129,5 +128,12 @@ public class CertificateRequestBuilderTest {
                 .build();
 
         client.createMobileIdCertificate(response);
+    }
+
+    private static CertificateChoiceResponse createDummyCertificateChoiceResponse() {
+        CertificateChoiceResponse certificateChoiceResponse = new CertificateChoiceResponse();
+        certificateChoiceResponse.setResult("OK");
+        certificateChoiceResponse.setCertificate(AUTH_CERTIFICATE_EE);
+        return certificateChoiceResponse;
     }
 }

@@ -14,9 +14,11 @@ import org.junit.experimental.categories.Category;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertAuthenticationPolled;
-import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertAuthenticationResponse;
 import static ee.sk.mid.mock.SessionStatusPollerDummy.pollSessionStatus;
 import static ee.sk.mid.mock.TestData.*;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 
 @Category({IntegrationTest.class})
 public class MobileIdRestConnectorAuthenticationIT {
@@ -36,7 +38,7 @@ public class MobileIdRestConnectorAuthenticationIT {
         assertCorrectAuthenticationRequestMade(request);
 
         AuthenticationResponse response = connector.authenticate(request);
-        assertAuthenticationResponse(response);
+        assertThat(response.getSessionID(), not(isEmptyOrNullString()));
 
         SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionID(), AUTHENTICATION_SESSION_PATH);
         assertAuthenticationPolled(sessionStatus);
@@ -49,7 +51,7 @@ public class MobileIdRestConnectorAuthenticationIT {
         assertCorrectAuthenticationRequestMade(request);
 
         AuthenticationResponse response = connector.authenticate(request);
-        assertAuthenticationResponse(response);
+        assertThat(response.getSessionID(), not(isEmptyOrNullString()));
 
         SessionStatus sessionStatus = pollSessionStatus(connector, response.getSessionID(), AUTHENTICATION_SESSION_PATH);
         assertAuthenticationPolled(sessionStatus);

@@ -12,7 +12,6 @@ import org.junit.experimental.categories.Category;
 
 import static ee.sk.mid.mock.MobileIdRestServiceRequestDummy.*;
 import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertAuthenticationPolled;
-import static ee.sk.mid.mock.MobileIdRestServiceResponseDummy.assertAuthenticationResponse;
 import static ee.sk.mid.mock.TestData.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -33,8 +32,12 @@ public class MobileIdAuthenticationIT {
 
     @Test
     public void authenticate() {
-        MobileIdAuthenticationHash authenticationHash = createRandomAuthenticationHash();
-        MobileIdAuthentication authentication = createAuthentication(client, VALID_PHONE, VALID_NAT_IDENTITY, authenticationHash);
+        MobileIdAuthenticationHash authenticationHash = MobileIdAuthenticationHash.generateRandomHashOfDefaultType();
+
+        assertThat(authenticationHash.calculateVerificationCode().length(), is(4));
+        assertThat(Integer.valueOf(authenticationHash.calculateVerificationCode()), allOf(greaterThanOrEqualTo(0), lessThanOrEqualTo(8192)));
+
+        MobileIdAuthentication authentication = createAndSendAuthentication(client, VALID_PHONE, VALID_NAT_IDENTITY, authenticationHash);
 
         assertAuthenticationCreated(authentication, authenticationHash.getHashInBase64());
 
@@ -46,7 +49,7 @@ public class MobileIdAuthenticationIT {
 
     @Test
     public void authenticate_withDisplayText() {
-        MobileIdAuthenticationHash authenticationHash = createRandomAuthenticationHash();
+        MobileIdAuthenticationHash authenticationHash = MobileIdAuthenticationHash.generateRandomHashOfDefaultType();
 
         AuthenticationRequest request = client
                 .createAuthenticationRequestBuilder()
@@ -58,7 +61,7 @@ public class MobileIdAuthenticationIT {
                 .build();
 
         AuthenticationResponse response = client.getMobileIdConnector().authenticate(request);
-        assertAuthenticationResponse(response);
+        assertThat(response.getSessionID(), not(isEmptyOrNullString()));
 
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), AUTHENTICATION_SESSION_PATH);
         assertAuthenticationPolled(sessionStatus);

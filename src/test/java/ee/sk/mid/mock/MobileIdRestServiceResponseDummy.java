@@ -13,60 +13,6 @@ import static org.junit.Assert.assertThat;
 
 public class MobileIdRestServiceResponseDummy {
 
-    public static CertificateChoiceResponse createDummyCertificateChoiceResponse() {
-        CertificateChoiceResponse certificateChoiceResponse = new CertificateChoiceResponse();
-        certificateChoiceResponse.setResult("OK");
-        certificateChoiceResponse.setCert(AUTH_CERTIFICATE_EE);
-        return certificateChoiceResponse;
-    }
-
-    public static SignatureResponse createDummySignatureResponse() {
-        return new SignatureResponse(SESSION_ID);
-    }
-
-    public static SessionStatus createDummySignatureSessionStatus() {
-        SessionStatus sessionStatus = new SessionStatus();
-        sessionStatus.setState("COMPLETE");
-        sessionStatus.setResult("OK");
-        SessionSignature signature = new SessionSignature();
-        signature.setValue("luvjsi1+1iLN9yfDFEh/BE8h");
-        signature.setAlgorithm("sha256WithRSAEncryption");
-        sessionStatus.setSignature(signature);
-        return sessionStatus;
-    }
-
-    public static AuthenticationResponse createDummyAuthenticationResponse() {
-        return new AuthenticationResponse(SESSION_ID);
-    }
-
-    public static SessionStatus createDummyAuthenticationSessionStatus() {
-        SessionSignature signature = new SessionSignature();
-        signature.setValue("c2FtcGxlIHNpZ25hdHVyZQ0K");
-        signature.setAlgorithm("sha512WithRSAEncryption");
-        SessionStatus sessionStatus = new SessionStatus();
-        sessionStatus.setState("COMPLETE");
-        sessionStatus.setResult("OK");
-        sessionStatus.setSignature(signature);
-        sessionStatus.setCert(AUTH_CERTIFICATE_EE);
-        return sessionStatus;
-    }
-
-    public static void assertCertificateChoiceResponse(CertificateChoiceResponse response) {
-        assertThat(response, is(notNullValue()));
-        assertThat(response.getResult(), is("OK"));
-        assertThat(response.getCert(), not(isEmptyOrNullString()));
-    }
-
-    public static void assertSignatureResponse(SignatureResponse response) {
-        assertThat(response, is(notNullValue()));
-        assertThat(response.getSessionID(), not(isEmptyOrNullString()));
-    }
-
-    public static void assertAuthenticationResponse(AuthenticationResponse response) {
-        assertThat(response, is(notNullValue()));
-        assertThat(response.getSessionID(), not(isEmptyOrNullString()));
-    }
-
     public static void assertSignaturePolled(SessionStatus sessionStatus) {
         assertSessionStatusPolled(sessionStatus);
     }

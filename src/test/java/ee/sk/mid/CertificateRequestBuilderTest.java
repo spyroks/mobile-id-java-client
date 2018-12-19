@@ -133,7 +133,7 @@ public class CertificateRequestBuilderTest {
     private static CertificateChoiceResponse createDummyCertificateChoiceResponse() {
         CertificateChoiceResponse certificateChoiceResponse = new CertificateChoiceResponse();
         certificateChoiceResponse.setResult("OK");
-        certificateChoiceResponse.setCertificate(AUTH_CERTIFICATE_EE);
+        certificateChoiceResponse.setCert(AUTH_CERTIFICATE_EE);
         return certificateChoiceResponse;
     }
 }

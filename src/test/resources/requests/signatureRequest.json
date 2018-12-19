@@ -1,8 +1,8 @@
 {
-  "relyingPartyUUID": "e8189051-5634-4fbe-a6e8-fe1b9a9ef445",
-  "relyingPartyName": "ToomasBank",
-  "phoneNumber": "+37200000433",
-  "nationalIdentityNumber": "14212128021",
+  "relyingPartyUUID": "00000000-0000-0000-0000-000000000000",
+  "relyingPartyName": "DEMO",
+  "phoneNumber": "+37200000766",
+  "nationalIdentityNumber": "60001019906",
   "hash": "AE7S1QxYjqtVv+Tgukv2bMMi9gDCbc9ca2vy/iIG6ug=",
   "hashType": "SHA256",
   "language": "EST"

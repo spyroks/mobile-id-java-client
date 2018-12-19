@@ -1,9 +1,6 @@
 package ee.sk.mid;
 
-import ee.sk.mid.exception.CertificateNotPresentException;
-import ee.sk.mid.exception.ExpiredException;
-import ee.sk.mid.exception.MobileIdException;
-import ee.sk.mid.exception.TechnicalErrorException;
+import ee.sk.mid.exception.*;
 import ee.sk.mid.rest.MobileIdConnector;
 import ee.sk.mid.rest.MobileIdRestConnector;
 import ee.sk.mid.rest.SessionStatusPoller;
@@ -34,16 +31,15 @@ public class MobileIdClient {
     private SessionStatusPoller sessionStatusPoller;
     private MobileIdRequestBuilder builder;
 
+    private MobileIdClient() {
+    }
+
     public void setRelyingPartyUUID(String relyingPartyUUID) {
         this.relyingPartyUUID = relyingPartyUUID;
     }
 
     public void setRelyingPartyName(String relyingPartyName) {
         this.relyingPartyName = relyingPartyName;
-    }
-
-    public void setHostUrl(String hostUrl) {
-        this.hostUrl = hostUrl;
     }
 
     public void setNetworkConnectionConfig(ClientConfig networkConnectionConfig) {
@@ -104,7 +100,7 @@ public class MobileIdClient {
     public X509Certificate createMobileIdCertificate(CertificateChoiceResponse certificateChoiceResponse) {
         validateCertificateResult(certificateChoiceResponse.getResult());
         validateCertificateResponse(certificateChoiceResponse);
-        return CertificateParser.parseX509Certificate(certificateChoiceResponse.getCertificate());
+        return CertificateParser.parseX509Certificate(certificateChoiceResponse.getCert());
     }
 
     public MobileIdSignature createMobileIdSignature(SessionStatus sessionStatus) {
@@ -147,7 +143,7 @@ public class MobileIdClient {
     }
 
     private void validateCertificateResponse(CertificateChoiceResponse certificateChoiceResponse) throws TechnicalErrorException {
-        if (certificateChoiceResponse.getCertificate() == null || isBlank(certificateChoiceResponse.getCertificate())) {
+        if (certificateChoiceResponse.getCert() == null || isBlank(certificateChoiceResponse.getCert())) {
             logger.error("Certificate was not present in the session status response");
             throw new TechnicalErrorException("Certificate was not present in the session status response");
         }
@@ -157,6 +153,34 @@ public class MobileIdClient {
         if (sessionStatus.getSignature() == null || isBlank(sessionStatus.getSignature().getValue())) {
             logger.error("Signature was not present in the response");
             throw new TechnicalErrorException("Signature was not present in the response");
+        }
+    }
+
+    public static MobileIdClientBuilder createMobileIdClientBuilder() {
+        return new MobileIdClient().new MobileIdClientBuilder();
+    }
+
+    public class MobileIdClientBuilder {
+
+        private MobileIdClientBuilder() {}
+
+        public MobileIdClientBuilder withRelyingPartyUUID(String relyingPartyUUID) {
+            MobileIdClient.this.relyingPartyUUID = relyingPartyUUID;
+            return this;
+        }
+
+        public MobileIdClientBuilder withRelyingPartyName(String relyingPartyName) {
+            MobileIdClient.this.relyingPartyName = relyingPartyName;
+            return this;
+        }
+
+        public MobileIdClientBuilder withHostUrl(String hostUrl) {
+            MobileIdClient.this.hostUrl = hostUrl;
+            return this;
+        }
+
+        public MobileIdClient build() {
+            return MobileIdClient.this;
         }
     }
 }

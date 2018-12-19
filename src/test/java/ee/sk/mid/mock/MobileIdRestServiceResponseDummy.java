@@ -16,7 +16,7 @@ public class MobileIdRestServiceResponseDummy {
     public static CertificateChoiceResponse createDummyCertificateChoiceResponse() {
         CertificateChoiceResponse certificateChoiceResponse = new CertificateChoiceResponse();
         certificateChoiceResponse.setResult("OK");
-        certificateChoiceResponse.setCertificate(AUTH_CERTIFICATE_EE);
+        certificateChoiceResponse.setCert(AUTH_CERTIFICATE_EE);
         return certificateChoiceResponse;
     }
 
@@ -54,7 +54,7 @@ public class MobileIdRestServiceResponseDummy {
     public static void assertCertificateChoiceResponse(CertificateChoiceResponse response) {
         assertThat(response, is(notNullValue()));
         assertThat(response.getResult(), is("OK"));
-        assertThat(response.getCertificate(), not(isEmptyOrNullString()));
+        assertThat(response.getCert(), not(isEmptyOrNullString()));
     }
 
     public static void assertSignatureResponse(SignatureResponse response) {

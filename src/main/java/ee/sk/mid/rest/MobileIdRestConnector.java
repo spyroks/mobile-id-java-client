@@ -128,7 +128,6 @@ public class MobileIdRestConnector implements MobileIdConnector {
                 .register(new LoggingFilter())
                 .target(uri)
                 .request()
-                .header("X-Forwarded-For", "192.10.11.12")
                 .accept(APPLICATION_JSON_TYPE);
     }
 }

@@ -27,7 +27,7 @@ public class MobileIdRestConnectorAuthenticationIT {
 
     @Before
     public void setUp() {
-        connector = new MobileIdRestConnector(TEST_HOST_URL);
+        connector = new MobileIdRestConnector(DEMO_HOST_URL);
     }
 
     @Test

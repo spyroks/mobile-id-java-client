@@ -46,7 +46,7 @@ public class MobileIdRestConnectorCertificateTest {
 
         assertThat(response, is(notNullValue()));
         assertThat(response.getResult(), is("OK"));
-        assertThat(response.getCertificate(), not(isEmptyOrNullString()));
+        assertThat(response.getCert(), not(isEmptyOrNullString()));
     }
 
     @Test(expected = ResponseRetrievingException.class)

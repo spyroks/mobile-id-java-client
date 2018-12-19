@@ -35,10 +35,11 @@ public class MobileIdClientSignatureTest {
 
     @Before
     public void setUp() throws IOException {
-        client = new MobileIdClient();
-        client.setRelyingPartyUUID(VALID_RELYING_PARTY_UUID);
-        client.setRelyingPartyName(VALID_RELYING_PARTY_NAME);
-        client.setHostUrl(LOCALHOST_URL);
+        client = MobileIdClient.createMobileIdClientBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(LOCALHOST_URL)
+                .build();
         stubRequestWithResponse("/mid-api/signature", "requests/signatureRequest.json", "responses/signatureResponse.json");
         stubRequestWithResponse("/mid-api/signature", "requests/signatureRequestWithDisplayText.json", "responses/signatureResponse.json");
         stubRequestWithResponse("/mid-api/signature/session/2c52caf4-13b0-41c4-bdc6-aa268403cc00", "responses/sessionStatusForSuccessfulSigningRequest.json");

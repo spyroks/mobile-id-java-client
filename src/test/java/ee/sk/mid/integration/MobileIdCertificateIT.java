@@ -3,7 +3,6 @@ package ee.sk.mid.integration;
 import ee.sk.mid.MobileIdClient;
 import ee.sk.mid.categories.IntegrationTest;
 import ee.sk.mid.exception.CertificateNotPresentException;
-import ee.sk.mid.exception.ExpiredException;
 import ee.sk.mid.exception.ParameterMissingException;
 import ee.sk.mid.exception.UnauthorizedException;
 import org.junit.Before;
@@ -22,10 +21,11 @@ public class MobileIdCertificateIT {
 
     @Before
     public void setUp() {
-        client = new MobileIdClient();
-        client.setRelyingPartyUUID(VALID_RELYING_PARTY_UUID);
-        client.setRelyingPartyName(VALID_RELYING_PARTY_NAME);
-        client.setHostUrl(TEST_HOST_URL);
+        client = MobileIdClient.createMobileIdClientBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(DEMO_HOST_URL)
+                .build();
     }
 
     @Test
@@ -38,11 +38,6 @@ public class MobileIdCertificateIT {
     @Test(expected = CertificateNotPresentException.class)
     public void getCertificate_whenCertificateNotPresent_shouldThrowException() {
         makeCertificateRequest(client, VALID_PHONE_NOT_MID_CLIENT, VALID_NAT_IDENTITY_NOT_MID_CLIENT);
-    }
-
-    @Test(expected = ExpiredException.class)
-    public void getCertificate_whenInactiveCertificateFound_shouldThrowException() {
-        makeCertificateRequest(client, VALID_PHONE_NOT_ACTIVE_CERTIFICATE, VALID_NAT_IDENTITY_NOT_ACTIVE_CERTIFICATE);
     }
 
     @Test(expected = ParameterMissingException.class)

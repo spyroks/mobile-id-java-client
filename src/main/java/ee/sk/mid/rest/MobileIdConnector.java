@@ -19,4 +19,8 @@ public interface MobileIdConnector {
     AuthenticationResponse authenticate(AuthenticationRequest request);
 
     SessionStatus getSessionStatus(SessionStatusRequest request, String path) throws SessionNotFoundException;
+
+    SessionStatus getAuthenticationSessionStatus(SessionStatusRequest request) throws SessionNotFoundException;
+
+    SessionStatus getSignatureSessionStatus(SessionStatusRequest request) throws SessionNotFoundException;
 }

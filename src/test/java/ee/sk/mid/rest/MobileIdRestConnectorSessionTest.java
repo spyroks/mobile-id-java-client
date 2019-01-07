@@ -37,7 +37,7 @@ public class MobileIdRestConnectorSessionTest {
     public void getNotExistingSessionStatus() {
         stubNotFoundResponse("/mid-api/authentication/session/de305d54-75b4-431b-adb2-eb6b9e546016");
         SessionStatusRequest request = new SessionStatusRequest("de305d54-75b4-431b-adb2-eb6b9e546016");
-        connector.getSessionStatus(request, AUTHENTICATION_SESSION_PATH);
+        connector.getAuthenticationSessionStatus(request);
     }
 
     @Test
@@ -123,6 +123,6 @@ public class MobileIdRestConnectorSessionTest {
     private SessionStatus getStubbedSessionStatusWithResponse(String responseFile) throws IOException {
         stubRequestWithResponse("/mid-api/authentication/session/de305d54-75b4-431b-adb2-eb6b9e546016", responseFile);
         SessionStatusRequest request = new SessionStatusRequest("de305d54-75b4-431b-adb2-eb6b9e546016");
-        return connector.getSessionStatus(request, AUTHENTICATION_SESSION_PATH);
+        return connector.getAuthenticationSessionStatus(request);
     }
 }

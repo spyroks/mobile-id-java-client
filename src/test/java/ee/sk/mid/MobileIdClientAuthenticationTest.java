@@ -17,7 +17,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -40,7 +39,7 @@ public class MobileIdClientAuthenticationTest {
 
     @Before
     public void setUp() throws IOException {
-        client = MobileIdClient.createMobileIdClientBuilder()
+        client = MobileIdClient.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withHostUrl(LOCALHOST_URL)
@@ -76,8 +75,9 @@ public class MobileIdClientAuthenticationTest {
         SignableData dataToSign = new SignableData(DATA_TO_SIGN);
         dataToSign.setHashType(HashType.SHA512);
 
-        AuthenticationRequest request = client
-                .createAuthenticationRequestBuilder()
+        AuthenticationRequest request = AuthenticationRequest.newBuilder()
+                .withRelyingPartyUUID(client.getRelyingPartyUUID())
+                .withRelyingPartyName(client.getRelyingPartyName())
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withSignableData(dataToSign)
@@ -92,7 +92,7 @@ public class MobileIdClientAuthenticationTest {
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), AUTHENTICATION_SESSION_PATH);
         assertAuthenticationPolled(sessionStatus);
 
-        MobileIdAuthentication authentication = client.createMobileIdAuthentication(sessionStatus);
+        MobileIdAuthentication authentication = client.createMobileIdAuthentication(sessionStatus, dataToSign.calculateHashInBase64(), dataToSign.getHashType());
 
         assertThat(authentication, is(notNullValue()));
         assertThat(authentication.getResult(), not(isEmptyOrNullString()));
@@ -113,8 +113,9 @@ public class MobileIdClientAuthenticationTest {
         MobileIdAuthenticationHash authenticationHash = createAuthenticationSHA256Hash();
         assertThat(authenticationHash.calculateVerificationCode(), is("0108"));
 
-        AuthenticationRequest request = client
-                .createAuthenticationRequestBuilder()
+        AuthenticationRequest request = AuthenticationRequest.newBuilder()
+                .withRelyingPartyUUID(client.getRelyingPartyUUID())
+                .withRelyingPartyName(client.getRelyingPartyName())
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withAuthenticationHash(authenticationHash)
@@ -130,7 +131,7 @@ public class MobileIdClientAuthenticationTest {
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), AUTHENTICATION_SESSION_PATH);
         assertAuthenticationPolled(sessionStatus);
 
-        MobileIdAuthentication authentication = client.createMobileIdAuthentication(sessionStatus);
+        MobileIdAuthentication authentication = client.createMobileIdAuthentication(sessionStatus, authenticationHash.getHashInBase64(), authenticationHash.getHashType());
         assertAuthenticationCreated(authentication, authenticationHash.getHashInBase64());
     }
 
@@ -222,8 +223,15 @@ public class MobileIdClientAuthenticationTest {
     public void setPollingSleepTimeoutForAuthentication() throws IOException {
         stubSessionStatusWithState("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusRunning.json", STARTED, "COMPLETE");
         stubSessionStatusWithState("/mid-api/authentication/session/1dcc1600-29a6-4e95-a95c-d69b31febcfb", "responses/sessionStatusForSuccessfulAuthenticationRequest.json", "COMPLETE", STARTED);
-        client.setPollingSleepTimeout(TimeUnit.SECONDS, 2L);
-        long duration = measureAuthenticationDuration();
+
+        MobileIdClient client = MobileIdClient.newBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(LOCALHOST_URL)
+                .withPollingSleepTimeoutSeconds(2)
+                .build();
+
+        long duration = measureAuthenticationDuration(client);
         assertThat("Duration is " + duration, duration > 2000L, is(true));
         assertThat("Duration is " + duration, duration < 3000L, is(true));
     }
@@ -236,7 +244,14 @@ public class MobileIdClientAuthenticationTest {
         Map<String, String> headersToAdd = new HashMap<>();
         headersToAdd.put(headerName, headerValue);
         ClientConfig clientConfig = getClientConfigWithCustomRequestHeaders(headersToAdd);
-        client.setNetworkConnectionConfig(clientConfig);
+
+        MobileIdClient client = MobileIdClient.newBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(LOCALHOST_URL)
+                .withNetworkConnectionConfig(clientConfig)
+                .build();
+
         makeValidAuthenticationRequest(client);
 
         verify(postRequestedFor(urlEqualTo("/mid-api/authentication"))
@@ -256,11 +271,18 @@ public class MobileIdClientAuthenticationTest {
         when(status.getState()).thenReturn(mock);
         MobileIdConnector connector = mock(MobileIdConnector.class);
         when(connector.getSessionStatus(null, null)).thenReturn(status);
-        client.setMobileIdConnector(connector);
+
+        MobileIdClient client = MobileIdClient.newBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(LOCALHOST_URL)
+                .withMobileIdConnector(connector)
+                .build();
+
         assertThat(client.getMobileIdConnector().getSessionStatus(null, null).getState(), is(mock));
     }
 
-    private long measureAuthenticationDuration() {
+    private long measureAuthenticationDuration(MobileIdClient client) {
         long startTime = System.currentTimeMillis();
         MobileIdAuthenticationHash authenticationHash = createAuthenticationSHA512Hash();
         MobileIdAuthentication authentication = createAndSendAuthentication(client, VALID_PHONE, VALID_NAT_IDENTITY, authenticationHash);

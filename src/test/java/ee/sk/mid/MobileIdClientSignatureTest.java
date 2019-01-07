@@ -14,7 +14,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -35,7 +34,7 @@ public class MobileIdClientSignatureTest {
 
     @Before
     public void setUp() throws IOException {
-        client = MobileIdClient.createMobileIdClientBuilder()
+        client = MobileIdClient.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withHostUrl(LOCALHOST_URL)
@@ -58,13 +57,14 @@ public class MobileIdClientSignatureTest {
         hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
         hashToSign.setHashType(HashType.SHA256);
 
-        SignatureRequest request = client
-                .createSignatureRequestBuilder()
-                .withPhoneNumber(VALID_PHONE)
-                .withNationalIdentityNumber(VALID_NAT_IDENTITY)
-                .withSignableHash(hashToSign)
-                .withLanguage(Language.EST)
-                .build();
+        SignatureRequest request = SignatureRequest.newBuilder()
+            .withRelyingPartyUUID(client.getRelyingPartyUUID())
+            .withRelyingPartyName(client.getRelyingPartyName())
+            .withPhoneNumber(VALID_PHONE)
+            .withNationalIdentityNumber(VALID_NAT_IDENTITY)
+            .withSignableHash(hashToSign)
+            .withLanguage(Language.EST)
+            .build();
 
         assertCorrectSignatureRequestMade(request);
 
@@ -83,8 +83,9 @@ public class MobileIdClientSignatureTest {
         SignableData dataToSign = new SignableData(DATA_TO_SIGN);
         dataToSign.setHashType(HashType.SHA256);
 
-        SignatureRequest request = client
-                .createSignatureRequestBuilder()
+        SignatureRequest request = SignatureRequest.newBuilder()
+                .withRelyingPartyUUID(client.getRelyingPartyUUID())
+                .withRelyingPartyName(client.getRelyingPartyName())
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withSignableData(dataToSign)
@@ -112,8 +113,9 @@ public class MobileIdClientSignatureTest {
 
         assertThat(hashToSign.calculateVerificationCode(), is("0108"));
 
-        SignatureRequest request = client
-                .createSignatureRequestBuilder()
+        SignatureRequest request = SignatureRequest.newBuilder()
+                .withRelyingPartyUUID(client.getRelyingPartyUUID())
+                .withRelyingPartyName(client.getRelyingPartyName())
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withSignableHash(hashToSign)
@@ -222,8 +224,15 @@ public class MobileIdClientSignatureTest {
     public void setPollingSleepTimeoutForSignatureCreation() throws Exception {
         stubSessionStatusWithState("/mid-api/signature/session/2c52caf4-13b0-41c4-bdc6-aa268403cc00", "responses/sessionStatusRunning.json", STARTED, "COMPLETE");
         stubSessionStatusWithState("/mid-api/signature/session/2c52caf4-13b0-41c4-bdc6-aa268403cc00", "responses/sessionStatusForSuccessfulSigningRequest.json", "COMPLETE", STARTED);
-        client.setPollingSleepTimeout(TimeUnit.SECONDS, 2L);
-        long duration = measureSigningDuration();
+
+        MobileIdClient client = MobileIdClient.newBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(LOCALHOST_URL)
+                .withPollingSleepTimeoutSeconds(2)
+                .build();
+
+        long duration = measureSigningDuration(client);
         assertThat("Duration is " + duration, duration > 2000L, is(true));
         assertThat("Duration is " + duration, duration < 3000L, is(true));
     }
@@ -236,14 +245,21 @@ public class MobileIdClientSignatureTest {
         Map<String, String> headers = new HashMap<>();
         headers.put(headerName, headerValue);
         ClientConfig clientConfig = getClientConfigWithCustomRequestHeaders(headers);
-        client.setNetworkConnectionConfig(clientConfig);
+
+        MobileIdClient client = MobileIdClient.newBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(LOCALHOST_URL)
+                .withNetworkConnectionConfig(clientConfig)
+                .build();
+
         makeValidSignatureRequest(client);
 
         verify(postRequestedFor(urlEqualTo("/mid-api/signature"))
                 .withHeader(headerName, equalTo(headerValue)));
     }
 
-    private long measureSigningDuration() {
+    private long measureSigningDuration(MobileIdClient client) {
         long startTime = System.currentTimeMillis();
         MobileIdSignature signature = createValidSignature(client);
         assertSignatureCreated(signature);

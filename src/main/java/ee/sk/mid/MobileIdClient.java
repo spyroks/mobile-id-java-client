@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.security.cert.X509Certificate;
-import java.util.concurrent.TimeUnit;
 
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -25,76 +24,48 @@ public class MobileIdClient {
     private String relyingPartyName;
     private String hostUrl;
     private ClientConfig networkConnectionConfig;
-    private TimeUnit pollingSleepTimeUnit = TimeUnit.SECONDS;
-    private long pollingSleepTimeout = 1L;
+    private int pollingSleepTimeoutSeconds;
     private MobileIdConnector connector;
     private SessionStatusPoller sessionStatusPoller;
-    private MobileIdRequestBuilder builder;
 
-    private MobileIdClient() {
+    private MobileIdClient(MobileIdClientBuilder builder) {
+        this.relyingPartyUUID = builder.relyingPartyUUID;
+        this.relyingPartyName = builder.relyingPartyName;
+        this.hostUrl = builder.hostUrl;
+        this.networkConnectionConfig = builder.networkConnectionConfig;
+        this.pollingSleepTimeoutSeconds = builder.pollingSleepTimeoutSeconds;
+        this.connector = builder.connector;
+
+        this.createSessionStatusPoller();
     }
 
-    public void setRelyingPartyUUID(String relyingPartyUUID) {
-        this.relyingPartyUUID = relyingPartyUUID;
-    }
-
-    public void setRelyingPartyName(String relyingPartyName) {
-        this.relyingPartyName = relyingPartyName;
-    }
-
-    public void setNetworkConnectionConfig(ClientConfig networkConnectionConfig) {
-        this.networkConnectionConfig = networkConnectionConfig;
-    }
-
-    public void setPollingSleepTimeout(TimeUnit unit, long timeout) {
-        pollingSleepTimeUnit = unit;
-        pollingSleepTimeout = timeout;
-    }
 
     public MobileIdConnector getMobileIdConnector() {
         if (null == connector) {
-            setMobileIdConnector(new MobileIdRestConnector(hostUrl, networkConnectionConfig));
+            this.connector = new MobileIdRestConnector(hostUrl, networkConnectionConfig);
         }
         return connector;
-    }
-
-    public void setMobileIdConnector(MobileIdConnector mobileIdConnector) {
-        this.connector = mobileIdConnector;
     }
 
     public SessionStatusPoller getSessionStatusPoller() {
         return sessionStatusPoller;
     }
 
-    public CertificateRequestBuilder createCertificateRequestBuilder() {
-        builder = new CertificateRequestBuilder(getMobileIdConnector());
-        populateBuilderFields(builder);
-        return (CertificateRequestBuilder) builder;
+
+    public String getRelyingPartyUUID() {
+        return relyingPartyUUID;
     }
 
-    public SignatureRequestBuilder createSignatureRequestBuilder() {
-        sessionStatusPoller = createSessionStatusPoller(getMobileIdConnector());
-        builder = new SignatureRequestBuilder(getMobileIdConnector(), sessionStatusPoller);
-        populateBuilderFields(builder);
-        return (SignatureRequestBuilder) builder;
+    public String getRelyingPartyName() {
+        return relyingPartyName;
     }
 
-    public AuthenticationRequestBuilder createAuthenticationRequestBuilder() {
-        sessionStatusPoller = createSessionStatusPoller(getMobileIdConnector());
-        builder = new AuthenticationRequestBuilder(getMobileIdConnector(), sessionStatusPoller);
-        populateBuilderFields(builder);
-        return (AuthenticationRequestBuilder) builder;
-    }
 
-    private SessionStatusPoller createSessionStatusPoller(MobileIdConnector connector) {
-        SessionStatusPoller sessionStatusPoller = new SessionStatusPoller(connector);
-        sessionStatusPoller.setPollingSleepTime(pollingSleepTimeUnit, pollingSleepTimeout);
+    private SessionStatusPoller createSessionStatusPoller() {
+        SessionStatusPoller sessionStatusPoller = new SessionStatusPoller(this.getMobileIdConnector());
+        sessionStatusPoller.setPollingSleepTimeSeconds(pollingSleepTimeoutSeconds);
+        this.sessionStatusPoller = sessionStatusPoller;
         return sessionStatusPoller;
-    }
-
-    private void populateBuilderFields(MobileIdRequestBuilder builder) {
-        builder.withRelyingPartyUUID(relyingPartyUUID);
-        builder.withRelyingPartyName(relyingPartyName);
     }
 
     public X509Certificate createMobileIdCertificate(CertificateChoiceResponse certificateChoiceResponse) {
@@ -107,26 +78,25 @@ public class MobileIdClient {
         validateResponse(sessionStatus);
         SessionSignature sessionSignature = sessionStatus.getSignature();
 
-        MobileIdSignature signature = new MobileIdSignature();
-        signature.setValueInBase64(sessionSignature.getValue());
-        signature.setAlgorithmName(sessionSignature.getAlgorithm());
-        return signature;
+        return MobileIdSignature.newBuilder()
+                .withValueInBase64(sessionSignature.getValue())
+                .withAlgorithmName(sessionSignature.getAlgorithm())
+                .build();
     }
 
-    public MobileIdAuthentication createMobileIdAuthentication(SessionStatus sessionStatus) {
+    public MobileIdAuthentication createMobileIdAuthentication(SessionStatus sessionStatus, String hashInBase64, HashType hashType) {
         validateResponse(sessionStatus);
-        String sessionResult = sessionStatus.getResult();
         SessionSignature sessionSignature = sessionStatus.getSignature();
         X509Certificate certificate = CertificateParser.parseX509Certificate(sessionStatus.getCert());
 
-        MobileIdAuthentication authentication = new MobileIdAuthentication();
-        authentication.setResult(sessionResult);
-        authentication.setSignatureValueInBase64(sessionSignature.getValue());
-        authentication.setAlgorithmName(sessionSignature.getAlgorithm());
-        authentication.setCertificate(certificate);
-        authentication.setSignedHashInBase64(builder.getHashInBase64());
-        authentication.setHashType(builder.getHashType());
-        return authentication;
+        return MobileIdAuthentication.newBuilder()
+            .withResult(sessionStatus.getResult())
+            .withSignatureValueInBase64(sessionSignature.getValue())
+            .withAlgorithmName(sessionSignature.getAlgorithm())
+            .withCertificate(certificate)
+            .withSignedHashInBase64(hashInBase64)
+            .withHashType(hashType)
+            .build();
     }
 
     private void validateCertificateResult(String result) throws MobileIdException {
@@ -156,31 +126,52 @@ public class MobileIdClient {
         }
     }
 
-    public static MobileIdClientBuilder createMobileIdClientBuilder() {
-        return new MobileIdClient().new MobileIdClientBuilder();
+    public static MobileIdClientBuilder newBuilder() {
+        return new MobileIdClientBuilder();
     }
 
-    public class MobileIdClientBuilder {
+    public static class MobileIdClientBuilder {
+        private String relyingPartyUUID;
+        private String relyingPartyName;
+        private String hostUrl;
+        private ClientConfig networkConnectionConfig;
+        private int pollingSleepTimeoutSeconds = 1;
+        private MobileIdConnector connector;
 
         private MobileIdClientBuilder() {}
 
         public MobileIdClientBuilder withRelyingPartyUUID(String relyingPartyUUID) {
-            MobileIdClient.this.relyingPartyUUID = relyingPartyUUID;
+            this.relyingPartyUUID = relyingPartyUUID;
             return this;
         }
 
         public MobileIdClientBuilder withRelyingPartyName(String relyingPartyName) {
-            MobileIdClient.this.relyingPartyName = relyingPartyName;
+            this.relyingPartyName = relyingPartyName;
             return this;
         }
 
         public MobileIdClientBuilder withHostUrl(String hostUrl) {
-            MobileIdClient.this.hostUrl = hostUrl;
+            this.hostUrl = hostUrl;
+            return this;
+        }
+
+        public MobileIdClientBuilder withNetworkConnectionConfig(ClientConfig networkConnectionConfig) {
+            this.networkConnectionConfig = networkConnectionConfig;
+            return this;
+        }
+
+        public MobileIdClientBuilder withPollingSleepTimeoutSeconds(int pollingSleepTimeoutSeconds) {
+            this.pollingSleepTimeoutSeconds = pollingSleepTimeoutSeconds;
+            return this;
+        }
+
+        public MobileIdClientBuilder withMobileIdConnector(MobileIdConnector mobileIdConnector) {
+            this.connector = mobileIdConnector;
             return this;
         }
 
         public MobileIdClient build() {
-            return MobileIdClient.this;
+            return new MobileIdClient(this);
         }
     }
 }

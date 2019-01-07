@@ -4,11 +4,10 @@
 [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
 
 # Mobile-ID Java client
-Mobile-ID Java client is a Java library that can be used for easy integration of the [Mobile-ID](https://www.id.ee/index.php?id=36809) solutions to information systems or e-services.
+Mobile-ID Java client is a Java library that can be used for easy integration with MID REST interface (https://github.com/SK-EID/MID) of the [Mobile-ID](https://www.id.ee/index.php?id=36809).
 
 * [Features](#features)
 * [Requirements](#requirements)
-* [Documentation](#documentation)
 * [Usage](#usage)
 * [License](#license)
 
@@ -18,12 +17,11 @@ Mobile-ID Java client is a Java library that can be used for easy integration of
 
 ## Requirements
 * Java 1.7
-* Internet access to Mobile-ID demo environment
+* Internet access to Mobile-ID demo environment (to run integration tests)
 
-## Documentation
-MID REST interface docs: https://github.com/SK-EID/MID
 
 ## Usage
+* [Running against Demo environment](#running-against-demo-environment)
 * [Configure the client](#configure-the-client)
 * [Configure client network connection](#configure-client-network-connection)
 * [Retrieve signing certificate](#retrieve-signing-certificate)
@@ -34,17 +32,27 @@ MID REST interface docs: https://github.com/SK-EID/MID
   - [Get an authentication response](#get-an-authentication-response)
   - [Verify an authentication response](#verify-an-authentication-response)
 
+### Running against Demo environment
+
+SK ID Solutions AS hosts a public demo environment that you can run your tests against.
+If you have a production Mobile ID then you can even add your own phone to this environment.
+[More info and tests numbers](https://github.com/SK-EID/dds-documentation/wiki/Test-number-for-automated-testing-in-DEMO).
+
+The [integration tests](tree/master/src/test/java/ee/sk/mid/integration)
+in this library have been configured to run against this Demo environment.
+
+
+
 ### Configure the client
 ```java
 MobileIdClient client = new MobileIdClient();
-client.setRelyingPartyUUID("e8189051-5634-4fbe-a6e8-fe1b9a9ef445");
-client.setRelyingPartyName("ToomasBank");
-client.setHostUrl("http://sk-mid-test2:9000");
+client.setRelyingPartyUUID("00000000-0000-0000-0000-000000000000");
+client.setRelyingPartyName("DEMO");
+client.setHostUrl("https://tsp.demo.sk.ee");
 ```
 
-> **Note** that these values are test environment specific.
+> **Note** that these values are demo environment specific. In production use the values provided by Application Provider.
 
-> UUID, name and host URL of the relying party – previously agreed with Application Provider and DigiDocService operator.
 
 ### Configure client network connection
 Under the hood operations as signing and authentication consist of 2 request steps:
@@ -52,20 +60,20 @@ Under the hood operations as signing and authentication consist of 2 request ste
 * Initiation request
 * Session status request
 
-Session status request by default is a long poll method, meaning it might not return until a timeout expires. The caller can tune the request parameters inside the bounds set by a service operator by using the `setPollingSleepTimeout(TimeUnit, long)`:
+Session status request by default is a long poll method, meaning it might not return until a timeout expires.
+The caller can tune the request parameters inside the bounds set by a service operator by using the `setPollingSleepTimeout(TimeUnit, long)`:
 
 ```java
-client.setPollingSleepTimeout(TimeUnit.SECONDS, 2L);
+client.setLongPollingMaxTimeoutSeconds(2);
 ```
 
 > Check [Long polling](https://github.com/SK-EID/MID#334-long-polling) documentation chapter for more information.
 
 ### Retrieve signing certificate
 ```java
-CertificateRequest request = client
-        .createCertificateRequestBuilder()
-        .withPhoneNumber("+37200000433")
-        .withNationalIdentityNumber("14212128021")
+CertificateRequest request = CertificateRequest.newBuilder()
+        .withPhoneNumber("+37060000666")
+        .withNationalIdentityNumber("50001018865")
         .build();
 
 CertificateChoiceResponse response = client.getMobileIdConnector().getCertificate(request);
@@ -73,7 +81,8 @@ CertificateChoiceResponse response = client.getMobileIdConnector().getCertificat
 X509Certificate certificate = client.createMobileIdCertificate(response);
 ```
 
-> **Note** that the cert retrieving process (before the actual singing) is necessary for the AdES-style digital signatures which require knowledge of the cert beforehand.
+> **Note** that the cert retrieving process (before the actual singing) is only necessary for the AdES-style
+digital signatures which require knowledge of the cert beforehand.
 
 ### Create a signature
 
@@ -85,12 +94,11 @@ hashToSign.setHashType(HashType.SHA256);
 
 String verificationCode = hashToSign.calculateVerificationCode();
 
-SignatureRequest request = client
-        .createSignatureRequestBuilder()
-        .withPhoneNumber("+37200000433")
-        .withNationalIdentityNumber("14212128021")
+SignatureRequest request = SignatureRequest.newBuilder()
+        .withPhoneNumber("+50001018865")
+        .withNationalIdentityNumber("60001019906")
         .withSignableHash(hashToSign)
-        .withLanguage(Language.EST)
+        .withLanguage(Language.ENG)
         .build();
 
 SignatureResponse response = client.getMobileIdConnector().sign(request);
@@ -112,8 +120,7 @@ dataToSign.setHashType(HashType.SHA256);
 
 String verificationCode = dataToSign.calculateVerificationCode();
 
-SignatureRequest request = client
-        .createSignatureRequestBuilder()
+SignatureRequest request = SignatureRequest.newBuilder()
         .withPhoneNumber("+37200000433")
         .withNationalIdentityNumber("14212128021")
         .withSignableData(dataToSign)
@@ -140,8 +147,7 @@ MobileIdAuthenticationHash authenticationHash = createRandomAuthenticationHash()
 
 String verificationCode = authenticationHash.calculateVerificationCode();
 
-AuthenticationRequest request = client
-        .createAuthenticationRequestBuilder()
+AuthenticationRequest request = AuthenticationRequest.newBuilder()
         .withPhoneNumber("+37200000433")
         .withNationalIdentityNumber("14212128021")
         .withAuthenticationHash(authenticationHash)

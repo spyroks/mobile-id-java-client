@@ -53,20 +53,22 @@ public class MobileIdRestServiceRequestDummy {
     }
 
     public static AuthenticationRequest createAuthenticationRequest(String UUID, String name, String phoneNumber, String nationalIdentityNumber) {
-        AuthenticationRequest request = new AuthenticationRequest();
-        request.setRelyingPartyUUID(UUID);
-        request.setRelyingPartyName(name);
-        request.setPhoneNumber(phoneNumber);
-        request.setNationalIdentityNumber(nationalIdentityNumber);
-        request.setHash(calculateHashInBase64(HashType.SHA512));
-        request.setHashType(HashType.SHA512);
-        request.setLanguage(Language.EST);
-        return request;
+        new MobileIdAuthenticationHash();
+
+        return AuthenticationRequest.newBuilder()
+                .withRelyingPartyUUID(UUID)
+                .withRelyingPartyName(name)
+                .withPhoneNumber(phoneNumber)
+                .withNationalIdentityNumber(nationalIdentityNumber)
+                .withAuthenticationHash( calculateMobileIdAuthenticationHash())
+                .withLanguage(Language.EST)
+                .build();
     }
 
     public static X509Certificate createCertificate(MobileIdClient client) {
-        CertificateRequest request = client
-                .createCertificateRequestBuilder()
+        CertificateRequest request = CertificateRequest.newBuilder()
+                .withRelyingPartyUUID(client.getRelyingPartyUUID())
+                .withRelyingPartyName(client.getRelyingPartyName())
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .build();
@@ -88,8 +90,9 @@ public class MobileIdRestServiceRequestDummy {
 
         assertThat(hashToSign.calculateVerificationCode(), is("0108"));
 
-        SignatureRequest request = client
-                .createSignatureRequestBuilder()
+        SignatureRequest request = SignatureRequest.newBuilder()
+                .withRelyingPartyUUID(client.getRelyingPartyUUID())
+                .withRelyingPartyName(client.getRelyingPartyName())
                 .withPhoneNumber(phoneNumber)
                 .withNationalIdentityNumber(nationalIdentityNumber)
                 .withSignableHash(hashToSign)
@@ -102,8 +105,9 @@ public class MobileIdRestServiceRequestDummy {
     }
 
     public static MobileIdAuthentication createAndSendAuthentication(MobileIdClient client, String phoneNumber, String nationalIdentityNumber, MobileIdAuthenticationHash authenticationHash) {
-        AuthenticationRequest request = client
-                .createAuthenticationRequestBuilder()
+        AuthenticationRequest request = AuthenticationRequest.newBuilder()
+                .withRelyingPartyUUID(client.getRelyingPartyUUID())
+                .withRelyingPartyName(client.getRelyingPartyName())
                 .withPhoneNumber(phoneNumber)
                 .withNationalIdentityNumber(nationalIdentityNumber)
                 .withAuthenticationHash(authenticationHash)
@@ -112,7 +116,7 @@ public class MobileIdRestServiceRequestDummy {
 
         AuthenticationResponse response = client.getMobileIdConnector().authenticate(request);
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), AUTHENTICATION_SESSION_PATH);
-        return client.createMobileIdAuthentication(sessionStatus);
+        return client.createMobileIdAuthentication(sessionStatus, authenticationHash.getHashInBase64(), authenticationHash.getHashType());
     }
 
     public static void makeValidCertificateRequest(MobileIdClient client) {
@@ -120,8 +124,9 @@ public class MobileIdRestServiceRequestDummy {
     }
 
     public static void makeCertificateRequest(MobileIdClient client, String phoneNumber, String nationalIdentityNumber) {
-        CertificateRequest request = client
-                .createCertificateRequestBuilder()
+        CertificateRequest request = CertificateRequest.newBuilder()
+                .withRelyingPartyUUID(client.getRelyingPartyUUID())
+                .withRelyingPartyName(client.getRelyingPartyName())
                 .withPhoneNumber(phoneNumber)
                 .withNationalIdentityNumber(nationalIdentityNumber)
                 .build();
@@ -139,8 +144,9 @@ public class MobileIdRestServiceRequestDummy {
         hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
         hashToSign.setHashType(HashType.SHA256);
 
-        SignatureRequest request = client
-                .createSignatureRequestBuilder()
+        SignatureRequest request = SignatureRequest.newBuilder()
+                .withRelyingPartyUUID(client.getRelyingPartyUUID())
+                .withRelyingPartyName(client.getRelyingPartyName())
                 .withPhoneNumber(phoneNumber)
                 .withNationalIdentityNumber(nationalIdentityNumber)
                 .withSignableHash(hashToSign)
@@ -159,8 +165,9 @@ public class MobileIdRestServiceRequestDummy {
     public static void makeAuthenticationRequest(MobileIdClient client, String phoneNumber, String nationalIdentityNumber) {
         MobileIdAuthenticationHash authenticationHash = createAuthenticationSHA512Hash();
 
-        AuthenticationRequest request = client
-                .createAuthenticationRequestBuilder()
+        AuthenticationRequest request = AuthenticationRequest.newBuilder()
+                .withRelyingPartyUUID(client.getRelyingPartyUUID())
+                .withRelyingPartyName(client.getRelyingPartyName())
                 .withPhoneNumber(phoneNumber)
                 .withNationalIdentityNumber(nationalIdentityNumber)
                 .withAuthenticationHash(authenticationHash)
@@ -169,7 +176,7 @@ public class MobileIdRestServiceRequestDummy {
 
         AuthenticationResponse response = client.getMobileIdConnector().authenticate(request);
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), AUTHENTICATION_SESSION_PATH);
-        client.createMobileIdAuthentication(sessionStatus);
+        client.createMobileIdAuthentication(sessionStatus, authenticationHash.getHashInBase64(), authenticationHash.getHashType());
     }
 
     public static MobileIdAuthenticationHash createAuthenticationSHA256Hash() {
@@ -190,6 +197,16 @@ public class MobileIdRestServiceRequestDummy {
     private static String calculateHashInBase64(HashType hashType) {
         byte[] digestValue = DigestCalculator.calculateDigest(DATA_TO_SIGN, hashType);
         return Base64.encodeBase64String(digestValue);
+    }
+
+    private static  MobileIdAuthenticationHash calculateMobileIdAuthenticationHash() {
+        byte[] digestValue = DigestCalculator.calculateDigest(DATA_TO_SIGN, HashType.SHA512);
+
+        MobileIdAuthenticationHash hash = new MobileIdAuthenticationHash();
+        hash.setHashInBase64(Base64.encodeBase64String(digestValue));
+        hash.setHashType(HashType.SHA512);
+
+        return hash;
     }
 
     public static void assertCorrectCertificateRequestMade(CertificateRequest request) {

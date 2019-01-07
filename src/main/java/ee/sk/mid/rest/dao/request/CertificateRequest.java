@@ -35,4 +35,8 @@ public class CertificateRequest extends AbstractRequest {
                 ", nationalIdentityNumber='" + nationalIdentityNumber + '\'' +
                 '}';
     }
+
+    public static CertificateRequestBuilder newBuilder() {
+        return new CertificateRequestBuilder();
+    }
 }

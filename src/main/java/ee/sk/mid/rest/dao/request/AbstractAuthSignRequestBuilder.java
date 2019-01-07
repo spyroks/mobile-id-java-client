@@ -1,19 +1,19 @@
-package ee.sk.mid;
+package ee.sk.mid.rest.dao.request;
 
+import ee.sk.mid.HashType;
+import ee.sk.mid.Language;
+import ee.sk.mid.SignableData;
+import ee.sk.mid.SignableHash;
 import ee.sk.mid.exception.ParameterMissingException;
-import ee.sk.mid.rest.MobileIdConnector;
-import ee.sk.mid.rest.SessionStatusPoller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-public abstract class MobileIdRequestBuilder {
+public abstract class AbstractAuthSignRequestBuilder {
 
-    private static final Logger logger = LoggerFactory.getLogger(MobileIdRequestBuilder.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractAuthSignRequestBuilder.class);
 
-    private MobileIdConnector connector;
-    private SessionStatusPoller sessionStatusPoller;
     private String relyingPartyName;
     private String relyingPartyUUID;
     private String phoneNumber;
@@ -23,61 +23,44 @@ public abstract class MobileIdRequestBuilder {
     private Language language;
     private String displayText;
 
-    protected MobileIdRequestBuilder(MobileIdConnector connector) {
-        this.connector = connector;
-    }
-
-    protected MobileIdRequestBuilder(MobileIdConnector connector, SessionStatusPoller sessionStatusPoller) {
-        this.connector = connector;
-        this.sessionStatusPoller = sessionStatusPoller;
-    }
-
-    protected MobileIdRequestBuilder withRelyingPartyUUID(String relyingPartyUUID) {
+    protected AbstractAuthSignRequestBuilder withRelyingPartyUUID(String relyingPartyUUID) {
         this.relyingPartyUUID = relyingPartyUUID;
         return this;
     }
 
-    protected MobileIdRequestBuilder withRelyingPartyName(String relyingPartyName) {
+    protected AbstractAuthSignRequestBuilder withRelyingPartyName(String relyingPartyName) {
         this.relyingPartyName = relyingPartyName;
         return this;
     }
 
-    protected MobileIdRequestBuilder withPhoneNumber(String phoneNumber) {
+    protected AbstractAuthSignRequestBuilder withPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         return this;
     }
 
-    protected MobileIdRequestBuilder withNationalIdentityNumber(String nationalIdentityNumber) {
+    protected AbstractAuthSignRequestBuilder withNationalIdentityNumber(String nationalIdentityNumber) {
         this.nationalIdentityNumber = nationalIdentityNumber;
         return this;
     }
 
-    protected MobileIdRequestBuilder withSignableData(SignableData dataToSign) {
+    protected AbstractAuthSignRequestBuilder withSignableData(SignableData dataToSign) {
         this.dataToSign = dataToSign;
         return this;
     }
 
-    protected MobileIdRequestBuilder withSignableHash(SignableHash hashToSign) {
+    protected AbstractAuthSignRequestBuilder withSignableHash(SignableHash hashToSign) {
         this.hashToSign = hashToSign;
         return this;
     }
 
-    protected MobileIdRequestBuilder withLanguage(Language language) {
+    protected AbstractAuthSignRequestBuilder withLanguage(Language language) {
         this.language = language;
         return this;
     }
 
-    protected MobileIdRequestBuilder withDisplayText(String displayText) {
+    protected AbstractAuthSignRequestBuilder withDisplayText(String displayText) {
         this.displayText = displayText;
         return this;
-    }
-
-    protected MobileIdConnector getConnector() {
-        return connector;
-    }
-
-    protected SessionStatusPoller getSessionStatusPoller() {
-        return sessionStatusPoller;
     }
 
     protected String getRelyingPartyUUID() {

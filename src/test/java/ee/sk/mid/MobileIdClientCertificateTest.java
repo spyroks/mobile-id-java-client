@@ -27,7 +27,7 @@ public class MobileIdClientCertificateTest {
 
     @Before
     public void setUp() throws Exception {
-        client = MobileIdClient.createMobileIdClientBuilder()
+        client = MobileIdClient.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withHostUrl(LOCALHOST_URL)
@@ -86,7 +86,14 @@ public class MobileIdClientCertificateTest {
         Map<String, String> headers = new HashMap<>();
         headers.put(headerName, headerValue);
         ClientConfig clientConfig = getClientConfigWithCustomRequestHeaders(headers);
-        client.setNetworkConnectionConfig(clientConfig);
+
+        MobileIdClient client = MobileIdClient.newBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(LOCALHOST_URL)
+                .withNetworkConnectionConfig(clientConfig)
+                .build();
+
         makeValidCertificateRequest(client);
 
         verify(postRequestedFor(urlEqualTo("/mid-api/certificate"))

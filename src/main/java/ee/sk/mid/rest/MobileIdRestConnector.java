@@ -77,6 +77,16 @@ public class MobileIdRestConnector implements MobileIdConnector {
     }
 
     @Override
+    public SessionStatus getAuthenticationSessionStatus(SessionStatusRequest request) throws SessionNotFoundException {
+        return getSessionStatus(request, SessionStatusPoller.AUTHENTICATION_SESSION_PATH);
+    }
+
+    @Override
+    public SessionStatus getSignatureSessionStatus(SessionStatusRequest request) {
+        return getSessionStatus(request, SessionStatusPoller.SIGNATURE_SESSION_PATH);
+    }
+
+    @Override
     public SessionStatus getSessionStatus(SessionStatusRequest request, String path) throws SessionNotFoundException {
         logger.debug("Getting session status for " + request.getSessionID());
         UriBuilder uriBuilder = UriBuilder

@@ -26,9 +26,6 @@ import static org.junit.Assert.assertThat;
 @Category({IntegrationTest.class})
 public class MobileIdRestConnectorSessionIT {
 
-    private static final String SIGNATURE_SESSION_PATH = "/mid-api/signature/session/{sessionId}";
-    private static final String AUTHENTICATION_SESSION_PATH = "/mid-api/authentication/session/{sessionId}";
-
     private MobileIdConnector connector;
 
     @Before
@@ -46,7 +43,7 @@ public class MobileIdRestConnectorSessionIT {
 
         SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(signatureResponse.getSessionID());
         SessionStatusPoller poller = new SessionStatusPoller(connector);
-        SessionStatus sessionStatus = poller.fetchFinalSessionStatus(sessionStatusRequest.getSessionID(), SIGNATURE_SESSION_PATH);
+        SessionStatus sessionStatus = poller.fetchFinalSignatureSessionStatus(sessionStatusRequest.getSessionID());
         assertSignaturePolled(sessionStatus);
     }
 
@@ -60,14 +57,14 @@ public class MobileIdRestConnectorSessionIT {
 
         SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(authenticationResponse.getSessionID());
         SessionStatusPoller poller = new SessionStatusPoller(connector);
-        SessionStatus sessionStatus = poller.fetchFinalSessionStatus(sessionStatusRequest.getSessionID(), AUTHENTICATION_SESSION_PATH);
+        SessionStatus sessionStatus = poller.fetchFinalAuthenticationSessionStatus(sessionStatusRequest.getSessionID());
         assertAuthenticationPolled(sessionStatus);
     }
 
     @Test(expected = SessionNotFoundException.class)
     public void getSessionStatus_whenSessionStatusNotExists_shouldThrowException() {
         SessionStatusRequest request = new SessionStatusRequest(SESSION_ID);
-        connector.getSessionStatus(request, AUTHENTICATION_SESSION_PATH);
+        connector.getAuthenticationSessionStatus(request);
     }
 
     @Test(expected = SessionNotFoundException.class)
@@ -79,6 +76,6 @@ public class MobileIdRestConnectorSessionIT {
         assertThat(signatureResponse.getSessionID(), not(isEmptyOrNullString()));
 
         SessionStatusRequest sessionStatusRequest = new SessionStatusRequest(signatureResponse.getSessionID());
-        connector.getSessionStatus(sessionStatusRequest, AUTHENTICATION_SESSION_PATH);
+        connector.getAuthenticationSessionStatus(sessionStatusRequest);
     }
 }

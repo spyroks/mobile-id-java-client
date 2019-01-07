@@ -44,8 +44,14 @@ public class AuthenticationResponseValidatorTest {
 
     @Test
     public void validate_whenResultLowerCase_shouldReturnValidAuthenticationResult() {
-        MobileIdAuthentication authentication = createValidMobileIdAuthentication();
-        authentication.setResult("ok");
+        MobileIdAuthentication authentication = MobileIdAuthentication.newBuilder()
+                .withResult("ok")
+                .withSignatureValueInBase64(VALID_SIGNATURE_IN_BASE64)
+                .withCertificate(CertificateParser.parseX509Certificate(AUTH_CERTIFICATE_EE))
+                .withSignedHashInBase64(SIGNED_HASH_IN_BASE64)
+                .withHashType(HashType.SHA512)
+                .build();
+
         MobileIdAuthenticationResult authenticationResult = validator.validate(authentication);
 
         assertThat(authenticationResult.isValid(), is(true));
@@ -92,22 +98,40 @@ public class AuthenticationResponseValidatorTest {
 
     @Test(expected = TechnicalErrorException.class)
     public void validate_whenCertificateIsNull_shouldThrowException() {
-        MobileIdAuthentication authentication = createValidMobileIdAuthentication();
-        authentication.setCertificate(null);
+        MobileIdAuthentication authentication = MobileIdAuthentication.newBuilder()
+                .withResult("OK")
+                .withSignatureValueInBase64(VALID_SIGNATURE_IN_BASE64)
+                .withCertificate(null)
+                .withSignedHashInBase64(SIGNED_HASH_IN_BASE64)
+                .withHashType(HashType.SHA512)
+                .build();
+
         validator.validate(authentication);
     }
 
     @Test(expected = TechnicalErrorException.class)
     public void validate_whenSignatureIsEmpty_shouldThrowException() {
-        MobileIdAuthentication authentication = createValidMobileIdAuthentication();
-        authentication.setSignatureValueInBase64("");
+        MobileIdAuthentication authentication = MobileIdAuthentication.newBuilder()
+                .withResult("OK")
+                .withSignatureValueInBase64("")
+                .withCertificate(CertificateParser.parseX509Certificate(AUTH_CERTIFICATE_EE))
+                .withSignedHashInBase64(SIGNED_HASH_IN_BASE64)
+                .withHashType(HashType.SHA512)
+                .build();
+
         validator.validate(authentication);
     }
 
     @Test(expected = TechnicalErrorException.class)
     public void validate_whenHashTypeIsNull_shouldThrowException() {
-        MobileIdAuthentication authentication = createValidMobileIdAuthentication();
-        authentication.setHashType(null);
+        MobileIdAuthentication authentication = MobileIdAuthentication.newBuilder()
+                .withResult("OK")
+                .withSignatureValueInBase64(VALID_SIGNATURE_IN_BASE64)
+                .withCertificate(CertificateParser.parseX509Certificate(AUTH_CERTIFICATE_EE))
+                .withSignedHashInBase64(SIGNED_HASH_IN_BASE64)
+                .withHashType(null)
+                .build();
+
         validator.validate(authentication);
     }
 
@@ -124,31 +148,39 @@ public class AuthenticationResponseValidatorTest {
     }
 
     private MobileIdAuthentication createMobileIdAuthenticationWithExpiredCertificate() {
-        MobileIdAuthentication authentication = createMobileIdAuthentication("OK", VALID_SIGNATURE_IN_BASE64);
-        X509Certificate certificateSpy = spy(authentication.getCertificate());
+        X509Certificate certificateSpy = spy(CertificateParser.parseX509Certificate(AUTH_CERTIFICATE_EE));
         when(certificateSpy.getNotAfter()).thenReturn(DateUtils.addHours(new Date(), -1));
-        authentication.setCertificate(certificateSpy);
+
+        MobileIdAuthentication authentication = MobileIdAuthentication.newBuilder()
+                .withResult("OK")
+                .withSignatureValueInBase64(VALID_SIGNATURE_IN_BASE64)
+                .withCertificate(certificateSpy)
+                .withSignedHashInBase64(SIGNED_HASH_IN_BASE64)
+                .withHashType(HashType.SHA512)
+                .build();
+
+
         return authentication;
     }
 
     private MobileIdAuthentication createMobileIdAuthentication(String result, String signatureInBase64) {
-        MobileIdAuthentication authentication = new MobileIdAuthentication();
-        authentication.setResult(result);
-        authentication.setSignatureValueInBase64(signatureInBase64);
-        authentication.setCertificate(CertificateParser.parseX509Certificate(AUTH_CERTIFICATE_EE));
-        authentication.setSignedHashInBase64(SIGNED_HASH_IN_BASE64);
-        authentication.setHashType(HashType.SHA512);
-        return authentication;
+        return MobileIdAuthentication.newBuilder()
+                .withResult(result)
+                .withSignatureValueInBase64(signatureInBase64)
+                .withCertificate(CertificateParser.parseX509Certificate(AUTH_CERTIFICATE_EE))
+                .withSignedHashInBase64(SIGNED_HASH_IN_BASE64)
+                .withHashType(HashType.SHA512)
+                .build();
     }
 
     private MobileIdAuthentication createMobileIdAuthenticationWithECC() {
-        MobileIdAuthentication authentication = new MobileIdAuthentication();
-        authentication.setResult("OK");
-        authentication.setSignatureValueInBase64(VALID_ECC_SIGNATURE_IN_BASE64);
-        authentication.setCertificate(CertificateParser.parseX509Certificate(ECC_CERTIFICATE));
-        authentication.setSignedHashInBase64(SIGNED_ECC_HASH_IN_BASE64);
-        authentication.setHashType(HashType.SHA512);
-        return authentication;
+        return MobileIdAuthentication.newBuilder()
+                .withResult("OK")
+                .withSignatureValueInBase64(VALID_ECC_SIGNATURE_IN_BASE64)
+                .withCertificate(CertificateParser.parseX509Certificate(ECC_CERTIFICATE))
+                .withSignedHashInBase64(SIGNED_ECC_HASH_IN_BASE64)
+                .withHashType(HashType.SHA512)
+                .build();
     }
 
     @Test

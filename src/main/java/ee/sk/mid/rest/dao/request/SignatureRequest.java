@@ -90,4 +90,9 @@ public class SignatureRequest extends AbstractRequest {
                 ", displayText='" + displayText + '\'' +
                 '}';
     }
+
+    public static SignatureRequestBuilder newBuilder() {
+        return new SignatureRequestBuilder();
+    }
+
 }

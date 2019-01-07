@@ -23,7 +23,7 @@ public class MobileIdSignatureIT {
 
     @Before
     public void setUp() {
-        client = MobileIdClient.createMobileIdClientBuilder()
+        client = MobileIdClient.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withHostUrl(DEMO_HOST_URL)
@@ -43,8 +43,9 @@ public class MobileIdSignatureIT {
         hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
         hashToSign.setHashType(HashType.SHA256);
 
-        SignatureRequest request = client
-                .createSignatureRequestBuilder()
+        SignatureRequest request = SignatureRequest.newBuilder()
+                .withRelyingPartyUUID(client.getRelyingPartyUUID())
+                .withRelyingPartyName(client.getRelyingPartyName())
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withSignableHash(hashToSign)
@@ -75,8 +76,9 @@ public class MobileIdSignatureIT {
         hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
         hashToSign.setHashType(HashType.SHA256);
 
-        SignatureRequest request = client
-                .createSignatureRequestBuilder()
+        SignatureRequest request = SignatureRequest.newBuilder()
+                .withRelyingPartyUUID(client.getRelyingPartyUUID())
+                .withRelyingPartyName(client.getRelyingPartyName())
                 .withPhoneNumber(VALID_PHONE_EXPIRED_TRANSACTION)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_EXPIRED_TRANSACTION)
                 .withSignableHash(hashToSign)
@@ -125,25 +127,45 @@ public class MobileIdSignatureIT {
 
     @Test(expected = ParameterMissingException.class)
     public void sign_withWrongRelyingPartyUUID_shouldThrowException() {
-        client.setRelyingPartyUUID(WRONG_RELYING_PARTY_UUID);
+        MobileIdClient client = MobileIdClient.newBuilder()
+                .withRelyingPartyUUID(WRONG_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(DEMO_HOST_URL)
+                .build();
+
         makeSignatureRequest(client, VALID_PHONE, VALID_NAT_IDENTITY);
     }
 
     @Test(expected = ParameterMissingException.class)
     public void sign_withWrongRelyingPartyName_shouldThrowException() {
-        client.setRelyingPartyName(WRONG_RELYING_PARTY_NAME);
+        MobileIdClient client = MobileIdClient.newBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(WRONG_RELYING_PARTY_NAME)
+                .withHostUrl(DEMO_HOST_URL)
+                .build();
+
         makeSignatureRequest(client, VALID_PHONE, VALID_NAT_IDENTITY);
     }
 
     @Test(expected = UnauthorizedException.class)
     public void sign_withUnknownRelyingPartyUUID_shouldThrowException() {
-        client.setRelyingPartyUUID(UNKNOWN_RELYING_PARTY_UUID);
+        MobileIdClient client = MobileIdClient.newBuilder()
+                .withRelyingPartyUUID(UNKNOWN_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(DEMO_HOST_URL)
+                .build();
+
         makeSignatureRequest(client, VALID_PHONE, VALID_NAT_IDENTITY);
     }
 
     @Test(expected = UnauthorizedException.class)
     public void sign_withUnknownRelyingPartyName_shouldThrowException() {
-        client.setRelyingPartyName(UNKNOWN_RELYING_PARTY_NAME);
+        MobileIdClient client = MobileIdClient.newBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(UNKNOWN_RELYING_PARTY_NAME)
+                .withHostUrl(DEMO_HOST_URL)
+                .build();
+
         makeSignatureRequest(client, VALID_PHONE, VALID_NAT_IDENTITY);
     }
 }

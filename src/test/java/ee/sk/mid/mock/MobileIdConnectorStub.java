@@ -2,6 +2,7 @@ package ee.sk.mid.mock;
 
 import ee.sk.mid.exception.SessionNotFoundException;
 import ee.sk.mid.rest.MobileIdConnector;
+import ee.sk.mid.rest.SessionStatusPoller;
 import ee.sk.mid.rest.dao.SessionStatus;
 import ee.sk.mid.rest.dao.request.AuthenticationRequest;
 import ee.sk.mid.rest.dao.request.CertificateRequest;
@@ -50,6 +51,16 @@ public class MobileIdConnectorStub implements MobileIdConnector {
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         return null;
+    }
+
+    @Override
+    public SessionStatus getAuthenticationSessionStatus(SessionStatusRequest request) throws SessionNotFoundException {
+        return getSessionStatus(request, SessionStatusPoller.AUTHENTICATION_SESSION_PATH);
+    }
+
+    @Override
+    public SessionStatus getSignatureSessionStatus(SessionStatusRequest request) {
+        return getSessionStatus(request, SessionStatusPoller.SIGNATURE_SESSION_PATH);
     }
 
     @Override

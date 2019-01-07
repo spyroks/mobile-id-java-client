@@ -17,18 +17,16 @@ import static ee.sk.mid.mock.TestData.*;
 public class CertificateRequestBuilderTest {
 
     private MobileIdConnectorSpy connector;
-    private CertificateRequestBuilder builder;
 
     @Before
     public void setUp() {
         connector = new MobileIdConnectorSpy();
         connector.setCertificateChoiceResponseToRespond(createDummyCertificateChoiceResponse());
-        builder = new CertificateRequestBuilder(connector);
     }
 
     @Test(expected = ParameterMissingException.class)
     public void getCertificate_withoutRelyingPartyUUID_shouldThrowException() {
-        CertificateRequest request = builder
+        CertificateRequest request = CertificateRequest.newBuilder()
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
@@ -41,7 +39,7 @@ public class CertificateRequestBuilderTest {
 
     @Test(expected = ParameterMissingException.class)
     public void getCertificate_withoutRelyingPartyName_shouldThrowException() {
-        CertificateRequest request = builder
+        CertificateRequest request = CertificateRequest.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
@@ -53,7 +51,7 @@ public class CertificateRequestBuilderTest {
 
     @Test(expected = ParameterMissingException.class)
     public void getCertificate_withoutPhoneNumber_shouldThrowException() {
-        CertificateRequest request = builder
+        CertificateRequest request = CertificateRequest.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
@@ -65,7 +63,7 @@ public class CertificateRequestBuilderTest {
 
     @Test(expected = ParameterMissingException.class)
     public void getCertificate_withoutNationalIdentityNumber_shouldThrowException() {
-        CertificateRequest request = builder
+        CertificateRequest request = CertificateRequest.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withPhoneNumber(VALID_PHONE)
@@ -112,7 +110,7 @@ public class CertificateRequestBuilderTest {
     }
 
     private void makeCertificateRequest(MobileIdConnector connector) {
-        CertificateRequest request = builder
+        CertificateRequest request = CertificateRequest.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withPhoneNumber(VALID_PHONE)
@@ -121,7 +119,7 @@ public class CertificateRequestBuilderTest {
 
         CertificateChoiceResponse response = connector.getCertificate(request);
 
-        MobileIdClient client = MobileIdClient.createMobileIdClientBuilder()
+        MobileIdClient client = MobileIdClient.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withHostUrl(LOCALHOST_URL)

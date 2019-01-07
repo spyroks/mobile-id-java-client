@@ -90,4 +90,8 @@ public class AuthenticationRequest extends AbstractRequest {
                 ", displayText='" + displayText + '\'' +
                 '}';
     }
+
+    public static AuthenticationRequestBuilder newBuilder() {
+        return new AuthenticationRequestBuilder();
+    }
 }

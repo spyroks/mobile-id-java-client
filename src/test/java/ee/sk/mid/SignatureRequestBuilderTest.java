@@ -18,15 +18,12 @@ import static ee.sk.mid.mock.TestData.*;
 public class SignatureRequestBuilderTest {
 
     private MobileIdConnectorSpy connector;
-    private SignatureRequestBuilder builder;
 
     @Before
     public void setUp() {
         connector = new MobileIdConnectorSpy();
-        SessionStatusPoller sessionStatusPoller = new SessionStatusPoller(connector);
         connector.setSignatureResponseToRespond(new SignatureResponse(SESSION_ID));
         connector.setSessionStatusToRespond(createDummySignatureSessionStatus());
-        builder = new SignatureRequestBuilder(connector, sessionStatusPoller);
     }
 
     @Test(expected = ParameterMissingException.class)
@@ -35,7 +32,7 @@ public class SignatureRequestBuilderTest {
         hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
         hashToSign.setHashType(HashType.SHA256);
 
-        SignatureRequest request = builder
+        SignatureRequest request = SignatureRequest.newBuilder()
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
@@ -53,7 +50,7 @@ public class SignatureRequestBuilderTest {
         hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
         hashToSign.setHashType(HashType.SHA256);
 
-        SignatureRequest request = builder
+        SignatureRequest request = SignatureRequest.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
@@ -71,7 +68,7 @@ public class SignatureRequestBuilderTest {
         hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
         hashToSign.setHashType(HashType.SHA256);
 
-        SignatureRequest request = builder
+        SignatureRequest request = SignatureRequest.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
@@ -89,7 +86,7 @@ public class SignatureRequestBuilderTest {
         hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
         hashToSign.setHashType(HashType.SHA256);
 
-        SignatureRequest request = builder
+        SignatureRequest request = SignatureRequest.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withPhoneNumber(VALID_PHONE)
@@ -103,7 +100,7 @@ public class SignatureRequestBuilderTest {
 
     @Test(expected = ParameterMissingException.class)
     public void sign_withoutSignableHash_andWithoutSignableData_shouldThrowException() {
-        SignatureRequest request = builder
+        SignatureRequest request = SignatureRequest.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withPhoneNumber(VALID_PHONE)
@@ -120,7 +117,7 @@ public class SignatureRequestBuilderTest {
         SignableHash hashToSign = new SignableHash();
         hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
 
-        SignatureRequest request = builder
+        SignatureRequest request = SignatureRequest.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withPhoneNumber(VALID_PHONE)
@@ -138,7 +135,7 @@ public class SignatureRequestBuilderTest {
         SignableHash hashToSign = new SignableHash();
         hashToSign.setHashType(HashType.SHA256);
 
-        SignatureRequest request = builder
+        SignatureRequest request = SignatureRequest.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withPhoneNumber(VALID_PHONE)
@@ -157,7 +154,7 @@ public class SignatureRequestBuilderTest {
         hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
         hashToSign.setHashType(HashType.SHA256);
 
-        SignatureRequest request = builder
+        SignatureRequest request = SignatureRequest.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withPhoneNumber(VALID_PHONE)
@@ -263,7 +260,7 @@ public class SignatureRequestBuilderTest {
         hashToSign.setHashInBase64(SHA256_HASH_IN_BASE64);
         hashToSign.setHashType(HashType.SHA256);
 
-        SignatureRequest request = builder
+        SignatureRequest request = SignatureRequest.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withPhoneNumber(VALID_PHONE)
@@ -277,7 +274,7 @@ public class SignatureRequestBuilderTest {
         SessionStatusPoller poller = new SessionStatusPoller(connector);
         SessionStatus sessionStatus = poller.fetchFinalSessionStatus(response.getSessionID(), SIGNATURE_SESSION_PATH);
 
-        MobileIdClient client = MobileIdClient.createMobileIdClientBuilder()
+        MobileIdClient client = MobileIdClient.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withHostUrl(LOCALHOST_URL)

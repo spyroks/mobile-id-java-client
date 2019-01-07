@@ -12,14 +12,25 @@ import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 public class SessionStatusPoller {
 
+    public static final String SIGNATURE_SESSION_PATH = "/mid-api/signature/session/{sessionId}";
+    public static final String AUTHENTICATION_SESSION_PATH = "/mid-api/authentication/session/{sessionId}";
+
     private static final Logger logger = LoggerFactory.getLogger(SessionStatusPoller.class);
 
     private MobileIdConnector connector;
-    private TimeUnit pollingSleepTimeUnit = TimeUnit.SECONDS;
-    private long pollingSleepTimeout = 1L;
+    private int pollingSleepTimeoutSeconds = 1;
+
 
     public SessionStatusPoller(MobileIdConnector connector) {
         this.connector = connector;
+    }
+
+    public SessionStatus fetchFinalSignatureSessionStatus(String sessionId) throws TechnicalErrorException {
+        return fetchFinalSessionStatus(sessionId, SIGNATURE_SESSION_PATH);
+    }
+
+    public SessionStatus fetchFinalAuthenticationSessionStatus(String sessionId) throws TechnicalErrorException {
+        return fetchFinalSessionStatus(sessionId, AUTHENTICATION_SESSION_PATH);
     }
 
     public SessionStatus fetchFinalSessionStatus(String sessionId, String path) throws TechnicalErrorException {
@@ -41,8 +52,8 @@ public class SessionStatusPoller {
             if (equalsIgnoreCase("COMPLETE", sessionStatus.getState())) {
                 break;
             }
-            logger.debug("Sleeping for " + pollingSleepTimeout + " " + pollingSleepTimeUnit);
-            pollingSleepTimeUnit.sleep(pollingSleepTimeout);
+            logger.debug("Sleeping for " + pollingSleepTimeoutSeconds + " seconds");
+            TimeUnit.SECONDS.sleep(pollingSleepTimeoutSeconds);
         }
         logger.debug("Got session final session status response");
         return sessionStatus;
@@ -104,9 +115,8 @@ public class SessionStatusPoller {
         }
     }
 
-    public void setPollingSleepTime(TimeUnit unit, long timeout) {
-        logger.debug("Polling sleep time is " + timeout + " " + unit.toString());
-        pollingSleepTimeUnit = unit;
-        pollingSleepTimeout = timeout;
+    public void setPollingSleepTimeSeconds(int pollingSleepTimeSeconds) {
+        logger.debug("Polling sleep time is " + pollingSleepTimeSeconds + " seconds");
+        pollingSleepTimeoutSeconds = pollingSleepTimeSeconds;
     }
 }

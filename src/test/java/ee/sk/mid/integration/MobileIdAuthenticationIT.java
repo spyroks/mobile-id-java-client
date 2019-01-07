@@ -23,7 +23,7 @@ public class MobileIdAuthenticationIT {
 
     @Before
     public void setUp() {
-        client = MobileIdClient.createMobileIdClientBuilder()
+        client = MobileIdClient.newBuilder()
                 .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
                 .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
                 .withHostUrl(DEMO_HOST_URL)
@@ -51,8 +51,9 @@ public class MobileIdAuthenticationIT {
     public void authenticate_withDisplayText() {
         MobileIdAuthenticationHash authenticationHash = MobileIdAuthenticationHash.generateRandomHashOfDefaultType();
 
-        AuthenticationRequest request = client
-                .createAuthenticationRequestBuilder()
+        AuthenticationRequest request = AuthenticationRequest.newBuilder()
+                .withRelyingPartyUUID(client.getRelyingPartyUUID())
+                .withRelyingPartyName(client.getRelyingPartyName())
                 .withPhoneNumber(VALID_PHONE)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY)
                 .withAuthenticationHash(authenticationHash)
@@ -66,7 +67,7 @@ public class MobileIdAuthenticationIT {
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), AUTHENTICATION_SESSION_PATH);
         assertAuthenticationPolled(sessionStatus);
 
-        MobileIdAuthentication authentication = client.createMobileIdAuthentication(sessionStatus);
+        MobileIdAuthentication authentication = client.createMobileIdAuthentication(sessionStatus, authenticationHash.getHashInBase64(), authenticationHash.getHashType());
         assertAuthenticationCreated(authentication, authenticationHash.getHashInBase64());
     }
 
@@ -79,8 +80,9 @@ public class MobileIdAuthenticationIT {
     public void authenticate_whenMSSPTransactionExpired_shouldThrowException() {
         MobileIdAuthenticationHash authenticationHash = createAuthenticationSHA512Hash();
 
-        AuthenticationRequest request = client
-                .createAuthenticationRequestBuilder()
+        AuthenticationRequest request = AuthenticationRequest.newBuilder()
+                .withRelyingPartyUUID(client.getRelyingPartyUUID())
+                .withRelyingPartyName(client.getRelyingPartyName())
                 .withPhoneNumber(VALID_PHONE_EXPIRED_TRANSACTION)
                 .withNationalIdentityNumber(VALID_NAT_IDENTITY_EXPIRED_TRANSACTION)
                 .withAuthenticationHash(authenticationHash)
@@ -89,7 +91,7 @@ public class MobileIdAuthenticationIT {
 
         AuthenticationResponse response = client.getMobileIdConnector().authenticate(request);
         SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(), AUTHENTICATION_SESSION_PATH);
-        client.createMobileIdAuthentication(sessionStatus);
+        client.createMobileIdAuthentication(sessionStatus, authenticationHash.getHashInBase64(), authenticationHash.getHashType());
     }
 
     @Test(expected = UserCancellationException.class)
@@ -129,25 +131,49 @@ public class MobileIdAuthenticationIT {
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withWrongRelyingPartyUUID_shouldThrowException() {
-        client.setRelyingPartyUUID(WRONG_RELYING_PARTY_UUID);
+        MobileIdClient client = MobileIdClient.newBuilder()
+                .withRelyingPartyUUID(WRONG_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(DEMO_HOST_URL)
+                .build();
+
+
         makeAuthenticationRequest(client, VALID_PHONE, VALID_NAT_IDENTITY);
     }
 
     @Test(expected = ParameterMissingException.class)
     public void authenticate_withWrongRelyingPartyName_shouldThrowException() {
-        client.setRelyingPartyName(WRONG_RELYING_PARTY_NAME);
+
+        MobileIdClient client = MobileIdClient.newBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(WRONG_RELYING_PARTY_NAME)
+                .withHostUrl(DEMO_HOST_URL)
+                .build();
+
         makeAuthenticationRequest(client, VALID_PHONE, VALID_NAT_IDENTITY);
     }
 
     @Test(expected = UnauthorizedException.class)
     public void authenticate_withUnknownRelyingPartyUUID_shouldThrowException() {
-        client.setRelyingPartyUUID(UNKNOWN_RELYING_PARTY_UUID);
+
+        MobileIdClient client = MobileIdClient.newBuilder()
+                .withRelyingPartyUUID(UNKNOWN_RELYING_PARTY_UUID)
+                .withRelyingPartyName(VALID_RELYING_PARTY_NAME)
+                .withHostUrl(DEMO_HOST_URL)
+                .build();
+
         makeAuthenticationRequest(client, VALID_PHONE, VALID_NAT_IDENTITY);
     }
 
     @Test(expected = UnauthorizedException.class)
     public void authenticate_withUnknownRelyingPartyName_shouldThrowException() {
-        client.setRelyingPartyName(UNKNOWN_RELYING_PARTY_NAME);
+
+        MobileIdClient client = MobileIdClient.newBuilder()
+                .withRelyingPartyUUID(VALID_RELYING_PARTY_UUID)
+                .withRelyingPartyName(UNKNOWN_RELYING_PARTY_NAME)
+                .withHostUrl(DEMO_HOST_URL)
+                .build();
+
         makeAuthenticationRequest(client, VALID_PHONE, VALID_NAT_IDENTITY);
     }
 

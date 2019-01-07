@@ -6,8 +6,6 @@ import ee.sk.mid.rest.dao.SessionStatus;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.concurrent.TimeUnit;
-
 import static ee.sk.mid.mock.SessionStatusDummy.*;
 import static ee.sk.mid.mock.TestData.AUTHENTICATION_SESSION_PATH;
 import static ee.sk.mid.mock.TestData.SESSION_ID;
@@ -23,7 +21,7 @@ public class SessionStatusPollerTest {
     public void setUp() {
         connector = new MobileIdConnectorStub();
         poller = new SessionStatusPoller(connector);
-        poller.setPollingSleepTime(TimeUnit.MILLISECONDS, 1L);
+        poller.setPollingSleepTimeSeconds(1);
     }
 
     @Test
@@ -49,7 +47,7 @@ public class SessionStatusPollerTest {
 
     @Test
     public void setPollingSleepTime() {
-        poller.setPollingSleepTime(TimeUnit.MILLISECONDS, 200L);
+        poller.setPollingSleepTimeSeconds(200);
         addMultipleRunningSessionResponses();
         connector.getResponses().add(createSuccessfulSessionStatus());
         long duration = measurePollingDuration();

@@ -15,19 +15,43 @@ public class MobileIdSignature {
         return Base64.decodeBase64(valueInBase64);
     }
 
-    public String getValueInBase64() {
-        return valueInBase64;
+    private MobileIdSignature(MobileIdSignatureBuilder builder) {
+        this.valueInBase64 = builder.valueInBase64;
+        this.algorithmName = builder.algorithmName;
     }
 
-    public void setValueInBase64(String valueInBase64) {
-        this.valueInBase64 = valueInBase64;
+    public String getValueInBase64() {
+        return valueInBase64;
     }
 
     public String getAlgorithmName() {
         return algorithmName;
     }
 
-    public void setAlgorithmName(String algorithmName) {
-        this.algorithmName = algorithmName;
+    public static MobileIdSignatureBuilder newBuilder() {
+        return new MobileIdSignatureBuilder();
     }
+
+    public static class MobileIdSignatureBuilder {
+        private String valueInBase64;
+        private String algorithmName;
+
+        private MobileIdSignatureBuilder() {
+        }
+
+        public MobileIdSignatureBuilder withValueInBase64(String valueInBase64) {
+            this.valueInBase64 = valueInBase64;
+            return this;
+        }
+
+        public MobileIdSignatureBuilder withAlgorithmName(String algorithmName) {
+            this.algorithmName = algorithmName;
+            return this;
+        }
+
+        public MobileIdSignature build() {
+            return new MobileIdSignature(this);
+        }
+    }
+
 }

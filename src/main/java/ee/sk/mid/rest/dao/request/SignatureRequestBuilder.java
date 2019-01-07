@@ -1,21 +1,12 @@
-package ee.sk.mid;
+package ee.sk.mid.rest.dao.request;
 
+import ee.sk.mid.Language;
+import ee.sk.mid.SignableData;
+import ee.sk.mid.SignableHash;
 import ee.sk.mid.exception.MobileIdException;
 import ee.sk.mid.exception.ParameterMissingException;
-import ee.sk.mid.rest.MobileIdConnector;
-import ee.sk.mid.rest.SessionStatusPoller;
-import ee.sk.mid.rest.dao.request.SignatureRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class SignatureRequestBuilder extends MobileIdRequestBuilder {
-
-    private static final Logger logger = LoggerFactory.getLogger(SignatureRequestBuilder.class);
-
-    public SignatureRequestBuilder(MobileIdConnector connector, SessionStatusPoller sessionStatusPoller) {
-        super(connector, sessionStatusPoller);
-        logger.debug("Instantiating signature request builder");
-    }
+public class SignatureRequestBuilder extends AbstractAuthSignRequestBuilder {
 
     public SignatureRequestBuilder withRelyingPartyUUID(String relyingPartyUUID) {
         super.withRelyingPartyUUID(relyingPartyUUID);

@@ -8,6 +8,7 @@ Mobile-ID Java client is a Java library that can be used for easy integration wi
 
 * [Features](#features)
 * [Requirements](#requirements)
+* [Maven](#maven)
 * [Usage](#usage)
 * [License](#license)
 
@@ -19,6 +20,16 @@ Mobile-ID Java client is a Java library that can be used for easy integration wi
 * Java 1.7
 * Internet access to Mobile-ID demo environment (to run integration tests)
 
+## Maven
+You can use the library as a Maven dependency from the Maven Central (http://mvnrepository.com/artifact/ee.sk.mid/mid-rest-java-client)
+
+```xml
+<dependency>
+    <groupId>ee.sk.mid</groupId>
+    <artifactId>mid-rest-java-client</artifactId>
+    <version>1.0</version>
+</dependency>
+```
 
 ## Usage
 * [Running against Demo environment](#running-against-demo-environment)
@@ -36,19 +47,19 @@ Mobile-ID Java client is a Java library that can be used for easy integration wi
 
 SK ID Solutions AS hosts a public demo environment that you can run your tests against.
 If you have a production Mobile ID then you can even add your own phone to this environment.
-[More info and tests numbers](https://github.com/SK-EID/dds-documentation/wiki/Test-number-for-automated-testing-in-DEMO).
+[More info and tests numbers](https://github.com/SK-EID/MID/wiki/Test-number-for-automated-testing-in-DEMO).
 
-The [integration tests](tree/master/src/test/java/ee/sk/mid/integration)
+The [integration tests](https://github.com/SK-EID/mid-rest-java-client/tree/master/src/test/java/ee/sk/mid/integration)
 in this library have been configured to run against this Demo environment.
-
 
 
 ### Configure the client
 ```java
-MobileIdClient client = new MobileIdClient();
-client.setRelyingPartyUUID("00000000-0000-0000-0000-000000000000");
-client.setRelyingPartyName("DEMO");
-client.setHostUrl("https://tsp.demo.sk.ee");
+MobileIdClient client = MobileIdClient.newBuilder()
+        .withRelyingPartyUUID("00000000-0000-0000-0000-000000000000")
+        .withRelyingPartyName("DEMO")
+        .withHostUrl("https://tsp.demo.sk.ee")
+        .build();
 ```
 
 > **Note** that these values are demo environment specific. In production use the values provided by Application Provider.
@@ -61,10 +72,10 @@ Under the hood operations as signing and authentication consist of 2 request ste
 * Session status request
 
 Session status request by default is a long poll method, meaning it might not return until a timeout expires.
-The caller can tune the request parameters inside the bounds set by a service operator by using the `setPollingSleepTimeout(TimeUnit, long)`:
+The caller can tune the request parameters inside the bounds set by a service operator by using the `setPollingSleepTimeSeconds(int)`:
 
 ```java
-client.setLongPollingMaxTimeoutSeconds(2);
+client.setPollingSleepTimeSeconds(2);
 ```
 
 > Check [Long polling](https://github.com/SK-EID/MID#334-long-polling) documentation chapter for more information.
@@ -72,8 +83,10 @@ client.setLongPollingMaxTimeoutSeconds(2);
 ### Retrieve signing certificate
 ```java
 CertificateRequest request = CertificateRequest.newBuilder()
+        .withRelyingPartyUUID(client.getRelyingPartyUUID())
+        .withRelyingPartyName(client.getRelyingPartyName())
         .withPhoneNumber("+37060000666")
-        .withNationalIdentityNumber("50001018865")
+        .withNationalIdentityNumber("60001019906")
         .build();
 
 CertificateChoiceResponse response = client.getMobileIdConnector().getCertificate(request);
@@ -95,7 +108,9 @@ hashToSign.setHashType(HashType.SHA256);
 String verificationCode = hashToSign.calculateVerificationCode();
 
 SignatureRequest request = SignatureRequest.newBuilder()
-        .withPhoneNumber("+50001018865")
+        .withRelyingPartyUUID(client.getRelyingPartyUUID())
+        .withRelyingPartyName(client.getRelyingPartyName())
+        .withPhoneNumber("+37200000766")
         .withNationalIdentityNumber("60001019906")
         .withSignableHash(hashToSign)
         .withLanguage(Language.ENG)
@@ -103,7 +118,7 @@ SignatureRequest request = SignatureRequest.newBuilder()
 
 SignatureResponse response = client.getMobileIdConnector().sign(request);
 
-SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(),
+SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(),
 "/mid-api/signature/session/{sessionId}");
 
 MobileIdSignature signature = client.createMobileIdSignature(sessionStatus);
@@ -121,15 +136,17 @@ dataToSign.setHashType(HashType.SHA256);
 String verificationCode = dataToSign.calculateVerificationCode();
 
 SignatureRequest request = SignatureRequest.newBuilder()
-        .withPhoneNumber("+37200000433")
-        .withNationalIdentityNumber("14212128021")
+        .withRelyingPartyUUID(client.getRelyingPartyUUID())
+        .withRelyingPartyName(client.getRelyingPartyName())
+        .withPhoneNumber("+37200000766")
+        .withNationalIdentityNumber("60001019906")
         .withSignableData(dataToSign)
         .withLanguage(Language.EST)
         .build();
 
 SignatureResponse response = client.getMobileIdConnector().sign(request);
 
-SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(),
+SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(),
 "/mid-api/signature/session/{sessionId}");
 
 MobileIdSignature signature = client.createMobileIdSignature(sessionStatus);
@@ -143,23 +160,25 @@ MobileIdSignature signature = client.createMobileIdSignature(sessionStatus);
 For security reasons, a new hash value must be created for each new authentication request.
 
 ```java
-MobileIdAuthenticationHash authenticationHash = createRandomAuthenticationHash();
+MobileIdAuthenticationHash authenticationHash = MobileIdAuthenticationHash.generateRandomHashOfDefaultType();
 
 String verificationCode = authenticationHash.calculateVerificationCode();
 
 AuthenticationRequest request = AuthenticationRequest.newBuilder()
-        .withPhoneNumber("+37200000433")
-        .withNationalIdentityNumber("14212128021")
+        .withRelyingPartyUUID(client.getRelyingPartyUUID())
+        .withRelyingPartyName(client.getRelyingPartyName())
+        .withPhoneNumber("+37200000766")
+        .withNationalIdentityNumber("60001019906")
         .withAuthenticationHash(authenticationHash)
         .withLanguage(Language.EST)
         .build();
 
 AuthenticationResponse response = client.getMobileIdConnector().authenticate(request);
 
-SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionId(),
+SessionStatus sessionStatus = client.getSessionStatusPoller().fetchFinalSessionStatus(response.getSessionID(),
 "/mid-api/authentication/session/{sessionId}");
 
-MobileIdAuthentication authentication = client.createMobileIdAuthentication(sessionStatus);
+MobileIdAuthentication authentication = client.createMobileIdAuthentication(sessionStatus, authenticationHash.getHashInBase64(), authenticationHash.getHashType());
 ```
 
 > **Note** that `verificationCode` of the service should be displayed on the screen, so the person could verify if the verification code displayed on the screen and code sent him as a text message are identical.
